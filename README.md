@@ -10,9 +10,13 @@ Installation is as follows:
 3. Install fruitbox dependencies and download fruitbox and the example skins...
   
   sudo apt-get install libsm-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev
+  
   wget https://codeload.github.com/chundermike/rpi-fruitbox/zip/master
+  
   unzip master
+  
   cd rpi-fruitbox-master
+  
   chmod +x ./fruitbox
 
 4. Copy your music MP3 files (either to the SD card or USB memory stick)
