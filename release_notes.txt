@@ -1,0 +1,56 @@
+fruitbox Release Notes:
+
+-----------------------------------
+v1.0
+-----------------------------------
+Initial release
+
+
+-----------------------------------
+v1.1
+-----------------------------------
+Highlights:
+
+-> *new* Support for loading and saving playlists to external files
+-> Changed handling of Now Playing Artwork
+-> *new* Added Album mode
+-> Running fruitbox with no arguments shows help (no longer expects default fruitbox.cfg)
+
+
+Details:
+
+Added new configuration parameters:
+-> NowPlayingArtworkMode (None, Auto, Embedded, Specified, Folder, Logo)
+-> AlbumPageArtworkMode (None, Auto, Specified, Folder, Logo)
+-> NowPlayingMissingArtwork
+-> AlbumPageMissingArtwork
+-> PageMode (Singles, Albums)
+-> AlbumArtSize
+-> AlbumArtOffset
+-> AlbumArtAngle
+-> AlbumPageLineSpacing
+
+Removed configuration parameter:
+-> MissingArtwork
+
+Added new SortSongsBy configuration parameter value:
+-> Album
+
+Added new command line options
+-> --load-playlist <file>
+-> --save-playlist <file>
+
+Added new status variables
+-> $IF_PAGE_MOVING
+-> $IF_PAGE_NOT_MOVING
+
+Behaviour changes
+-> joystick image stays on left / right hand edge when pages move rather than switching to opposite side
+
+-> Bug fix : prevent audio artwork load thread hang when trying to extract non-existent MP3 APIC tag picture data.
+-> Bug fix : fixed incorrect positioning for rotated objects
+-> Bug fix : fixed page animation draw for non-integer page size / speed ratios
+-> Bug fix : different page backgrounds now work
+-> Bug fix : prevent crash when database loading MP3 songs with audio rate of zero
+
+Added new "Granite" example album skin
