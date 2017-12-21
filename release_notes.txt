@@ -54,3 +54,10 @@ Behaviour changes
 -> Bug fix : prevent crash when database loading MP3 songs with audio rate of zero
 
 Added new "Granite" example album skin
+
+
+-----------------------------------
+v1.2
+-----------------------------------
+
+Extended Select Code range from a->H to A->K
