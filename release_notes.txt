@@ -1,9 +1,17 @@
 fruitbox Release Notes:
 
 -----------------------------------
-v1.0
+v1.3
 -----------------------------------
-Initial release
+
+Ignore and issue Warning for database song TrackNumber and Length values of > 2^31 - 1, rather than crashing out
+
+
+-----------------------------------
+v1.2
+-----------------------------------
+
+Extended Select Code range from A->H to A->K
 
 
 -----------------------------------
@@ -57,7 +65,8 @@ Added new "Granite" example album skin
 
 
 -----------------------------------
-v1.2
+v1.0
 -----------------------------------
+Initial release
 
-Extended Select Code range from a->H to A->K
+
