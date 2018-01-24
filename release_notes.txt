@@ -1,6 +1,140 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.4
+-----------------------------------
+
+Highlights:
+
+-> *new* Button remapping
+-> *new* USB controller (joystick) support
+-> *new* Touch screen support (tested on official Raspberry Pi 7")
+-> *new* GPIO input support for buttons (no need for Adafruit retrogame anymore)
+-> *new* GPIO output from status objects
+-> *new* User-configurable text descriptions for song pages
+-> *new* Prevention of repeated random songs (in user and Auto mode)
+-> Various bug fixes
+-> Added a bunch of new status $ variables
+-> Improved and extended song sorting
+
+Details:
+
+Updated input button handling... 
+fruitbox now reads custom button mappings from fruitbox.btn mappping file (if it exists).
+buttons can be...
+  -> Mapped to any keyboard key
+  -> Mapped to any GPIO pin
+  -> Mapped to USB Joystick buttons / sticks
+  -> Mapped to touch screen areas
+
+Added new command line options...
+  -> --config-buttons : Interactive generation of fruitbox.btn button mapping file
+  -> --test-buttons   : For checking button codes
+
+Added new buttons for moving quickly through pages...
+-> ButtonJumpLeft
+-> ButtonJumpRight
+
+Added new status object $ variables...
+  Support for GPIO outputs... GPIO pins can be set/reset from status objects...
+    -> $SET_GPIO_xx_HI
+    -> $SET_GPIO_xx_LO
+      (where xx is 00 to 27)
+  Support for button detection (useful for animating touch screen buttons)...
+    -> $IF_BUTTON_<name>_PRESSED
+    -> $IF_NOT_BUTTON_<name>_PRESSED
+  Added new variables for extra song information...    
+    -> $NOW_PLAYING_ALB_ARTIST
+    -> $NOW_PLAYING_TRACK_NUMBER
+    -> $NOW_PLAYING_PUBLISHER
+    -> $NOW_PLAYING_ISRC
+    -> $NOW_PLAYING_CUSTOM_TAG
+    -> $COMING_UP_ALB_ARTIST
+    -> $COMING_UP_TRACK_NUMBER
+    -> $COMING_UP_PUBLISHER
+    -> $COMING_UP_ISRC
+    -> $COMING_UP_CUSTOM_TAG
+    -> $IF_STEREO
+    -> $IF_NOT_STEREO
+  Added new variables for playqueue status...
+    -> $IF_PLAYQUEUE_EMPTY
+    -> $IF_NOT_PLAYQUEUE_EMPTY
+    -> $IF_PLAYQUEUE_FULL 
+    -> $IF_NOT_PLAYQUEUE_FULL
+  Added new variables for general status...
+    -> $PLAYS_PER_COIN
+    -> $NUM_SONGS
+    -> $NUM_PAGES
+    -> $FIRST_VISIBLE_PAGE
+    -> $LAST_VISIBLE_PAGE
+  Changed some status $ variables for consistency...
+    -> Renamed $IF_SONG_NOT_PLAYING   to $IF_NOT_SONG_PLAYING
+    -> Renamed $IF_SONG_NOT_LOADING   to $IF_NOT_SONG_LOADING
+    -> Renamed $IF_SONG_NOT_UNLOADING to $IF_NOT_SONG_UNLOADING
+    -> Renamed $IF_PAGE_NOT_MOVING    to $IF_NOT_PAGE_MOVING
+
+Added new configuration sections...
+-> [touch areas]
+   ...defines touch areas for buttons
+-> [touch song]
+   ...allows songs to be selected by touching song name rather than entering select code
+
+Added new configuration parameters...
+-> CustomMP3Tag
+  ... allows the specified MP3 ID3v2 tag to be extracted to a songs 'custom' field, to be subsequently
+      used for song sorting and song/status display
+-> SongHistoryDepth
+  ... this prevents a randomly chosen song being repeated within the specified number of previously played songs
+      (in addition to the play queue contents)
+-> SongDescription
+  ...defines the description of the song entries on a page
+-> PairedSongDescription
+  ...defines the description of the second song of a song pair
+-> ArtistDescription
+  ...defines the description of the artist entries on a page (if artists are different for each song in a pair)
+-> MatchedArtistDescription
+  ...defines the description of the artist entries on a page (if artists are the same for each song in a pair)
+-> ExtraDescription
+  ...defines an extra text line to accompany each song (or pair) / artist grouping
+-> TextCondenseLimit
+  ... specifies the difference between object width and text width after which text condensing is applied
+-> PageJump
+  ...specifies how many screens of pages to jump if 'ButtonJumpLeft' or 'ButtonJumpRight' is pressed
+-> ReverseClip
+  ...allows the direction of bitmap clipping to be specified.
+
+Added new SortSongsBy configuration parameter values...
+-> TrackNumber
+-> AlbumArtist
+-> Publisher
+-> ISRC
+-> Custom
+
+Enhancements...
+-> Extraction of more MP3 ID3v2 tags to database...
+    -> Publisher (TPUB)
+    -> ISRC (TSRC)
+    -> User-specified Custom MP3 tag
+-> Select Code now updates in joystick and touch song modes
+-> User guide expanded and cleaned up
+-> Volume and Mute now affect sound effects as well as songs
+-> Load and Save playlists now only generate warnings and not errors if files can't be opened / created
+-> Hide joystick bitmap when pages are moving
+
+Bug fixes...
+-> Mono MP3 files now play properly
+-> Multiple SortSongsBy now works as expected
+-> Fixed duplicated albums page if SongsPerPage is the same as the number of songs on the album
+ 
+Skin changes...
+  -> Wall* skins spinning record now correctly disappears when record not playing
+  -> Wall* skins Now Playing artist name now correctly displayed
+  -> Changes to all Status content files containing updated $IF_NOT_* variables
+  -> Changes to all Status configuration files for SortSongsBy Title and then Artist
+  -> New "SongTouch" skin demonstrating touch screen operation
+
+
+-----------------------------------
 v1.3
 -----------------------------------
 
@@ -50,7 +184,7 @@ Added new command line options
 
 Added new status variables
 -> $IF_PAGE_MOVING
--> $IF_PAGE_NOT_MOVING
+-> $IF_NOT_PAGE_MOVING
 
 Behaviour changes
 -> joystick image stays on left / right hand edge when pages move rather than switching to opposite side
