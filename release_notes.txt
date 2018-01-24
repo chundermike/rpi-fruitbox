@@ -131,7 +131,7 @@ Skin changes...
   -> Wall* skins Now Playing artist name now correctly displayed
   -> Changes to all Status content files containing updated $IF_NOT_* variables
   -> Changes to all Status configuration files for SortSongsBy Title and then Artist
-  -> New "SongTouch" skin demonstrating touch screen operation
+  -> New "TouchOne" skin demonstrating touch screen operation
 
 
 -----------------------------------
