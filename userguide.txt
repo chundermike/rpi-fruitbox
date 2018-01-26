@@ -1,5 +1,5 @@
 
-fruitbox v1.4 (Jan 24 2018, 20:52:12) by Mike Kingsley
+fruitbox v1.5 (Jan 26 2018, 18:19:37) by Mike Kingsley
 A customisable MP3 Retro Jukebox for the Raspberry Pi
 
   1: Introduction
@@ -148,7 +148,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
 
       AutoSelect                    'No' = ENTER needs to be pressed to select song (after the two-digit select code is entered)
                                     'Yes' = song selected immediately select code is entered
-      PageJump                      The number of screens of pages moved in one go when 'ButtonJumpLeft' or 'ButtonJumpRight' is pressed
+      PageJump                      The number of screens of pages moved in one go when 'ButtonLeftJump' or 'ButtonRightJump' is pressed
       SelectTimeout                 Timeout for select code to return to '--' after not detecting second digit selection
       SelectHoldTimeout             Timeout for select code to return to '--' after song selected
       AutoPageTurnTime              Time between pages automatically turning (0 = no automatic page turn)
@@ -1022,6 +1022,20 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       Activates the text following it if the specified button is not 
       pressed
 
+      $IF_BUTTON_LEFT_JUMP_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_LEFT_JUMP_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
+      $IF_BUTTON_RIGHT_JUMP_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_RIGHT_JUMP_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
       $IF_BUTTON_AUTO_PRESSED
       Activates the text following it if the specified button is pressed
 
@@ -1294,8 +1308,8 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     
                LEFT : ButtonLeft ........ Move pages left
               RIGHT : ButtonRight ....... Move pages right
-                  [ : ButtonJumpLeft .... Move 'PageJump' pages
-                  ] : ButtonJumpRight ... Move 'PageJump' pages
+                  [ : ButtonLeftJump .... Move 'PageJump' pages
+                  ] : ButtonRightJump ... Move 'PageJump' pages
                  UP : ButtonUp .......... Move song selection up
                                           (joystick mode only)
                DOWN : ButtonDown ........ Move song selection down

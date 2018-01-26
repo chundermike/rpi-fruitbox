@@ -1,6 +1,18 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.5
+-----------------------------------
+
+Added new status object $ variables...
+  -> $IF_BUTTON_LEFT_JUMP_PRESSED
+  -> $IF_NOT_BUTTON_LEFT_JUMP_PRESSED
+  -> $IF_BUTTON_RIGHT_JUMP_PRESSED
+  -> $IF_NOT_BUTTON_RIGHT_JUMP_PRESSED
+
+Improved GPIO input debouncing
+
+-----------------------------------
 v1.4
 -----------------------------------
 
@@ -99,7 +111,7 @@ Added new configuration parameters...
 -> TextCondenseLimit
   ... specifies the difference between object width and text width after which text condensing is applied
 -> PageJump
-  ...specifies how many screens of pages to jump if 'ButtonJumpLeft' or 'ButtonJumpRight' is pressed
+  ...specifies how many screens of pages to jump if 'ButtonLeftJump' or 'ButtonRightJump' is pressed
 -> ReverseClip
   ...allows the direction of bitmap clipping to be specified.
 
@@ -131,7 +143,7 @@ Skin changes...
   -> Wall* skins Now Playing artist name now correctly displayed
   -> Changes to all Status content files containing updated $IF_NOT_* variables
   -> Changes to all Status configuration files for SortSongsBy Title and then Artist
-  -> New "TouchOne" skin demonstrating touch screen operation
+  -> New "SongTouch" skin demonstrating touch screen operation
 
 
 -----------------------------------
