@@ -585,13 +585,13 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     parameters can be used to modify the text displayed on the song 
     lines of the page(s)  ('PairedSongDescription' is only used if 
     'PairSongs' is not set to false) by setting it to 'SongTitle', 
-    'Artist', 'AlbumTitle', 'AlbumArtist', 'Year', 'TrackNumber', 
+    'Artist', 'AlbumTitle', 'AlbumArtist', 'Year', 'Genre', 'TrackNumber', 
     'Publisher', 'ISRC', 'Custom', 'PairedSongTitle', 'PairedArtist', 
-    'PairedAlbumTitle', 'PairedAlbumArtist', 'PairedYear', 'PairedTrackNumber', 
-    'PairedPublisher', 'PairedISRC', 'PairedCustom'  or any user 
-    string enclosed in double quotes.  Also, if multiple 'SongDescription' 
-    parameters are specified, then they are joined together to make 
-    a single text line.  For example...
+    'PairedAlbumTitle', 'PairedAlbumArtist', 'PairedYear', 'PairedGenre',
+    'PairedTrackNumber', 'PairedPublisher', 'PairedISRC', 'PairedCustom' 
+    or any user string enclosed in double quotes.  Also, if multiple
+    'SongDescription' parameters are specified, then they are joined
+    together to make a single text line.  For example...
      SongDescription = SongTitle
      SongDescription = " ["
      SongDescription = Year
