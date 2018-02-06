@@ -1,6 +1,48 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.6
+-----------------------------------
+
+Highlights:
+
+-> *new* Added ability to pause currently playing song
+-> *new* Added Extraction of and Sorting by MP3 Genre
+-> *new* Ability to auto play random songs only from specified Genre(s)
+-> *new* Ability to jump pages by (last) sort group Alphanumeric value
+-> *new* Added '--screenshot <filename>' command line option for capturing screenshot of skin
+-> Removed 'TextCondenseLimit' and replaced with individual max_width on each text description
+
+Added new buttons...
+-> ButtonPause
+-> ButtonLeftAlpha
+-> ButtonRightAlpha
+
+Added new status object $ variables...
+-> $NOW_PLAYING_GENRE
+-> $COMING_UP_GENRE
+-> $IF_PAUSED
+-> $IF_NOT_PAUSED
+-> $IF_BUTTON_PAUSE_PRESSED
+-> $IF_NOT_BUTTON_PAUSE_PRESSED
+-> $IF_BUTTON_LEFT_ALPHA_PRESSED
+-> $IF_NOT_BUTTON_LEFT_ALPHA_PRESSED
+-> $IF_BUTTON_RIGHT_ALPHA_PRESSED
+-> $IF_NOT_BUTTON_RIGHT_ALPHA_PRESSED
+-> $AUTO_GENRE
+
+Added new configuration parameters...
+-> AutoGenre * (allows auto mode to cycle through different genres, so auto mode random songs are picked only from current genre)
+
+Enhancements...
+-> Enhanced parameters...
+  -> SortSongsBy now includes 'Genre' parameter value
+  -> All *Text parameters now include optional extra parameter value 'max_width' for condense mode
+-> Added Jump by last SortSongsBy category Alphanumeric value
+-> Extraction of MP3 ID3v1 parameters
+
+
+-----------------------------------
 v1.5
 -----------------------------------
 
