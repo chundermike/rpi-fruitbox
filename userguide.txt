@@ -1,5 +1,5 @@
 
-fruitbox v1.6 (Feb  6 2018, 21:05:39) by Mike Kingsley
+fruitbox v1.7 (Feb 22 2018, 18:53:40) by Mike Kingsley
 A customisable MP3 Retro Jukebox for the Raspberry Pi
 
   1: Introduction
@@ -41,8 +41,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
 
   4: Command Line Options
 
-  fruitbox takes the following command line parameters.  All are 
-  optional except '--cfg'...
+  fruitbox takes the following command line parameters.
 
 
   4.1: --help
@@ -55,38 +54,63 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     This option determines which configuration file (skin) is used.
 
 
-  4.3: --user-guide
+  4.3: --database <file>
+
+    Use the specified database instead of the one specified in the 
+    skin
+
+
+  4.4: --music-path <file>
+
+    Use the specified music path instead of the one specified in 
+    the skin.  Only used when the database file doesn't exist (as 
+    specified on the command line or skin config file).  Note that 
+    the --music-path option can be specified multiple times if the 
+    user wishes to construct the database from multiple sources.
+
+
+  4.5: --user-guide
 
     Show this user guide (but I guess you already worked that one 
     out...)
 
 
-  4.4: --debug-song-nums
+  4.6: --debug-song-nums
 
     Show select code alongside song entries
 
 
-  4.5: --config-buttons
+  4.7: --config-buttons
 
     This option allows the user to interactively change the input 
     control button mappings, and creates the button mapping file 
     'fruitbox.btn'
 
 
-  4.6: --test-buttons
+  4.8: --test-buttons
 
     This option allows button codes to be checked without creating 
     a fruitbox.btn file.
 
 
-  4.7: --load-playlist <file>
+  4.9: --input_device <name>
+
+    Used in conjunction with '--config-buttons' or '--test-buttons', 
+    this allows an input device(s) to be specified which is then 
+    included in the button assignment.  The <name> can be the complete 
+    device name or just a sub section of it.  (A device name can 
+    be found using an external application such as 'evtest', or by 
+    typing "cat /proc/bus/input/devices").
+
+
+  4.10: --load-playlist <file>
 
     Loads a playlist file and populates the play queue with the songs 
     in it; fruitbox will begin playing the songs after it has started 
     up.
 
 
-  4.8: --save-playlist <file>
+  4.11: --save-playlist <file>
 
     When fruitbox exits (by the user pressing the 'Quit' button), 
     this option saves the contents of the play queue (and currently 
@@ -97,10 +121,31 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     required.
 
 
-  4.9: --screenshot <file>
+  4.12: --choose-cfg <file>
 
-    Save a screenshot of the skin to the specified filename, then 
-    quit without running.
+    This option allows the user to choose a configuration file (skin) 
+    from a menu when fruitbox starts up, rather than specifying it 
+    using the '--cfg' command line option.  The <file> parameter, 
+    should contain a list of cfg files to choose from.  Each entry 
+    takes the form 'File = <file>' (path and name of a skin's cfg 
+    file).
+    
+    fruitbox will allow the user to cycle through the list of files 
+    using the ButtonLeft and ButtonRight keys.  Any other button 
+    will select the skin.  The 'SkinName' and 'SkinDescription' values 
+    in the skin cfg files will be used to display information about 
+    each skin. A preview of the skin is shown if a 'screenshot.jpg' 
+    file exists in the same directory as the cfg file.  Note that 
+    screenshot files can be generated with the '--screenshot' command 
+    line option.
+
+
+  4.13: --screenshot <file>
+
+    Save a screenshot of the skin, then quit without running.  The 
+    screenshot will be written to 'screeenshot.jpg' in the skin directory. 
+    This option should be used in conjunction with the '--cfg' or 
+    '--choose-cfg' command line options.
 
 
   5: Configuration (Skin) Files
@@ -143,16 +188,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       SkinSize                      Size of the skin (width and height in pixels).
                                     The skin is scaled to match the full screen size of the display
       SkinName                      Name of the skin
-
+      SkinDescription               Description of the skin
       Database                      File name of Database file
       MusicPath *                   File name of path to mp3 music files.  Can contain sub-directories.
                                     Ignored if the 'Database' file already exists
       SortSongsBy *                 'Title', 'Artist', 'Album', 'AlbumArtist', 'Year', 'Genre', 'TrackNumber', 'Publisher', 'ISRC', 'Custom', 'Random', 'Unsorted'
       SelectKeys                    First pair of characters are the range for first button press, second pair for second button press
-      TouchDevice                   Name of touch device (defaults to 'FT5406' - the official Raspberry Pi 7" display)
       CustomMP3Tag                  Name of an MP3 ID3v2 tag the user wishes to extract to a song's 'Custom' field (i.e. "TCON" is content type)
                                     Note: this is only used during database file *creation*
-
       AutoSelect                    'No' = ENTER needs to be pressed to select song (after the two-digit select code is entered)
                                     'Yes' = song selected immediately select code is entered
       PageJump                      The number of screens of pages moved in one go when 'ButtonLeftJump' or 'ButtonRightJump' is pressed
@@ -236,6 +279,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       ButtonVol+                    x y width height  (touch area of button, where x y = top left corner)
       ButtonVol-                    x y width height  (touch area of button, where x y = top left corner)
       ButtonMute                    x y width height  (touch area of button, where x y = top left corner)
+      ButtonPowerOff                x y width height  (touch area of button, where x y = top left corner)
       Button0                       x y width height  (touch area of button, where x y = top left corner)
       Button1                       x y width height  (touch area of button, where x y = top left corner)
       Button2                       x y width height  (touch area of button, where x y = top left corner)
@@ -281,6 +325,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       Position                      x y (in pixels)
       Angle                         Angle of object in degrees (0..359)
       Contents                      Filename of text file describing status box contents
+      Output                        Filename of output text file containing status
       Text                          Status box text style.  See section 'Fonts and Text'
       LineSpacing                   Gap (in pixels) between text lines in the status box
       TimerTickPeriod               Time (in video frame ticks) of status box timer period
@@ -418,7 +463,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
 
     If a [joystick] object is specified in the skin file, then joystick 
     mode is activated.  This allows a song to be chosen using the 
-    up, down, left and right buttons instead of entering the two-digit 
+    up, down, L and right buttons instead of entering the two-digit 
     select code.  Pressing the Select Button will then add that song 
     to the play queue (AutoSelect mode is disabled when joystick 
     mode is active).
@@ -527,16 +572,20 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   The display is built using a combination of the following objects, 
   as defined in the skin file:
   
-  1.     [page] object : a region which contains songs.
-                        See pages section for more details.
-  2.   [bitmap] object : a region which contains a static bitmap.
-                        This can be used for background and foregrounds
-                        for example.
-  3.   [status] object : a region containing status information.
-                        See status box section for more details.
-  4. [joystick] object : a region containing a bitmap controlled
-                        by the four cursor keys.
-                        See joystick section for more details.
+  1.       [page] object : a region which contains songs.
+                          See pages section for more details.
+  2.     [bitmap] object : a region which contains a static bitmap.
+                          This can be used for background and 
+  foregrounds
+                          for example.
+  3.     [status] object : a region containing status information.
+                          See status box section for more details.
+  4.   [joystick] object : a region containing a bitmap controlled
+                          by the four cursor keys.
+                          See joystick section for more details.
+  5. [touch song] object : a region containing a bitmap highlighting
+                          a song name when touched.
+                          See touch song section for more details.
   
   Note that there is no limit on the number of objects which can 
   be defined.  They are rendered to the display in the order that 
@@ -587,10 +636,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     'PairSongs' is not set to false) by setting it to 'SongTitle', 
     'Artist', 'AlbumTitle', 'AlbumArtist', 'Year', 'Genre', 'TrackNumber', 
     'Publisher', 'ISRC', 'Custom', 'PairedSongTitle', 'PairedArtist', 
-    'PairedAlbumTitle', 'PairedAlbumArtist', 'PairedYear', 'PairedGenre',
+    'PairedAlbumTitle', 'PairedAlbumArtist', 'PairedYear', 'PairedGenre', 
     'PairedTrackNumber', 'PairedPublisher', 'PairedISRC', 'PairedCustom' 
-    or any user string enclosed in double quotes.  Also, if multiple
-    'SongDescription' parameters are specified, then they are joined
+    or any user string enclosed in double quotes.  Also, if multiple 
+    'SongDescription' parameters are specified, then they are joined 
     together to make a single text line.  For example...
      SongDescription = SongTitle
      SongDescription = " ["
@@ -608,11 +657,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   7.2: Status Boxes
 
     Status Boxes provide a very flexible way of displaying real-time 
-    text-based information, and fixed and animated bitmaps.  Examples 
-    include 'Now Playing' information, 'Coming Up' song list, Select 
-    Code, Credits, etc.  Each status box defined should have a 'Contents' 
-    file associated with it.  This is a file that contains human 
-    readable text which indicates what is drawn in the status box.
+    text-based information, and fixed and animated bitmaps.  Using 
+    the 'Output' parameter also allows the status information to 
+    be written to an external file to be parsed by external applications*. 
+    Examples of status include 'Now Playing' information, 'Coming 
+    Up' song list, Select Code, Credits, etc.  Each status box defined 
+    should have a 'Contents' file associated with it.  This is a 
+    file that contains human readable text which indicates what is 
+    drawn in the status box.
     
     As well as fixed text, the user can also specify the following 
     predefined variables, which represent song details and jukebox 
@@ -620,6 +672,11 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     drawn under many different circumstances.  The GPIO related predefined 
     variables allow GPIO pins to be driven with high or low values 
     under different fruitbox conditions.
+    
+    * Note: outputting status to a text file can be done as well 
+    as displaying the status on the display, or instead of (to supress 
+    the status being rendered to the display, do not define the 'Size' 
+    parameter (or set width and/or height to zero).
 
       $NOW_PLAYING_TITLE
       The name of the song which is currently playing
@@ -746,7 +803,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       The number of the first page visible on the display
 
       $LAST_VISIBLE_PAGE
-      The number of the lasst page visible on the display
+      The number of the last page visible on the display
 
       $SET_GPIO_00_HI
       Sets the specified GPIO output high
@@ -1030,7 +1087,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       Activates the text following it if the current song is not stereo
 
       $IF_PAUSED
-      Activates the text following it if the current song is paued
+      Activates the text following it if the current song is paused
 
       $IF_NOT_PAUSED
       Activates the text following it if the current song is not paused
@@ -1329,6 +1386,13 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       Activates the text following it if the specified button is not 
       pressed
 
+      $IF_BUTTON_POWER_OFF_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_POWER_OFF_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
       $NO_DRAW
       Supresses drawing of the status object
 
@@ -1393,13 +1457,20 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   3. USB joystick axis (stick)
   4. USB joystick button
   5. Region on touch screen
+  6. User-defined Input Device(s) *
   
   The fruitbox command line parameter '--config-buttons' can be 
   used to interactively assign buttons, and generate the 'fruitbox.btn' 
   file.  The btn file can be manually edited later if minor adjustments 
   are required.  The '--test-buttons' command line parameter can 
   be used to check what codes are generated without creating a 
-  fruitbox.btn file.
+  fruitbox.btn file.  If the command line option '--add-input-devices' 
+  is specified along with '--config-buttons' or '--test-buttons', 
+  then all the input devices are scanned, and the user is given 
+  the choice to include one or more in the button detection.  Any 
+  selected devices are then specified in the button file.  This 
+  is useful if your input device is not a joystick, keyboard or 
+  touch device.
   
   For touch screen buttons, the touch areas are defined in the 
   skin file itself, using the [touch areas] section, because these 
@@ -1408,6 +1479,17 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   related.  Button assignments are not specified in the skin to 
   ensure skins remain compatible with different button hardware 
   setups.
+  
+  * The user can specify other input devices using the 'InputDevice' 
+  configuration parameter.  The parameter value can be the full 
+  name or part of the name of the input device. (this can be found 
+  using 'evtest' or by typing "cat /proc/bus/input/devices").  
+  fruitbox will support general input devices which generate EV_KEY 
+  event types (again, check with 'evtest').  You can specify as 
+  many InputDevices as you like.  The '--input-device' command 
+  line option can be used to specify an input device name(s) if 
+  generating the button file using the '--config-buttons' command 
+  line option.
 
 
   9.1: Default Buttons
@@ -1417,7 +1499,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     inputs, USB joysticks or touch screen inputs defined in the 'fruitbox.btn' 
     file.
     
-               LEFT : ButtonLeft ........ Move pages left
+               LEFT : ButtonRight ....... Move pages left
               RIGHT : ButtonRight ....... Move pages right
                   [ : ButtonLeftJump .... Move 'PageJump' pages
                   ] : ButtonRightJump ... Move 'PageJump' pages
@@ -1444,6 +1526,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
                   M : ButtonMute ........ Mute / Unmute song and
                                           sound effects volume
                 ESC : ButtonQuit ........ Quit fruitbox
+                F12 : ButtonPowerOff .... Power off Raspberry Pi
     
     * The sort sections start with a new letter of the alphabet 
     corresponding to the last SortSongsBy value.  For example, if 
@@ -1466,6 +1549,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     
     The following entries in the button file are recognised:
 
+      InputDevice *                 Name of an input device.  Can be the full device name or part of the device name
+                                    ('evtest' can give you this information) * Can be defined multiple times
+
+      TouchDevice                   Name of touch device (defaults to 'FT5406' - the official Raspberry Pi 7" display)
       ButtonQuit                    Name of button (quit fruitbox)
       ButtonCoin                    Name of button (insert coin)
       ButtonRandom                  Name of button (select random song)
@@ -1487,6 +1574,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       ButtonVol+                    Name of button (change volume)
       ButtonVol-                    Name of button (change volume)
       ButtonMute                    Name of button (volume mute)
+      ButtonPowerOff                Name of button (power off)
       Button0                       Name of button (song selection)
       Button1                       Name of button (song selection)
       Button2                       Name of button (song selection)
@@ -1516,14 +1604,15 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
      = Keyboard <code>
      = GPIO <number>
      = Touch
-     = JoyAxis <stick> <axis> <position>
-     = JoyButton <code>
+     = JoyAxis <stick> <axis> <position> <id>
+     = JoyButton <code> <id>
+     = Device <code> <id>
     
-    The above <code>, <number>, <stick>, <axis> and <position> values 
-    can be determined by fruitbox using the '--config-buttons' or 
-    '--test-buttons' command line options.  There are no values for 
-    the 'Touch' option; the touch area for the specified button should 
-    be defined in the [touch areas] section of the skin configuration 
+    The above <code>, <number>, <stick>, <axis>, <position> and <id> 
+    values can be determined by fruitbox using the '--config-buttons' 
+    or '--test-buttons' command line options.  There are no values 
+    for the 'Touch' option; the touch area for the specified button 
+    should be defined in the [touch areas] section of the skin configuration 
     file.
 
 

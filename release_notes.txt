@@ -1,6 +1,44 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.7
+-----------------------------------
+
+Highlights:
+
+-> *new* Optional Skin Chooser start-up menu
+-> *new* Support for multiple joysticks
+-> *new* Support user-specified (key/button based) input devices
+-> *new* Status output to external file(s)
+-> Improved user interface for button mapping and database creation
+
+Bug fixes:
+-> mp3 file extensions now case-insensitive
+
+Added new command line options...
+-> --choose-cfg for skin chooser menu
+-> --database and --music_path for over-riding skin settings
+-> --input-device for specifying input device(s) for button config/test
+
+Enhancements:
+-> Support for multiple joysticks
+-> Graphics based Info box (rather than terminal output) for database generation and configuring/testing buttons (shows info for GUI-launched fruitbox)
+-> Volume control now logarithmic not linear for flatter volume change across the range 0-100
+-> --screenshot command line parameter now creates screenshot.jpg in skin directory (not user specified)
+-> Added 'ButtonPowerOff'
+-> TouchDevice and InputDevice parameters moved from skin cfg files to btn file
+-> Added new 'Output' option for [status] objects
+  ...allows text status to be output to file(s) for reading by external applications
+
+Added new button...
+-> ButtonPoweroff
+
+Added new status object $ variables...
+-> $IF_BUTTON_POWER_OFF_PRESSED
+-> $IF_NOT_BUTTON_POWER_OFF_PRESSED
+
+
+-----------------------------------
 v1.6
 -----------------------------------
 

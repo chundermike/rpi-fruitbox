@@ -1,0 +1,12 @@
+# fruitbox v1.7 Skin chooser file
+# Add the skins you want to appear in the chooser menu below...
+
+Title = ...Select Skin...
+
+File = skins/TouchOne/fruitbox.cfg
+File = skins/WallSmall/fruitbox.cfg
+File = skins/WallJuke/fruitbox.cfg
+File = skins/Granite/fruitbox.cfg
+File = skins/Modern/fruitbox.cfg
+File = skins/NumberOne/fruitbox.cfg
+File = skins/Splat/fruitbox.cfg
