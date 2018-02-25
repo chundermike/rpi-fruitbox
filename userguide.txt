@@ -1,5 +1,5 @@
 
-fruitbox v1.7 (Feb 22 2018, 18:53:40) by Mike Kingsley
+fruitbox v1.8 (Feb 25 2018, 12:32:09) by Mike Kingsley
 A customisable MP3 Retro Jukebox for the Raspberry Pi
 
   1: Introduction
@@ -134,18 +134,20 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     using the ButtonLeft and ButtonRight keys.  Any other button 
     will select the skin.  The 'SkinName' and 'SkinDescription' values 
     in the skin cfg files will be used to display information about 
-    each skin. A preview of the skin is shown if a 'screenshot.jpg' 
-    file exists in the same directory as the cfg file.  Note that 
-    screenshot files can be generated with the '--screenshot' command 
-    line option.
+    each skin. A preview of the skin is shown if a screenshot file 
+    ('screenshot.jpg' by default or the value of the 'Screenshot' 
+    parameter in the skin configuration file) exists in the same 
+    directory as the cfg file.  Note that screenshot files can be 
+    generated with the '--screenshot' command line option.
 
 
   4.13: --screenshot <file>
 
     Save a screenshot of the skin, then quit without running.  The 
-    screenshot will be written to 'screeenshot.jpg' in the skin directory. 
-    This option should be used in conjunction with the '--cfg' or 
-    '--choose-cfg' command line options.
+    screenshot will be written to 'screeenshot.jpg' in the skin directory 
+    by default or the value of the 'Screenshot' parameter in the 
+    skin configuration file.  This option should be used in conjunction 
+    with the '--cfg' or '--choose-cfg' command line options.
 
 
   5: Configuration (Skin) Files
@@ -189,6 +191,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
                                     The skin is scaled to match the full screen size of the display
       SkinName                      Name of the skin
       SkinDescription               Description of the skin
+      Screenshot                    Filename of screenshot capture
       Database                      File name of Database file
       MusicPath *                   File name of path to mp3 music files.  Can contain sub-directories.
                                     Ignored if the 'Database' file already exists
@@ -463,7 +466,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
 
     If a [joystick] object is specified in the skin file, then joystick 
     mode is activated.  This allows a song to be chosen using the 
-    up, down, L and right buttons instead of entering the two-digit 
+    up, down, left and right buttons instead of entering the two-digit 
     select code.  Pressing the Select Button will then add that song 
     to the play queue (AutoSelect mode is disabled when joystick 
     mode is active).
@@ -575,9 +578,8 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   1.       [page] object : a region which contains songs.
                           See pages section for more details.
   2.     [bitmap] object : a region which contains a static bitmap.
-                          This can be used for background and 
-  foregrounds
-                          for example.
+                          This can be used for background and
+                          foregrounds for example.
   3.     [status] object : a region containing status information.
                           See status box section for more details.
   4.   [joystick] object : a region containing a bitmap controlled
@@ -1550,8 +1552,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     The following entries in the button file are recognised:
 
       InputDevice *                 Name of an input device.  Can be the full device name or part of the device name
-                                    ('evtest' can give you this information) * Can be defined multiple times
-
+                                    ('evtest' gives you this information) *Can be defined multiple times
       TouchDevice                   Name of touch device (defaults to 'FT5406' - the official Raspberry Pi 7" display)
       ButtonQuit                    Name of button (quit fruitbox)
       ButtonCoin                    Name of button (insert coin)

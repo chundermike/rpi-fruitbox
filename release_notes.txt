@@ -1,6 +1,17 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.8
+-----------------------------------
+
+-> bug fix for ButtonSkip remapping not working
+
+-> Added 'Screenshot' configuration parameter to allow a screenshot to be associated 
+   with a cfg file rather than the directory it's in (to allow multiple choosr cfg files
+   with their own screenshots in the same directory)
+
+   
+-----------------------------------
 v1.7
 -----------------------------------
 
