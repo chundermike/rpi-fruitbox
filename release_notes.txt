@@ -1,6 +1,20 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.9
+-----------------------------------
+
+Added new command line options...
+-> --touch-device for specifying touch device for button config/test
+-> --no-scale for disabling the skin scaling to display size (useful for debugging skins)
+
+Bug fixes:
+-> TouchDevice and InputDevice now pick up device names corectly in frutibox.btn file
+-> Fixed broken touch input (broken since v1.7)
+-> Check for no pages defined in skin config file
+
+
+-----------------------------------
 v1.8
 -----------------------------------
 

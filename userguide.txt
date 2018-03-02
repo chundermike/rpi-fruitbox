@@ -1,5 +1,5 @@
 
-fruitbox v1.8 (Feb 25 2018, 12:32:09) by Mike Kingsley
+fruitbox v1.9 (Feb 28 2018, 19:34:19) by Mike Kingsley
 A customisable MP3 Retro Jukebox for the Raspberry Pi
 
   1: Introduction
@@ -103,14 +103,26 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     typing "cat /proc/bus/input/devices").
 
 
-  4.10: --load-playlist <file>
+  4.10: --touch_device <name>
+
+    Used in conjunction with '--config-buttons' or '--test-buttons', 
+    this allows a touch screen device to be specified which is then 
+    included in the button assignment.  The <name> can be the complete 
+    device name or just a sub section of it.  (A device name can 
+    be found using an external application such as 'evtest', or by 
+    typing "cat /proc/bus/input/devices").  If not specified, fruitbox 
+    will try and find the default 'FT5406' device (the official Raspberry 
+    Pi 7" touch screen display)
+
+
+  4.11: --load-playlist <file>
 
     Loads a playlist file and populates the play queue with the songs 
     in it; fruitbox will begin playing the songs after it has started 
     up.
 
 
-  4.11: --save-playlist <file>
+  4.12: --save-playlist <file>
 
     When fruitbox exits (by the user pressing the 'Quit' button), 
     this option saves the contents of the play queue (and currently 
@@ -121,7 +133,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     required.
 
 
-  4.12: --choose-cfg <file>
+  4.13: --choose-cfg <file>
 
     This option allows the user to choose a configuration file (skin) 
     from a menu when fruitbox starts up, rather than specifying it 
@@ -135,19 +147,31 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     will select the skin.  The 'SkinName' and 'SkinDescription' values 
     in the skin cfg files will be used to display information about 
     each skin. A preview of the skin is shown if a screenshot file 
-    ('screenshot.jpg' by default or the value of the 'Screenshot' 
-    parameter in the skin configuration file) exists in the same 
-    directory as the cfg file.  Note that screenshot files can be 
-    generated with the '--screenshot' command line option.
+    exists (by default, 'screenshot.jpg' in the same directory as 
+    the cfg file, or the name of the 'Screenshot' parameter value 
+    in the skin configuration file).  Note that screenshot files 
+    can be generated with the '--screenshot' command line option.
 
 
-  4.13: --screenshot <file>
+  4.14: --screenshot
 
     Save a screenshot of the skin, then quit without running.  The 
     screenshot will be written to 'screeenshot.jpg' in the skin directory 
     by default or the value of the 'Screenshot' parameter in the 
     skin configuration file.  This option should be used in conjunction 
     with the '--cfg' or '--choose-cfg' command line options.
+
+
+  4.15: --no-scale
+
+    Normally fruitbox will scale (resize) the skin to the display, 
+    so no matter what it's size, it will always fit exactly.  This 
+    option turns off the scaling so the skin will be shown at its 
+    original size (useful for debugging skin designs).  The skin 
+    will be centered on the display.  If the skin is smaller than 
+    the display then the skin will be surrounded by a black border, 
+    but if the skin is larger than the display, the outer edges of 
+    the skin will not be visible.
 
 
   5: Configuration (Skin) Files
@@ -1466,13 +1490,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   file.  The btn file can be manually edited later if minor adjustments 
   are required.  The '--test-buttons' command line parameter can 
   be used to check what codes are generated without creating a 
-  fruitbox.btn file.  If the command line option '--add-input-devices' 
+  fruitbox.btn file.  If the command line option '--input-device' 
   is specified along with '--config-buttons' or '--test-buttons', 
-  then all the input devices are scanned, and the user is given 
-  the choice to include one or more in the button detection.  Any 
-  selected devices are then specified in the button file.  This 
-  is useful if your input device is not a joystick, keyboard or 
-  touch device.
+  then the specified input device(s) are included in the button 
+  detection.  Any selected devices are then specified in the button 
+  file.  This is useful if your input device is not a joystick, 
+  keyboard or touch device.  The '--touch-device' option works 
+  the same as the '--input-device' option but is used for specifying 
+  a touch input device.
   
   For touch screen buttons, the touch areas are defined in the 
   skin file itself, using the [touch areas] section, because these 
@@ -1483,15 +1508,16 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   setups.
   
   * The user can specify other input devices using the 'InputDevice' 
-  configuration parameter.  The parameter value can be the full 
-  name or part of the name of the input device. (this can be found 
-  using 'evtest' or by typing "cat /proc/bus/input/devices").  
-  fruitbox will support general input devices which generate EV_KEY 
-  event types (again, check with 'evtest').  You can specify as 
-  many InputDevices as you like.  The '--input-device' command 
+  and/or the 'TouchDevice' configuration parameters.  The parameter 
+  values can be the full name or part of the name of the input 
+  device. (this can be found using 'evtest' or by typing "cat /proc/bus/input/devi
+  ces").  fruitbox will support general input devices which generate 
+  EV_KEY event types (again, check with 'evtest').  You can specify 
+  as many InputDevices as you like .  The '--input-device' command 
   line option can be used to specify an input device name(s) if 
   generating the button file using the '--config-buttons' command 
-  line option.
+  line option.  Likewise the TouchDevice and --touch-device options 
+  can be used to specify a touch input device.
 
 
   9.1: Default Buttons
@@ -1599,7 +1625,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       ButtonK                       Name of button (song selection)
 
     
-    Each of the above parameters can be assigned one of the following 
+    Each of the above Button* parameters can be assigned one of the following 
     values...
     
      = Keyboard <code>
