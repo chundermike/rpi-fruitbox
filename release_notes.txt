@@ -9,7 +9,7 @@ Added new command line options...
 -> --no-scale for disabling the skin scaling to display size (useful for debugging skins)
 
 Bug fixes:
--> TouchDevice and InputDevice now pick up device names corectly in frutibox.btn file
+-> TouchDevice and InputDevice now pick up device names corectly in fruitbox.btn file
 -> Fixed broken touch input (broken since v1.7)
 -> Check for no pages defined in skin config file
 
