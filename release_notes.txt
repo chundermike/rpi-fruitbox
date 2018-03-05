@@ -1,6 +1,52 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.10
+-----------------------------------
+
+Highlights:
+
+-> *new* support for multiple coin slots
+-> *new* status for invalid song selection
+-> *new* added --touch-scale command line option to support touch
+   screens with different display and touch resolutions
+
+
+Added extra buttons for multiple coin inserters...
+  -> ButtonCoin1
+  -> ButtonCoin2
+  -> ButtonCoin3
+  -> ButtonCoin4
+
+Removed Button...
+  -> ButtonCoin
+
+Added extra status variables...
+  -> $PLAYS_PER_COIN1
+  -> $PLAYS_PER_COIN2
+  -> $PLAYS_PER_COIN3
+  -> $PLAYS_PER_COIN4
+  -> $IF_BUTTON_COIN1_PRESSED
+  -> $IF_NOT_BUTTON_COIN1_PRESSED
+  -> $IF_BUTTON_COIN2_PRESSED
+  -> $IF_NOT_BUTTON_COIN2_PRESSED
+  -> $IF_BUTTON_COIN3_PRESSED
+  -> $IF_NOT_BUTTON_COIN3_PRESSED
+  -> $IF_BUTTON_COIN4_PRESSED
+  -> $IF_NOT_BUTTON_COIN4_PRESSED
+  -> $IF_INVALID_CHOICE
+  -> $IF_NOT_INVALID_CHOICE
+
+Removed stat varaiables...
+  -> $PLAYS_PER_COIN
+  -> $IF_BUTTON_COIN_PRESSED
+  -> $IF_NOT_BUTTON_COIN_PRESSED
+
+Enhancements:
+  -> don't generate an empty database file if no songs found
+
+
+-----------------------------------
 v1.9
 -----------------------------------
 
@@ -20,11 +66,11 @@ v1.8
 
 -> bug fix for ButtonSkip remapping not working
 
--> Added 'Screenshot' configuration parameter to allow a screenshot to be associated 
+-> Added 'Screenshot' configuration parameter to allow a screenshot to be associated
    with a cfg file rather than the directory it's in (to allow multiple choosr cfg files
    with their own screenshots in the same directory)
 
-   
+
 -----------------------------------
 v1.7
 -----------------------------------
@@ -136,7 +182,7 @@ Highlights:
 
 Details:
 
-Updated input button handling... 
+Updated input button handling...
 fruitbox now reads custom button mappings from fruitbox.btn mappping file (if it exists).
 buttons can be...
   -> Mapped to any keyboard key
@@ -160,7 +206,7 @@ Added new status object $ variables...
   Support for button detection (useful for animating touch screen buttons)...
     -> $IF_BUTTON_<name>_PRESSED
     -> $IF_NOT_BUTTON_<name>_PRESSED
-  Added new variables for extra song information...    
+  Added new variables for extra song information...
     -> $NOW_PLAYING_ALB_ARTIST
     -> $NOW_PLAYING_TRACK_NUMBER
     -> $NOW_PLAYING_PUBLISHER
@@ -176,7 +222,7 @@ Added new status object $ variables...
   Added new variables for playqueue status...
     -> $IF_PLAYQUEUE_EMPTY
     -> $IF_NOT_PLAYQUEUE_EMPTY
-    -> $IF_PLAYQUEUE_FULL 
+    -> $IF_PLAYQUEUE_FULL
     -> $IF_NOT_PLAYQUEUE_FULL
   Added new variables for general status...
     -> $PLAYS_PER_COIN
@@ -242,7 +288,7 @@ Bug fixes...
 -> Mono MP3 files now play properly
 -> Multiple SortSongsBy now works as expected
 -> Fixed duplicated albums page if SongsPerPage is the same as the number of songs on the album
- 
+
 Skin changes...
   -> Wall* skins spinning record now correctly disappears when record not playing
   -> Wall* skins Now Playing artist name now correctly displayed

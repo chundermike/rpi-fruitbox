@@ -1,5 +1,5 @@
 
-fruitbox v1.9 (Feb 28 2018, 19:34:19) by Mike Kingsley
+fruitbox v1.10 (Mar  5 2018, 19:50:49) by Mike Kingsley
 A customisable MP3 Retro Jukebox for the Raspberry Pi
 
   1: Introduction
@@ -174,6 +174,15 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     the skin will not be visible.
 
 
+  4.16: --touch-scale
+
+    This value can be used to specify a scaling factor for when touch 
+    screens provide a different display resolution to the touch resolution. 
+    For example, if a touch display has a resolution of 1000x500, 
+    and the touch input provides a resolution of 2000x750, then set 
+    the --touch-scale values to 2.0 and 1.5 respectively.
+
+
   5: Configuration (Skin) Files
 
   Configuration files (skins) define the look and feel of fruitbox. 
@@ -223,7 +232,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       SelectKeys                    First pair of characters are the range for first button press, second pair for second button press
       CustomMP3Tag                  Name of an MP3 ID3v2 tag the user wishes to extract to a song's 'Custom' field (i.e. "TCON" is content type)
                                     Note: this is only used during database file *creation*
-      AutoSelect                    'No' = ENTER needs to be pressed to select song (after the two-digit select code is entered)
+      AutoSelect                    'No' = ButtonSelect needs to be pressed to select song (after the two-digit select code is entered)
                                     'Yes' = song selected immediately select code is entered
       PageJump                      The number of screens of pages moved in one go when 'ButtonLeftJump' or 'ButtonRightJump' is pressed
       SelectTimeout                 Timeout for select code to return to '--' after not detecting second digit selection
@@ -235,7 +244,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       AutoPlayGap                   The time between a random song being selected and played after the last song has finished playing
       AutoGenre *                   Name of Genre.  Pressing ButtonAuto will cycle through all AutoGenre definitions (and 'Off'
                                     and 'Any') and only select a random song from that Genre **
-      PlaysPerCoin                  The number of song credits added when a coin is inserted (0 = freeplay mode)
+      PlaysPerCoin1                 The number of song credits added when a coin is inserted (if all 4 = 0; freeplay mode)
+      PlaysPerCoin2                 The number of song credits added when a coin is inserted (if all 4 = 0; freeplay mode)
+      PlaysPerCoin3                 The number of song credits added when a coin is inserted (if all 4 = 0; freeplay mode)
+      PlaysPerCoin4                 The number of song credits added when a coin is inserted (if all 4 = 0; freeplay mode)
       SongsPerPage                  The number of song entries on each song page
       PageMode                      'Singles' or 'Albums'.
       PageSize                      The size (width and height in pixels) of each song page
@@ -286,7 +298,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
 
       [touch areas]
       ButtonQuit                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonCoin                    x y width height  (touch area of button, where x y = top left corner)
+      ButtonCoin1                   x y width height  (touch area of button, where x y = top left corner)
+      ButtonCoin2                   x y width height  (touch area of button, where x y = top left corner)
+      ButtonCoin3                   x y width height  (touch area of button, where x y = top left corner)
+      ButtonCoin4                   x y width height  (touch area of button, where x y = top left corner)
       ButtonRandom                  x y width height  (touch area of button, where x y = top left corner)
       ButtonSelect                  x y width height  (touch area of button, where x y = top left corner)
       ButtonSkip                    x y width height  (touch area of button, where x y = top left corner)
@@ -486,7 +501,16 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
                  maximum width (if the 'condense' option is 'Yes')
 
 
-  5.3: Joystick Mode
+  5.3: Coin Mode
+
+    fruitbox can support upto four coin buttons.  Each coin button 
+    has it's own 'PlaysPerCoin' value, so that fruitbox can mimic 
+    jukeboxes which have multiple coin slots, for different coin 
+    denominations.  If all four 'PlaysPerCoin' parameters are zero 
+    (or not specified) then fruitbox will operate in free play mode.
+
+
+  5.4: Joystick Mode
 
     If a [joystick] object is specified in the skin file, then joystick 
     mode is activated.  This allows a song to be chosen using the 
@@ -505,7 +529,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     around the song title region.
 
 
-  5.4: Touch Song Mode
+  5.5: Touch Song Mode
 
     If a [touch song] object is specified in the skin file, then 
     touch song mode is activated (only if a touch screen has been 
@@ -521,7 +545,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     being touched.
 
 
-  5.5: Random Songs
+  5.6: Random Songs
 
     fruitbox can play random songs in one of two ways...
      1. The user pressing the 'Random' button
@@ -538,7 +562,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     song anyway even if it already been played recently.
 
 
-  5.6: Albums / Singles Mode
+  5.7: Albums / Singles Mode
 
     Fruitbox has two distinct modes - Albums and Singles, specified 
     by the 'PageMode' parameter.
@@ -810,7 +834,16 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       The name of the current AutoGenre that AutoPlay will select a 
       random song from
 
-      $PLAYS_PER_COIN
+      $PLAYS_PER_COIN1
+      The number of plays per coin
+
+      $PLAYS_PER_COIN2
+      The number of plays per coin
+
+      $PLAYS_PER_COIN3
+      The number of plays per coin
+
+      $PLAYS_PER_COIN4
       The number of plays per coin
 
       $VOLUME
@@ -1118,6 +1151,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       $IF_NOT_PAUSED
       Activates the text following it if the current song is not paused
 
+      $IF_INVALID_CHOICE
+      Activates the text following it if the last song selection was 
+      invalid
+
+      $IF_NOT_INVALID_CHOICE
+      Activates the text following it if the last song selection was 
+      not invalid
+
       $IF_BUTTON_QUIT_PRESSED
       Activates the text following it if the specified button is pressed
 
@@ -1125,10 +1166,31 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       Activates the text following it if the specified button is not 
       pressed
 
-      $IF_BUTTON_COIN_PRESSED
+      $IF_BUTTON_COIN1_PRESSED
       Activates the text following it if the specified button is pressed
 
-      $IF_NOT_BUTTON_COIN_PRESSED
+      $IF_NOT_BUTTON_COIN1_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
+      $IF_BUTTON_COIN2_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_COIN2_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
+      $IF_BUTTON_COIN3_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_COIN3_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
+      $IF_BUTTON_COIN4_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_COIN4_PRESSED
       Activates the text following it if the specified button is not 
       pressed
 
@@ -1539,7 +1601,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
                                           (joystick mode only)
     0 to 9 / A to K : Button0..ButtonK .. Song selection
               ENTER : ButtonSelect ...... Select song
-             INSERT : ButtonCoin ........ Insert coin
+                 F1 : ButtonCoin1 ....... Insert coin
+                 F2 : ButtonCoin2 ....... Insert coin
+                 F3 : ButtonCoin3 ....... Insert coin
+                 F4 : ButtonCoin4 ....... Insert coin
               SPACE : ButtonRandom ...... Select random song
           BACKSPACE : ButtonSkip ........ Skip (stops currently
                   Z : ButtonPause ....... pause (pauses/unpauses
@@ -1581,7 +1646,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
                                     ('evtest' gives you this information) *Can be defined multiple times
       TouchDevice                   Name of touch device (defaults to 'FT5406' - the official Raspberry Pi 7" display)
       ButtonQuit                    Name of button (quit fruitbox)
-      ButtonCoin                    Name of button (insert coin)
+      ButtonCoin1                   Name of button (insert coin)
+      ButtonCoin2                   Name of button (insert coin)
+      ButtonCoin3                   Name of button (insert coin)
+      ButtonCoin4                   Name of button (insert coin)
       ButtonRandom                  Name of button (select random song)
       ButtonSelect                  Name of button (play selected song)
       ButtonSkip                    Name of button (stop current song)
@@ -1625,8 +1693,8 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       ButtonK                       Name of button (song selection)
 
     
-    Each of the above Button* parameters can be assigned one of the following 
-    values...
+    Each of the above Button* parameters can be assigned one of the 
+    following values...
     
      = Keyboard <code>
      = GPIO <number>
