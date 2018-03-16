@@ -1,6 +1,22 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.11
+-----------------------------------
+
+Highlights:
+
+-> fruitbox versions for Stretch (fruitbox) and Jessie (fruitbox-jessie)
+-> Reduced ALSA audio lag (upgraded Allegro library from 5.2.2 to 5.2.4)
+
+Bug-fixes:
+-> User Device buttons correctly recognised when reading fruitbox.btn file
+
+Enhancements:
+-> Check for duplicated button mappings
+
+
+-----------------------------------
 v1.10
 -----------------------------------
 

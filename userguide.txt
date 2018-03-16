@@ -1,5 +1,5 @@
 
-fruitbox v1.10 (Mar  5 2018, 19:50:49) by Mike Kingsley
+fruitbox v1.11 (Mar 16 2018, 11:05:38) by Mike Kingsley
 A customisable MP3 Retro Jukebox for the Raspberry Pi
 
   1: Introduction
@@ -174,7 +174,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     the skin will not be visible.
 
 
-  4.16: --touch-scale
+  4.16: --touch-scale <x> <y>
 
     This value can be used to specify a scaling factor for when touch 
     screens provide a different display resolution to the touch resolution. 
