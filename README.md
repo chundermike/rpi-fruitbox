@@ -17,7 +17,11 @@ Installation is as follows:
   
   cd rpi-fruitbox-master
   
-  chmod +x ./fruitbox
+  chmod +x ./fruitbox                  (if you are using Raspbian Stretch)
+
+  chmod +x ./fruitbox-jessie           (if you are using Raspbian Jessie)
+
+NB: in the following instructions, if you are using Raspbian Jessie, substitute './fruitbox' for './fruitbox-jessie'...
 
 4. Copy your music MP3 files (either to the SD card or USB memory stick)
 5. Point fruitbox to your MP3 files (edit skins/WallJuke/fruitbox.cfg and/or skins/NumberOne/fruitbox.cfg and change the MusicPath parameter)
