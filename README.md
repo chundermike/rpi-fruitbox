@@ -5,11 +5,11 @@ fruitbox is a customisable MP3 player for the Raspberry Pi, allowing the user to
 
 Installation is as follows:
 
-1. It is recommended to start from a fresh OS install (Raspbian Stretch Lite 2017-09-07 release)
+1. It is recommended to start from a fresh OS install (Raspbian Stretch Lite 2018-03-13 release)
 2. Increase GPU memory to (at least) 256 (sudo raspi-config -> Advanced Options -> Memory Split)
 3. Install fruitbox dependencies and download fruitbox and the example skins...
   
-  sudo apt-get install libsm-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev
+  sudo apt-get install libsm-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxpm-dev
   
   wget https://codeload.github.com/chundermike/rpi-fruitbox/zip/master
   
