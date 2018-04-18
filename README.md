@@ -29,9 +29,9 @@ NB: in the following instructions, if you are using Raspbian Jessie, substitute 
 
 For best results, run fruitbox directly from a command line boot, not from a command shell launched from the desktop.
 
-For help, type './fruitbox --help' from the fruitbox installation directory.  The user guide will give details on how to create your own skins, storing songs on USB memory sticks, and other helpful hints.  You can generate the user-guide with the command ./fruitbox --user-guide > user-guide.txt
+The user guide will give details on how to create your own skins, storing songs on USB memory sticks, and other helpful hints.
 
-I have tested it using a Raspberry Pi A+ with a HifiBerry Amp+, and also a Raspberry Pi zero, using the Raspbian Stretch Lite 2017-09-07 release.
+I have tested it using a Raspberry Pi A+ with a HifiBerry Amp+, and also a Raspberry Pi zero, and 3B, using Raspbian Stretch Lite 2017-09-07, Stretch Lite 2018-03-13 and Jessie.
 
 Please feedback to me any bugs which need fixing, or any feature requests you would like to see in future releases.
 
