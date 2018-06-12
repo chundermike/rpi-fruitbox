@@ -10,3 +10,5 @@ File = skins/Granite/fruitbox.cfg
 File = skins/Modern/fruitbox.cfg
 File = skins/NumberOne/fruitbox.cfg
 File = skins/Splat/fruitbox.cfg
+File = skins/MikeTV/fruitbox.cfg
+File = skins/Wurly/fruitbox.cfg
