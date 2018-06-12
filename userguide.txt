@@ -1,5 +1,5 @@
 
-fruitbox v1.11 (Mar 16 2018, 11:05:38) by Mike Kingsley
+fruitbox v1.12 (Jun 12 2018, 20:05:49) by Mike Kingsley
 A customisable MP3 Retro Jukebox for the Raspberry Pi
 
   1: Introduction
@@ -27,16 +27,18 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   a new one will be created (see section 'Database Creation'). 
   When the database has been read, fruitbox will start!
   
-  Song pages are moved using the left and right keys, and songs 
-  are selected using the select keys or cursor keys if in joystick 
-  mode.  Once a song is selected, it is added to the play queue. 
-  If no song is playing, the song at the top of the play queue 
-  is 'loaded', played, and then 'unloaded'.
+  Song pages are moved using the ButtonLeft and ButtonRight keys, 
+  and songs are selected using the select keys or cursor keys if 
+  in joystick mode.  Once a song is selected, it is added to the 
+  play queue.  If no song is playing, the song at the top of the 
+  play queue is 'loaded', played, and then 'unloaded'.
   
   Control inputs (buttons) can be re-defined...fruitbox will look 
-  for a 'fruitbox.btn' file in the samedirectory as it is run from. 
-  If it finds one, it will read the file and re-map one or more 
-  of the input control buttons as specified in the mapping file.
+  for a 'fruitbox.btn' file in the same directory as it is run 
+  from (unless an alternative button mapping file is defined using 
+  the '--button-map' command line option.  If it finds one, it 
+  will read the file and re-map one or more of the input control 
+  buttons as specified in the mapping file.
 
 
   4: Command Line Options
@@ -49,18 +51,18 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     Show basic help and version information.
 
 
-  4.2: --cfg <file>
+  4.2: --cfg <filename>           
 
     This option determines which configuration file (skin) is used.
 
 
-  4.3: --database <file>
+  4.3: --database <filename>      
 
     Use the specified database instead of the one specified in the 
     skin
 
 
-  4.4: --music-path <file>
+  4.4: --music-path <filepath>    
 
     Use the specified music path instead of the one specified in 
     the skin.  Only used when the database file doesn't exist (as 
@@ -69,31 +71,40 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     user wishes to construct the database from multiple sources.
 
 
-  4.5: --user-guide
+  4.5: --user-guide               
 
     Show this user guide (but I guess you already worked that one 
     out...)
 
 
-  4.6: --debug-song-nums
+  4.6: --debug-song-nums          
 
     Show select code alongside song entries
 
 
-  4.7: --config-buttons
+  4.7: --config-buttons           
 
     This option allows the user to interactively change the input 
     control button mappings, and creates the button mapping file 
-    'fruitbox.btn'
+    specified by the --button-map command line option (or 'fruitbox.btn' 
+    if not specified)
 
 
-  4.8: --test-buttons
+  4.8: --calibrate-touch          
+
+    Used in conjunction with '--config-buttons' , this allows the 
+    user to interactively specify the touch-min and touch-max values 
+    rather than through the command line options.  It will also write 
+    these values to the button mappinf file for future use.
+
+
+  4.9: --test-buttons             
 
     This option allows button codes to be checked without creating 
-    a fruitbox.btn file.
+    a button mapping file.
 
 
-  4.9: --input_device <name>
+  4.10: --input-device <name>      
 
     Used in conjunction with '--config-buttons' or '--test-buttons', 
     this allows an input device(s) to be specified which is then 
@@ -103,7 +114,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     typing "cat /proc/bus/input/devices").
 
 
-  4.10: --touch_device <name>
+  4.11: --touch-device <name>      
 
     Used in conjunction with '--config-buttons' or '--test-buttons', 
     this allows a touch screen device to be specified which is then 
@@ -115,14 +126,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     Pi 7" touch screen display)
 
 
-  4.11: --load-playlist <file>
+  4.12: --load-playlist <filename> 
 
     Loads a playlist file and populates the play queue with the songs 
-    in it; fruitbox will begin playing the songs after it has started 
+    in it; fruitbox will begin playing the songs after it has playing 
     up.
 
 
-  4.12: --save-playlist <file>
+  4.13: --save-playlist <filename> 
 
     When fruitbox exits (by the user pressing the 'Quit' button), 
     this option saves the contents of the play queue (and currently 
@@ -133,7 +144,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     required.
 
 
-  4.13: --choose-cfg <file>
+  4.14: --choose-cfg <filename>    
 
     This option allows the user to choose a configuration file (skin) 
     from a menu when fruitbox starts up, rather than specifying it 
@@ -153,7 +164,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     can be generated with the '--screenshot' command line option.
 
 
-  4.14: --screenshot
+  4.15: --screenshot               
 
     Save a screenshot of the skin, then quit without running.  The 
     screenshot will be written to 'screeenshot.jpg' in the skin directory 
@@ -162,7 +173,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     with the '--cfg' or '--choose-cfg' command line options.
 
 
-  4.15: --no-scale
+  4.16: --no-scale                 
 
     Normally fruitbox will scale (resize) the skin to the display, 
     so no matter what it's size, it will always fit exactly.  This 
@@ -174,13 +185,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     the skin will not be visible.
 
 
-  4.16: --touch-scale <x> <y>
+  4.17: --button-map <filename>    
 
-    This value can be used to specify a scaling factor for when touch 
-    screens provide a different display resolution to the touch resolution. 
-    For example, if a touch display has a resolution of 1000x500, 
-    and the touch input provides a resolution of 2000x750, then set 
-    the --touch-scale values to 2.0 and 1.5 respectively.
+    Name of button mapping file (defaults to 'fruitbox.btn' if not 
+    specified)
 
 
   5: Configuration (Skin) Files
@@ -229,7 +237,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       MusicPath *                   File name of path to mp3 music files.  Can contain sub-directories.
                                     Ignored if the 'Database' file already exists
       SortSongsBy *                 'Title', 'Artist', 'Album', 'AlbumArtist', 'Year', 'Genre', 'TrackNumber', 'Publisher', 'ISRC', 'Custom', 'Random', 'Unsorted'
-      SelectKeys                    First pair of characters are the range for first button press, second pair for second button press
+      SelectButtons *               List of characters for the select code for the button presses
+      SelectButtonsSequence         'RowCol', 'ColRow'
+                                    Specifies if the first select buttons are cycled before the second
+                                    select code buttons (ColRow) or the after the second buttons (RowCol)
       CustomMP3Tag                  Name of an MP3 ID3v2 tag the user wishes to extract to a song's 'Custom' field (i.e. "TCON" is content type)
                                     Note: this is only used during database file *creation*
       AutoSelect                    'No' = ButtonSelect needs to be pressed to select song (after the two-digit select code is entered)
@@ -238,7 +249,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       SelectTimeout                 Timeout for select code to return to '--' after not detecting second digit selection
       SelectHoldTimeout             Timeout for select code to return to '--' after song selected
       AutoPageTurnTime              Time between pages automatically turning (0 = no automatic page turn)
-      MaxPlaylistLength             Maximum number of songs which can be stored up in the coming up queue
+      MaxPlaylistLength             Maximum number of songs which can be stored in the coming up queue
       LoopPlaylist                  'Yes' = a song is added to the back of the play queue when it has finished playing (credits permitting)
       AutoPlay                      'Yes' = a random song is played if the play queue is empty and no songs are playing
       AutoPlayGap                   The time between a random song being selected and played after the last song has finished playing
@@ -273,6 +284,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       SongLoadTime                  The time the song takes to load (from removing from the coming up queue to starting to play)
       SongUnloadTime                The time the song takes to unload (from finishing playing to the next song in the queue loading)
       SongText                      Text style for Song title in song page. See section 'Fonts and Text'
+      PairedSongText                Text style for the paired Song title in song page. See section 'Fonts and Text'
       ArtistText                    Text style for Artist name in song page. See section 'Fonts and Text'
       AlbumText                     Text style for Album name in song page. See section 'Fonts and Text'
       ExtraText                     Text style for the extra text field in song page. See section 'Fonts and Text'
@@ -302,24 +314,24 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       ButtonCoin2                   x y width height  (touch area of button, where x y = top left corner)
       ButtonCoin3                   x y width height  (touch area of button, where x y = top left corner)
       ButtonCoin4                   x y width height  (touch area of button, where x y = top left corner)
+      ButtonVol+                    x y width height  (touch area of button, where x y = top left corner)
+      ButtonVol-                    x y width height  (touch area of button, where x y = top left corner)
       ButtonRandom                  x y width height  (touch area of button, where x y = top left corner)
       ButtonSelect                  x y width height  (touch area of button, where x y = top left corner)
       ButtonSkip                    x y width height  (touch area of button, where x y = top left corner)
       ButtonPause                   x y width height  (touch area of button, where x y = top left corner)
+      ButtonUp                      x y width height  (touch area of button, where x y = top left corner)
+      ButtonDown                    x y width height  (touch area of button, where x y = top left corner)
       ButtonLeft                    x y width height  (touch area of button, where x y = top left corner)
       ButtonRight                   x y width height  (touch area of button, where x y = top left corner)
       ButtonLeftJump                x y width height  (touch area of button, where x y = top left corner)
       ButtonRightJump               x y width height  (touch area of button, where x y = top left corner)
       ButtonLeftAlpha               x y width height  (touch area of button, where x y = top left corner)
       ButtonRightAlpha              x y width height  (touch area of button, where x y = top left corner)
-      ButtonUp                      x y width height  (touch area of button, where x y = top left corner)
-      ButtonDown                    x y width height  (touch area of button, where x y = top left corner)
       ButtonAuto                    x y width height  (touch area of button, where x y = top left corner)
       ButtonLoop                    x y width height  (touch area of button, where x y = top left corner)
       ButtonFree                    x y width height  (touch area of button, where x y = top left corner)
       ButtonClear                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonVol+                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonVol-                    x y width height  (touch area of button, where x y = top left corner)
       ButtonMute                    x y width height  (touch area of button, where x y = top left corner)
       ButtonPowerOff                x y width height  (touch area of button, where x y = top left corner)
       Button0                       x y width height  (touch area of button, where x y = top left corner)
@@ -343,6 +355,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       ButtonI                       x y width height  (touch area of button, where x y = top left corner)
       ButtonJ                       x y width height  (touch area of button, where x y = top left corner)
       ButtonK                       x y width height  (touch area of button, where x y = top left corner)
+      ButtonFlag1                   x y width height  (touch area of button, where x y = top left corner)
+      ButtonFlag2                   x y width height  (touch area of button, where x y = top left corner)
+      ButtonFlag3                   x y width height  (touch area of button, where x y = top left corner)
+      ButtonFlag4                   x y width height  (touch area of button, where x y = top left corner)
 
       [sounds]
       InsertCoin                    Volume (0..100), Filename of sound effect when a coin is inserted (wav, flac, ogg)
@@ -370,8 +386,11 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       Output                        Filename of output text file containing status
       Text                          Status box text style.  See section 'Fonts and Text'
       LineSpacing                   Gap (in pixels) between text lines in the status box
+      LoopVideo                     'Yes' - start video from beginning after it finishes
       TimerTickPeriod               Time (in video frame ticks) of status box timer period
+      BitmapDirectory               Location of image files (bmp, jpg, png)
       Bitmap *                      Filename of graphic image (bmp, png, tga, jpg, pcx)
+      Video *                       Filename of video clip (ogv)
 
       [bitmap] * 
       Size                          width height (in pixels)
@@ -466,7 +485,47 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     out the frame rate (along with the resolution).
 
 
-  5.2: Fonts and Text
+  5.2: Status Bitmaps
+
+    There are two ways of specifying bitmaps in status objects...
+    
+    Using one or more 'Bitmap' parameters.  This preloads the bitmaps 
+    on startup, so the number is limited by the GPU memory, but allows 
+    for fast switching for full-frame rate animation.
+    
+    Alternatively, the 'BitmapDirectory' can be used.  This specifies 
+    a location on the file system in which image files are stored 
+    (.bmp, .jpg, .png).  fruitbox only loads these into GPU memory 
+    when needed, so is slower, but there is no limit on the number 
+    of image files.  This is more suitable for use in slide-show 
+    displays for example.
+
+
+  5.3: Status Videos
+
+    Status boxes can be used to display either video clips or music 
+    videos.  If the Video parameter is specified in the [status] 
+    object, any reference to VIDEO in the status Contents file variables 
+    (i.e. $DRAW_VIDEO) will refer to the video clip specified by 
+    the Video parameter.  If the Video parameter is not specified, 
+    any VIDEO $variables will refer to the currently playing song 
+    (if it's a video file).
+    
+    The only supported format is .ogv (Vorbis + Theora). Any video 
+    format can be converted to this format using for example ffmpeg 
+    with the following options for specifying the video bitrate and 
+    video picture size for better quality...
+    
+     ffmpeg -i MyVideo.mp4 -b:v 2M -vf scale=640x480 MyVideo.ogv
+    
+    Since the video decoding process is quite CPU intensive, it is 
+    recommended that a Quad core Pi is used (Model 2 or 3) with a 
+    good PSU (at least 2 Amps) when running fruitbox and skins with 
+    video content, and the display resolution is kept low (less than 
+    1024x768).
+
+
+  5.4: Fonts and Text
 
     The configuration file [font] section(s) allow multiple fonts 
     of different sizes to be loaded and used by different display 
@@ -475,7 +534,8 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     and size from the 'font pool'.
     
     Text definitions ([general] ArtistText, [general] SongText, [general] 
-    ExtraText and [status] Text) parameters have the following arguments...
+    PairedSongText, [general] ExtraText and [status] Text) parameters 
+    have the following arguments...
     
     <font> <colour> <alignment> <capitalise> <condense> <quoted> 
     <offset> <max_width>
@@ -490,8 +550,8 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
      alignment : 'Left', 'Centre' or 'Right'
     capitalise : 'Yes' or 'No'
       condense : 'Yes' (wide text is horizontally squashed to fit
-                  within max_width),
-                  'No' no squashing is done
+                 within max_width),
+                 'No' no squashing is done
         quoted : 'Yes' (text is wrapped within double-quotes),
                  'No' text is unmodified
         offset : x y (text position is shifted by these amounts
@@ -501,7 +561,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
                  maximum width (if the 'condense' option is 'Yes')
 
 
-  5.3: Coin Mode
+  5.5: Coin Mode
 
     fruitbox can support upto four coin buttons.  Each coin button 
     has it's own 'PlaysPerCoin' value, so that fruitbox can mimic 
@@ -510,14 +570,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     (or not specified) then fruitbox will operate in free play mode.
 
 
-  5.4: Joystick Mode
+  5.6: Joystick Mode
 
     If a [joystick] object is specified in the skin file, then joystick 
     mode is activated.  This allows a song to be chosen using the 
-    up, down, left and right buttons instead of entering the two-digit 
-    select code.  Pressing the Select Button will then add that song 
-    to the play queue (AutoSelect mode is disabled when joystick 
-    mode is active).
+    ButtonUp, ButtonDown, ButtonLeft and ButtonRight buttons instead 
+    of entering the two-digit select code.  Pressing the Select Button 
+    will then add that song to the play queue (AutoSelect mode is 
+    disabled when joystick mode is active).
     
     The joystick image specified is positioned in the same place 
     as the song title being selected, and its size is calculated 
@@ -529,7 +589,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     around the song title region.
 
 
-  5.5: Touch Song Mode
+  5.7: Touch Song Mode
 
     If a [touch song] object is specified in the skin file, then 
     touch song mode is activated (only if a touch screen has been 
@@ -541,11 +601,11 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     the song touch areas default to the page area holding the song 
     name, but their size and position can be adjusted by using the 
     'Size' and 'Offset' [touch song] parameters.  The 'Bitmap' parameter 
-    defines a image file which is displayed over the song area when 
+    defines an image file which is displayed over the song area when 
     being touched.
 
 
-  5.6: Random Songs
+  5.8: Random Songs
 
     fruitbox can play random songs in one of two ways...
      1. The user pressing the 'Random' button
@@ -562,29 +622,29 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     song anyway even if it already been played recently.
 
 
-  5.7: Albums / Singles Mode
+  5.9: Albums / Singles Mode
 
     Fruitbox has two distinct modes - Albums and Singles, specified 
     by the 'PageMode' parameter.
     
     In Singles mode, each song is individually selectable, and each 
     page displays a number of songs (or pairs of songs), each along 
-    with the artist name.  'ArtistText', 'SongText', 'PairSongs' 
-    and 'SongsPerPage' configuration parameters can be used adjust 
-    the appearance of the song details on the pages.
+    with the artist name.  'ArtistText', 'SongText', 'PairedSongText', 
+    'PairSongs' and 'SongsPerPage' configuration parameters can be 
+    used adjust the appearance of the song details on the pages.
     
     In Albums mode, each page shows the album title, album artist, 
     album cover art, and list of songs in the album (upto the SongsPerPage 
     value).  One selection will add all the songs in the album to 
     the play queue in one go (assuming, in non-freeplay mode, there 
     are sufficient credits).  'AlbumText', 'ArtistText', 'SongText', 
-    'AlbumArtSize', 'AlbumArtOffset' and 'SongsPerPage' configuration 
-    parameters can be used adjust the appearance of the album details 
-    on the pages.  Also note that 'PairedSongDescription' is used 
-    to define the contents of the line which is associated with the 
-    'AlbumText' parameter, and all of the 'Paired*' Description values 
-    are ignored (as these are only relevant for singles mode song 
-    pairs).
+    'PairedSongText', 'AlbumArtSize', 'AlbumArtOffset' and 'SongsPerPage' 
+    configuration parameters can be used adjust the appearance of 
+    the album details on the pages.  Also note that 'PairedSongDescription' 
+    is used to define the contents of the line which is associated 
+    with the 'AlbumText' parameter, and all of the 'Paired*' Description 
+    values are ignored (as these are only relevant for singles mode 
+    song pairs).
 
 
   6: Database Creation
@@ -658,10 +718,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     select code.  The command line option '--debug-song-nums' can 
     be used to make these codes visible; useful when developing skins.
     
-    Pages automatically move and update their contents when the LEFT 
-    or RIGHT keys are pressed.  The look and movement of the pages 
-    is determined by 'PageMoveStyle' parameter in the skin file, 
-    as follows:
+    Pages automatically move and update their contents when the ButtonLeft 
+    or ButtonRight keys are pressed.  The look and movement of the 
+    pages is determined by 'PageMoveStyle' parameter in the skin 
+    file, as follows:
     
      PageMoveStyle <speed> <effect> <fade>
     
@@ -674,6 +734,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
                3 = reveal vertically
                4 = turn horizontally
                5 = turn vertically
+               6 = dissolve
            <fade>
              no  = pages don't fade
              yes = pages fade to black
@@ -826,6 +887,39 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       The length in mm:ss of a song in the play queue.  Each time this 
       reserved word is used, it refers to the next song after the last 
       one referenced
+
+      $LAST_PLAYED_TITLE
+      The name of the song which was last played
+
+      $LAST_PLAYED_ARTIST
+      The name of the artist of the song which was last played
+
+      $LAST_PLAYED_ALBUM
+      The name of the album of the song which was last played
+
+      $LAST_PLAYED_ALB_ARTIST
+      The name of the album artist of the song which was last played
+
+      $LAST_PLAYED_TRACK_NUMBER
+      The track number of the song which was last played
+
+      $LAST_PLAYED_YEAR
+      The year of the song which was last played
+
+      $LAST_PLAYED_GENRE
+      The genre of the song which was last played
+
+      $LAST_PLAYED_PUBLISHER
+      The publisher of the song which was last played
+
+      $LAST_PLAYED_ISRC
+      The ISRC of the song which was last played
+
+      $LAST_PLAYED_CUSTOM_TAG
+      The custom MP3 tag of the song which was last played
+
+      $LAST_PLAYED_LENGTH
+      The length in mm:ss of the song which was last played
 
       $CREDITS
       The number of credits
@@ -1032,6 +1126,30 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       $SET_GPIO_27_LO
       Sets the specified GPIO output low
 
+      $SET_FLAG_1_HI
+      Sets the specified status flag high
+
+      $SET_FLAG_1_LO
+      Sets the specified status flag low
+
+      $SET_FLAG_2_HI
+      Sets the specified status flag high
+
+      $SET_FLAG_2_LO
+      Sets the specified status flag low
+
+      $SET_FLAG_3_HI
+      Sets the specified status flag high
+
+      $SET_FLAG_3_LO
+      Sets the specified status flag low
+
+      $SET_FLAG_4_HI
+      Sets the specified status flag high
+
+      $SET_FLAG_4_LO
+      Sets the specified status flag low
+
       $DRAW_BITMAP
       Draw user defined bitmaps, as specified by the Bitmap parameter. 
       The bitmap will occupy the entire status box, and is drawn after 
@@ -1039,8 +1157,30 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       in turn, each time the $DRAW_BITMAP keyword is executed.  Bitmaps 
       remain visible until a $UNDRAW_BITMAP command is executed.
 
+      $DRAW_RANDOM_BITMAP
+      Draw a random user defined bitmap, chosen from the specified 
+      Bitmap parameters.
+
       $UNDRAW_BITMAP
       Undraw the bitmap
+
+      $DRAW_VIDEO
+      Draw the video
+
+      $UNDRAW_VIDEO
+      Undraw the video
+
+      $START_VIDEO
+      Start video playing
+
+      $STOP_VIDEO
+      Stop video playing
+
+      $PAUSE_VIDEO
+      Pause video playing
+
+      $UNPAUSE_VIDEO
+      Un-pause video playing
 
       $IF_FREE_PLAY
       Activates the text following it if Free Play mode is enabled
@@ -1059,6 +1199,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
 
       $IF_NOT_SONG_PLAYING
       Activates the text following it if no song is currently playing
+
+      $IF_VIDEO_SONG_PLAYING
+      Activates the text following it if the song is currently playing 
+      is a video
+
+      $IF_NOT_VIDEO_SONG_PLAYING
+      Activates the text following it if the song is currently playing 
+      is not a video
 
       $IF_SONG_LOADING
       Activates the text following it if a song is currently loading
@@ -1158,6 +1306,38 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       $IF_NOT_INVALID_CHOICE
       Activates the text following it if the last song selection was 
       not invalid
+
+      $IF_FLAG_1_HI
+      Activates the text following it if the specified status flag 
+      is high
+
+      $IF_FLAG_1_LO
+      Activates the text following it if the specified status flag 
+      is low
+
+      $IF_FLAG_2_HI
+      Activates the text following it if the specified status flag 
+      is high
+
+      $IF_FLAG_2_LO
+      Activates the text following it if the specified status flag 
+      is low
+
+      $IF_FLAG_3_HI
+      Activates the text following it if the specified status flag 
+      is high
+
+      $IF_FLAG_3_LO
+      Activates the text following it if the specified status flag 
+      is low
+
+      $IF_FLAG_4_HI
+      Activates the text following it if the specified status flag 
+      is high
+
+      $IF_FLAG_4_LO
+      Activates the text following it if the specified status flag 
+      is low
 
       $IF_BUTTON_QUIT_PRESSED
       Activates the text following it if the specified button is pressed
@@ -1481,11 +1661,39 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       Activates the text following it if the specified button is not 
       pressed
 
+      $IF_BUTTON_FLAG_1_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_FLAG_1_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
+      $IF_BUTTON_FLAG_2_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_FLAG_2_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
+      $IF_BUTTON_FLAG_3_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_FLAG_3_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
+      $IF_BUTTON_FLAG_4_PRESSED
+      Activates the text following it if the specified button is pressed
+
+      $IF_NOT_BUTTON_FLAG_4_PRESSED
+      Activates the text following it if the specified button is not 
+      pressed
+
       $NO_DRAW
       Supresses drawing of the status object
 
       $END_IF
-      Marks the end of a text section started by the preceding $IF_
+      Marks the end of a text section playing by the preceding $IF_
 
     The variables beginning $IF_ and $IF_NOT_ are used to conditionally 
     execute or ignore the text in the config file which follows it, 
@@ -1506,7 +1714,25 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     changes.
 
 
-  8: GPIO Input/Output
+  8: Status Flags
+
+  Four status flags allow for inter-status communication and user 
+  triggered status events.  Each status flag can be set high or 
+  low from button presses (toggle) and/or status $variables.  The 
+  values of the flags can be read in status objects, allowing support 
+  for functionality such as...
+  
+  1. Inter status communication:
+  for example one status object could toggle a flag with a certain 
+  timer tick period which could then be detected in a different 
+  status object with a different timer tick period. This would 
+  allow status to "time-out" after being started from a different 
+  timer period (or a button press)
+  2. Button invoked status display:
+  The flag buttons can be used to turn on and off status information.
+
+
+  9: GPIO Input/Output
 
   fruitbox can use the GPIO pins for both input and output:
   
@@ -1519,7 +1745,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   Contents file, the specified GPIO pin is automatically configured 
   as an output.
   
-  Note that if the same pin is defined in both the fruitbox.btn 
+  Note that if the same pin is defined in both the button mapping 
   file and a status object, then input will take precedence over 
   the output, hence the status output will not work.
   
@@ -1529,12 +1755,13 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   your GPIO pin assignments carefully ;)
 
 
-  9: Input Control Buttons
+  10: Input Control Buttons
 
-  The fruitbox input controls can be modified using the button 
-  file 'fruitbox.btn'.  If this file exists in the same directory 
-  as fruitbox, it will be read by fruitbox to determine one or 
-  more button mappings.  See section 'Button Mapping File'.
+  The fruitbox input controls can be modified using the a button 
+  mapping file ('fruitbox.btn' by default).  If this file exists 
+  in the same directory as fruitbox, it will be read by fruitbox 
+  to determine one or more button mappings.  See section 'Button 
+  Mapping File'.
   
   By default, the buttons are mapped to keyboard keys (see section 
   'Default Buttons'), but each key can be re-mapped to any of the 
@@ -1548,11 +1775,11 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   6. User-defined Input Device(s) *
   
   The fruitbox command line parameter '--config-buttons' can be 
-  used to interactively assign buttons, and generate the 'fruitbox.btn' 
-  file.  The btn file can be manually edited later if minor adjustments 
-  are required.  The '--test-buttons' command line parameter can 
-  be used to check what codes are generated without creating a 
-  fruitbox.btn file.  If the command line option '--input-device' 
+  used to interactively assign buttons, and generate the button 
+  map file.  The btn file can be manually edited later if minor 
+  adjustments are required.  The '--test-buttons' command line 
+  parameter can be used to check what codes are generated without 
+  creating a button mapping file.  If the command line option '--input-device' 
   is specified along with '--config-buttons' or '--test-buttons', 
   then the specified input device(s) are included in the button 
   detection.  Any selected devices are then specified in the button 
@@ -1582,14 +1809,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   can be used to specify a touch input device.
 
 
-  9.1: Default Buttons
+  10.1: Default Buttons
 
     The button controls are mapped to the following keyboard keys 
     by default, but can be re-mapped to other keyboard keys, GPIO 
-    inputs, USB joysticks or touch screen inputs defined in the 'fruitbox.btn' 
-    file.
+    inputs, USB joysticks or touch screen inputs defined in the button 
+    mapping file.
     
-               LEFT : ButtonRight ....... Move pages left
+               LEFT : ButtonLeft ........ Move pages left
               RIGHT : ButtonRight ....... Move pages right
                   [ : ButtonLeftJump .... Move 'PageJump' pages
                   ] : ButtonRightJump ... Move 'PageJump' pages
@@ -1605,6 +1832,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
                  F2 : ButtonCoin2 ....... Insert coin
                  F3 : ButtonCoin3 ....... Insert coin
                  F4 : ButtonCoin4 ....... Insert coin
+                 F5 : ButtonFlag1 ....... Toggle status flag 1
+                 F6 : ButtonFlag2 ....... Toggle status flag 2
+                 F7 : ButtonFlag3 ....... Toggle status flag 3
+                 F8 : ButtonFlag4 ....... Toggle status flag 4
               SPACE : ButtonRandom ...... Select random song
           BACKSPACE : ButtonSkip ........ Skip (stops currently
                   Z : ButtonPause ....... pause (pauses/unpauses
@@ -1628,9 +1859,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     which contains the first Artist beginning with the letter 'A'.
 
 
-  9.2: Button Mapping File
+  10.2: Button Mapping File
 
-    The button mapping file ('fruitbox.btn') contains data in the 
+    The button mapping file ('fruitbox.btn' by default, or specified 
+    by the --button-map command line option) contains data in the 
     same format as the skin configuration files.  Each entry specifies 
     a button and its source and parameters.  This file can be automatically 
     generated by the '--config-buttons' command line parameter, and 
@@ -1645,29 +1877,31 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       InputDevice *                 Name of an input device.  Can be the full device name or part of the device name
                                     ('evtest' gives you this information) *Can be defined multiple times
       TouchDevice                   Name of touch device (defaults to 'FT5406' - the official Raspberry Pi 7" display)
+      TouchMin                      x y (the touch co-ordinatesfor top left of touch display)
+      TouchMax                      x y (the touch co-ordinatesfor bottom right of touch display)
       ButtonQuit                    Name of button (quit fruitbox)
       ButtonCoin1                   Name of button (insert coin)
       ButtonCoin2                   Name of button (insert coin)
       ButtonCoin3                   Name of button (insert coin)
       ButtonCoin4                   Name of button (insert coin)
+      ButtonVol+                    Name of button (change volume)
+      ButtonVol-                    Name of button (change volume)
       ButtonRandom                  Name of button (select random song)
       ButtonSelect                  Name of button (play selected song)
       ButtonSkip                    Name of button (stop current song)
       ButtonPause                   Name of button (pause/unpause currently playing song)
+      ButtonUp                      Name of button (joystick selector)
+      ButtonDown                    Name of button (joystick selector)
       ButtonLeft                    Name of button (move pages/joystick selector)
       ButtonRight                   Name of button (move pages/joystick selector)
       ButtonLeftJump                Name of button (move pages by 'PageJump' amount)
       ButtonRightJump               Name of button (move pages by 'PageJump' amount)
       ButtonLeftAlpha               Name of button (move pages by last 'SortSongsBy' value)
       ButtonRightAlpha              Name of button (move pages by last 'SortSongsBy' value)
-      ButtonUp                      Name of button (joystick selector)
-      ButtonDown                    Name of button (joystick selector)
       ButtonAuto                    Name of button (toggle Auto (aka Attract) mode)
       ButtonLoop                    Name of button (toggle Loop mode)
       ButtonFree                    Name of button (toggle Freeplay mode)
       ButtonClear                   Name of button (empty play queue)
-      ButtonVol+                    Name of button (change volume)
-      ButtonVol-                    Name of button (change volume)
       ButtonMute                    Name of button (volume mute)
       ButtonPowerOff                Name of button (power off)
       Button0                       Name of button (song selection)
@@ -1691,6 +1925,10 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       ButtonI                       Name of button (song selection)
       ButtonJ                       Name of button (song selection)
       ButtonK                       Name of button (song selection)
+      ButtonFlag1                   Name of button (toggle status flag)
+      ButtonFlag2                   Name of button (toggle status flag)
+      ButtonFlag3                   Name of button (toggle status flag)
+      ButtonFlag4                   Name of button (toggle status flag)
 
     
     Each of the above Button* parameters can be assigned one of the 
@@ -1711,7 +1949,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     file.
 
 
-  10: Troubleshooting
+  11: Troubleshooting
 
   Poor graphics performance is usually caused by not allocating 
   enough memory to the GPU.  If the display is very sluggish, or 
@@ -1725,7 +1963,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   skin contains lots of large graphics objects.
 
 
-  11: Hints and Tips
+  12: Hints and Tips
 
   Automatically run fruitbox on power up
   --------------------------------------
@@ -1780,8 +2018,8 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   will need the text:
    $IF_BUTTON_LEFT_PRESSED$DRAW_BITMAP$END_IF
    $IF_NOT_BUTTON_LEFT_PRESSED$UNDRAW_BITMAP$END_IF
-  for example when pressing button 'LEFT'.  If the status object 
-  is placed over a image of an unpressed button (i.e. in the background) 
+  for example when pressing ButtonLeft.  If the status object is 
+  placed over a image of an unpressed button (i.e. in the background) 
   then this will have the desired effect.
   
   
