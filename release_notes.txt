@@ -1,6 +1,91 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.12
+-----------------------------------
+
+Highlights:
+
+-> *new* Support for playing (ogv) music videos
+-> *new* Support for playing (ogv) video clips in status objects
+-> *new* status flags for more flexible skin designs
+-> *new* Status object random image file and directory support
+-> Debugged support for non-official touchscreens
+-> More flexible select code operation
+
+Added skin configuration parameters...
+  -> [general] SelectButtons
+  -> [general] SelectButtonsSequence
+  -> [general] PairedSongText
+  -> [status] BitmapDirectory
+
+Removed skin configuration parameter...
+  -> [general] SelectKeys
+
+Enhancements:
+  -. Added new [video] skin object
+  -> Added new 'Dissolve' page effect
+  -> Added --button-map <file> command line option to specify button file (defaults to fruitbox.btn)
+  -> Added touch co-ordinates to touch status for --test-buttons
+  -> Added --calibrate-touch
+  -> Added new buttons
+    -> ButtonFlag1
+    -> ButtonFlag2
+    -> ButtonFlag3
+    -> ButtonFlag4
+
+Added extra status variables...
+  -> $START_VIDEO
+  -> $STOP_VIDEO
+  -> $PAUSE_VIDEO
+  -> $UNPAUSE_VIDEO
+  -> $DRAW_VIDEO
+  -> $UNDRAW_VIDEO
+  -> $DRAW_RANDOM_BITMAP
+  -> $IF_VIDEO_SONG_PLAYING
+  -> $IF_NOT_VIDEO_SONG_PLAYING
+  -> $LAST_PLAYED_TITLE
+  -> $LAST_PLAYED_ARTIST
+  -> $LAST_PLAYED_ALBUM
+  -> $LAST_PLAYED_ALB_ARTIST
+  -> $LAST_PLAYED_TRACK_NUMBER
+  -> $LAST_PLAYED_YEAR
+  -> $LAST_PLAYED_GENRE
+  -> $LAST_PLAYED_PUBLISHER
+  -> $LAST_PLAYED_ISRC
+  -> $LAST_PLAYED_CUSTOM_TAG
+  -> $LAST_PLAYED_LENGTH
+  -> $SET_FLAG_1_HI
+  -> $SET_FLAG_1_LO
+  -> $SET_FLAG_2_HI
+  -> $SET_FLAG_2_LO
+  -> $SET_FLAG_3_HI
+  -> $SET_FLAG_3_LO
+  -> $SET_FLAG_4_HI
+  -> $SET_FLAG_4_LO
+  -> $IF_BUTTON_FLAG_1_PRESSED
+  -> $IF_NOT_BUTTON_FLAG_1_PRESSED
+  -> $IF_BUTTON_FLAG_2_PRESSED
+  -> $IF_NOT_BUTTON_FLAG_2_PRESSED
+  -> $IF_BUTTON_FLAG_3_PRESSED
+  -> $IF_NOT_BUTTON_FLAG_3_PRESSED
+  -> $IF_BUTTON_FLAG_4_PRESSED
+  -> $IF_NOT_BUTTON_FLAG_4_PRESSED
+  -> $IF_FLAG_1_HI
+  -> $IF_FLAG_1_LO
+  -> $IF_FLAG_2_HI
+  -> $IF_FLAG_2_LO
+  -> $IF_FLAG_3_HI
+  -> $IF_FLAG_3_LO
+  -> $IF_FLAG_4_HI
+  -> $IF_FLAG_4_LO
+  -> $IF_PLAYQUEUE_FULL
+  -> $IF_NOT_PLAYQUEUE_FULL
+  
+-> Fixed typo in user guide (--input_device -> --input-device, --touch_device -> --touch-device)
+
+
+-----------------------------------
 v1.11
 -----------------------------------
 
