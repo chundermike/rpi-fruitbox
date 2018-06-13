@@ -23,7 +23,6 @@ Removed skin configuration parameter...
   -> [general] SelectKeys
 
 Enhancements:
-  -. Added new [video] skin object
   -> Added new 'Dissolve' page effect
   -> Added --button-map <file> command line option to specify button file (defaults to fruitbox.btn)
   -> Added touch co-ordinates to touch status for --test-buttons
