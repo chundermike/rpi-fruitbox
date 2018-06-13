@@ -9,7 +9,7 @@ Installation is as follows:
 2. Increase GPU memory to (at least) 256 (sudo raspi-config -> Advanced Options -> Memory Split)
 3. Install fruitbox dependencies and download fruitbox and the example skins...
   
-  sudo apt-get install libsm-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxpm-dev
+  sudo apt-get install libsm-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxpm-dev libvorbis-dev libtheora-dev
   
   wget https://codeload.github.com/chundermike/rpi-fruitbox/zip/master
   
