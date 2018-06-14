@@ -1,6 +1,14 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.12.1
+-----------------------------------
+
+Bug-fix:
+-> Fixed auto play (which broke in v1.12 release)
+
+
+-----------------------------------
 v1.12
 -----------------------------------
 
@@ -23,6 +31,7 @@ Removed skin configuration parameter...
   -> [general] SelectKeys
 
 Enhancements:
+  -. Added new [video] skin object
   -> Added new 'Dissolve' page effect
   -> Added --button-map <file> command line option to specify button file (defaults to fruitbox.btn)
   -> Added touch co-ordinates to touch status for --test-buttons
