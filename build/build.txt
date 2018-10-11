@@ -1,0 +1,45 @@
+# Instructions to build fruitbox from source code on Raspberry Pi
+# ---------------------------------------------------------------
+
+cd <fruitbox installation directory>
+cd build
+
+# install and build libmpg123 as static library...
+
+tar -xvf mpg123-1.24.0.tar
+cd mpg123-1.24.0
+chmod +x configure
+./configure --with-cpu=arm_fpu --disable-shared
+make && sudo make install
+cd ..
+
+# install allegro dependencies...
+sudo apt-get install build-essential git cmake xorg-dev libgl1-mesa-dev libgles2-mesa-dev libglu-dev
+sudo apt-get install libdumb1 libjpeg-dev libfreetype6-dev libpng-dev libasound-dev libxcursor-dev
+sudo apt-get install libvorbis-dev libtheora-dev
+
+#touch support (jessie only?)...
+sudo apt-get install libts-dev
+
+
+# install and build allegro as static library...
+# If using raspbian stretch distribution do the follwoing five lines...
+cd /opt/vc/lib
+sudo ln -s libbrcmEGL.so libEGL.so
+sudo ln -s libbrcmGLESv2.so libGLESv2.so
+sudo ln -s libbrcmOpenVG.so libOpenVG.so
+sudo ln -s libbrcmWFC.so libWFC.so
+
+tar -xvf allegro-5.2.4.0.tar
+cd allegro-5.2.4.0
+mkdir build && cd build
+cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/Toolchain-raspberrypi.cmake -DSHARED=off
+make && sudo make install
+export PKG_CONFIG_PATH=/home/pi/allegro-5.2.4.0/build/lib/pkgconfig
+sudo ldconfig
+cd ..
+
+# build fruitbox...
+# (you should be in the fruitbox 'build' subdirectory...)
+
+make
