@@ -7,14 +7,12 @@ Installation is as follows:
 
 1. It is recommended to start from a fresh OS install (Raspbian Stretch Lite 2018-03-13 release)
 2. Increase GPU memory to (at least) 256 (sudo raspi-config -> Advanced Options -> Memory Split)
-3. download and run install.sh ...
-  wget https://github.com/chundermike/rpi-fruitbox/blob/master/install.sh
-  chmod +x ./install.sh
-  source ./install.sh
-  
-4. Copy your music MP3 files (either to the SD card or USB memory stick)
-5. Point fruitbox to your MP3 files (edit skins/WallJuke/fruitbox.cfg (or any other skin you fancy) and change the MusicPath parameter)
-6. Run fruitbox ( ./fruitbox --cfg skins/WallJuke/fruitbox.cfg)
+3. From a command shell, type : wget https://github.com/chundermike/rpi-fruitbox/blob/master/install.sh
+4. From a command shell, type : chmod +x ./install.sh
+5. From a command shell, type : source ./install.sh
+6. Copy your music MP3 files (either to the SD card or USB memory stick)
+7. Point fruitbox to your MP3 files (edit skins/WallJuke/fruitbox.cfg (or any other skin you fancy) and change the MusicPath parameter)
+8. Run fruitbox ( ./fruitbox --cfg skins/WallJuke/fruitbox.cfg)
 
 For best results, run fruitbox directly from a command line boot, not from a command shell launched from the desktop.
 
