@@ -7,6 +7,7 @@ rm -Rf rpi-fruitbox-master
 sudo apt-get -y install libsm-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxpm-dev libvorbis-dev libtheora-dev
 wget https://codeload.github.com/chundermike/rpi-fruitbox/zip/master
 unzip master
+rm master
 cd rpi-fruitbox-master
 chmod +x ./fruitbox
 echo
