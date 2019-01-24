@@ -3,7 +3,7 @@ echo "----------------------"
 echo "Installing fruitbox..."
 echo "----------------------"
 rm master*
-rm -Rf rpi-fruitbox-master
+mv rpi-fruitbox-master rpi-fruitbox-master-backup
 sudo apt-get -y install libsm-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxpm-dev libvorbis-dev libtheora-dev
 wget https://codeload.github.com/chundermike/rpi-fruitbox/zip/master
 unzip master
