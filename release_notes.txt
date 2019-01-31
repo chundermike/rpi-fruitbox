@@ -1,6 +1,20 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.14
+-----------------------------------
+
+-> Over-hauled input handling...
+  -> Key codes registered now match linux input subsystem codes.
+  -> Added support for multimedia (multiple event) keyboards. Now all keys are recognised.
+  -> Fixed Dragonrise USB controller delay issues. Hopefully the lag issue is now fixed
+  -> Better, more robust support for analogue joysticks.
+  -> Support for DPAD joystick buttons.
+  -> Automatic detection and support for all input devices. You no longer have to specify an input device or touch device;
+     fruitbox will now register all input devices it finds.  As such, the command line options "--input-device" and
+     "--touch-device" have now been removed as they are no longer required.
+
+-----------------------------------
 v1.12.1
 -----------------------------------
 
@@ -89,7 +103,7 @@ Added extra status variables...
   -> $IF_FLAG_4_LO
   -> $IF_PLAYQUEUE_FULL
   -> $IF_NOT_PLAYQUEUE_FULL
-  
+
 -> Fixed typo in user guide (--input_device -> --input-device, --touch_device -> --touch-device)
 
 
