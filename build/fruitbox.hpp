@@ -77,7 +77,7 @@
 
 // #define _CURL
 
-#define FRUITBOX_VERSION                      "v2.00"
+#define FRUITBOX_VERSION                      "v1.14"
 #define FRUITBOX_PRO_VERSION                  FRUITBOX_VERSION " Pro"
 #define FRUITBOX_DESCRIPTION                  "fruitbox " FRUITBOX_VERSION " (" __DATE__ ", " __TIME__ ") by Mike Kingsley"
 #define FRUITBOX_SUMMARY                      "A customisable MP3 Retro Jukebox for the Raspberry Pi"
