@@ -17,8 +17,8 @@ constexpr char commandLineArgDebugSongNums[]    { "--debug-song-nums" };
 constexpr char commandLineArgConfigButtons[]    { "--config-buttons" };
 constexpr char commandLineArgCalibrateTouch[]   { "--calibrate-touch" };
 constexpr char commandLineArgTestButtons[]      { "--test-buttons" };
-constexpr char commandLineArgInputDevice[]      { "--input-device" };
-constexpr char commandLineArgTouchDevice[]      { "--touch-device" };
+// constexpr char commandLineArgInputDevice[]      { "--input-device" };
+// constexpr char commandLineArgTouchDevice[]      { "--touch-device" };
 constexpr char commandLineArgScreenshot[]       { "--screenshot" };
 constexpr char commandLineArgNoScale[]          { "--no-scale" };
 // constexpr char commandLineArgTouchMin[]         { "--touch-min" };
@@ -38,8 +38,8 @@ constexpr char commandLineOptDebugSongNums[]    { "          "};
 constexpr char commandLineOptConfigButtons[]    { "           "};
 constexpr char commandLineOptCalibrateTouch[]   { "          "};
 constexpr char commandLineOptTestButtons[]      { "             "};
-constexpr char commandLineOptInputDevice[]      { " <name>      "};
-constexpr char commandLineOptTouchDevice[]      { " <name>      "};
+// constexpr char commandLineOptInputDevice[]      { " <name>      "};
+// constexpr char commandLineOptTouchDevice[]      { " <name>      "};
 constexpr char commandLineOptScreenshot[]       { "               "};
 constexpr char commandLineOptNoScale[]          { "                 "};
 // constexpr char commandLineOptTouchMin[]         { " <x> <y>        "};
@@ -51,7 +51,7 @@ constexpr char commandLineOptButtonMap[]        { " <filename>    "};
 
 constexpr char defaultButtonFilename[]      { "fruitbox.btn" };
 constexpr char defaultScreenshotFilename[]  { "screenshot.jpg" };
-constexpr char defaultTouchDevice[]         { "FT5406" };
+// constexpr char defaultTouchDevice[]         { "FT5406" };
 constexpr char defaultFirstSelectButtons[]  { "ABCDEFGHIJK" };
 constexpr char defaultSecondSelectButtons[] { "0123456789" };
 
@@ -67,12 +67,10 @@ auto SecondsToHours   = [](uint32_t A) -> uint32_t { return A / 3600; } ;
 auto SecondsToMinutes = [](uint32_t A) -> uint32_t { return (A / 60) % 60; } ;
 auto SecondsToSeconds = [](uint32_t A) -> uint32_t { return A % 60; } ;
 
-constexpr char ButtonTypeKeyboardStr[]      { "Keyboard" };
-constexpr char ButtonTypeJoyAxisStr[]       { "JoyAxis" };
-constexpr char ButtonTypeJoyButtonStr[]     { "JoyButton" };
+constexpr char ButtonTypeKeyStr[]           { "Key" };
+constexpr char ButtonTypeJoystickStr[]      { "Joystick" };
 constexpr char ButtonTypeGPIOStr[]          { "GPIO" };
 constexpr char ButtonTypeTouchStr[]         { "Touch" };
-constexpr char ButtonTypeUserDeviceStr[]    { "Device" };
 
 constexpr char UnknownTitleStr[]            { "Unknown Title" };
 constexpr char UnknownArtistStr[]           { "Unknown Artist" };
@@ -187,15 +185,13 @@ enum class artwork_mode_e
   Logo
 };
 
-enum class button_type_e
+enum class input_type_e
 {
-  Keyboard,
-  JoyAxis,
-  JoyButton,
-  GPIO,
+  None,
+  Key,
+  Joystick,
   Touch,
-  UserDevice,
-  None
+  GPIO
 };
 
 enum class gpio_e
@@ -327,11 +323,17 @@ struct touch_area_t
   uint32_t h {};
 };
 
+struct input_event_t
+{
+  input_type_e type;
+  array<int32_t, 4> param {{0, 0, 0, 0}};
+};
+
 struct button_t
 {
   string name {};
-  button_type_e type { button_type_e::Keyboard };
-  array<uint32_t, 4> param {{0, 0, 0, 0}};
+  input_type_e type { input_type_e::None };
+  array<int32_t, 4> param {{0, 0, 0, 0}};
 };
 
 struct status_t

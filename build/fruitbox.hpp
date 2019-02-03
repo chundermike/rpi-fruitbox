@@ -47,6 +47,7 @@
 #include <allegro5/allegro_video.h>
 
 #include "fruitbox_types.hpp"
+#include "gpio.hpp"
 #include "input.hpp"
 #include "status_events.hpp"
 #include "config_base.hpp"
@@ -55,6 +56,7 @@
 #include "engine.hpp"
 #include "pages.hpp"
 #include "display.hpp"
+#include "menu.hpp"
 #include "bitmap.hpp"
 #include "status.hpp"
 #include "joystick.hpp"
@@ -75,10 +77,11 @@
 
 // #define _CURL
 
-#define FRUITBOX_VERSION                      "v1.12.2"
+#define FRUITBOX_VERSION                      "v2.00"
+#define FRUITBOX_PRO_VERSION                  FRUITBOX_VERSION " Pro"
 #define FRUITBOX_DESCRIPTION                  "fruitbox " FRUITBOX_VERSION " (" __DATE__ ", " __TIME__ ") by Mike Kingsley"
 #define FRUITBOX_SUMMARY                      "A customisable MP3 Retro Jukebox for the Raspberry Pi"
-
+#define FRUITBOX_DONATE                       "To encourage future development, please consider making a donation\nto the author at https://paypal.me/rpifruitbox"
 void error(const char *fmt, ...);
 
 extern status_t status;
@@ -95,3 +98,4 @@ extern PlayQueueClass *PlayQueue;
 extern EngineClass *Engine;
 extern DisplayClass *Display;
 extern ChooserConfigClass *Chooser;
+extern GpioClass *Gpio;

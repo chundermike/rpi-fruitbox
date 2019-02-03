@@ -54,22 +54,47 @@
 #define BUTTON_FLAG_4            49
 #define NUM_BUTTONS              50
 
-#define BUTTON_MASK              0x000000ff
+#define BUTTON_MASK              0x0000ffff
 #define BUTTON_RELEASED          0x80000000
 #define TOUCH_SONG               0x40000000
 #define SONG_PAGE_POS            8
 #define SONG_ENTRY_POS           16
 #define SONG_POS_MASK            0xff
 
+#define EVENT_PARAM_ID           0
+#define EVENT_PARAM_VAL1         1
+#define EVENT_PARAM_VAL2         2
+#define EVENT_PARAM_PRESSED      3
 
-#define NUM_GPIO                 28
-
-struct gpio_regs_t
+enum class input_device_state_e
 {
-  uint32_t gpfsel[6];
-  uint32_t gpren[2];
-  uint32_t gpfen[2];
-  bool saved {false};
+  idle,
+  waiting_for_touch_abs_x,
+  waiting_for_touch_abs_y,
+  waiting_for_touch_release
+};
+
+struct input_device_t
+{
+  input_type_e type { input_type_e::None };
+  string name {};
+  string event_path {};
+  input_device_state_e state {input_device_state_e::idle};
+  bool joystick_moved { false };
+  uint32_t joystick_moved_code { 0 };
+  int fd;
+  uint32_t js_num {0};
+  // uint32_t mouse_num {0};
+};
+
+struct raw_t
+{
+  mutex mtx;
+  bool enable { false };
+  condition_variable valid;
+  input_event_t event {};
+  string str;
+  volatile bool kbd_esc_pressed { false };
 };
 
 class InputClass
@@ -80,44 +105,25 @@ public:
   ~InputClass();
   deque<uint32_t> queue { };
   std::mutex queue_mtx {};
-  void GPIOConfigurePinAsInput(const uint32_t pin);
-  void GPIOConfigurePinAsOutput(const uint32_t pin);
-  uint32_t GPIOReadPin(const uint32_t pin);
-  void GPIOSetPin(const uint32_t pin);
-  void GPIOClrPin(const uint32_t pin);
   bool touch_installed {false};
-  // int32_t touch_max_x { 0 };
-  // int32_t touch_max_y { 0 };
-  // int32_t touch_min_x { 0 };
-  // int32_t touch_min_y { 0 };
   double touch_scale_x { 1.0 };
   double touch_scale_y { 1.0 };
   int32_t touch_offset_x { 0 };
   int32_t touch_offset_y { 0 };
-  bool openDevice(const string &name, int &fd);
-  int touch_fd;
   bool reversed_touch {false};
 private:
-  gpio_regs_t gpio_regs {};
+  void openDevices(void);
+  void scanGPIO(input_event_t &event);
+  void scanDevice(input_device_t &device, input_event_t &event);
+  vector <input_device_t> input_device {};
+  // deque<config_buttons_queue_t> config_buttons_queue { };
+  raw_t raw {};
   bool config_buttons {false};
   bool test_buttons {false};
   bool calibrate_touch {false};
-  void GenerateButtonFile(void);
-  void ButtonInputThread(void);
-  // bool openTouchScreen(void);
-  uint32_t FindButton(const button_type_e type, const array<uint32_t, 4> &param);
-  void GPIOInit(void);
+  void ConfigButtons(void);
+  void TestButtons(void);
+  bool FindButton(const input_event_t &event);
   void CalibrateTouch(void);
-  void OtherInputThread(void);
-  // void GetTouchMaxMin(int fd);
-  ALLEGRO_EVENT event {};
-  ALLEGRO_EVENT_QUEUE *EventQueue {};
-  ALLEGRO_EVENT_SOURCE other_input_event_source;
-  volatile uint32_t *gpio {};
-  uint32_t gpio_input_mask {};
-  array<uint32_t, NUM_GPIO> gpio_history {};
-  array<bool, NUM_GPIO> gpio_pressed {};
-  array<bool, NUM_GPIO> prev_gpio_pressed {};
-  float prev_joystick_pos {};
-  vector <ALLEGRO_JOYSTICK*> joystick {};
+  void InputThread(void);
 };

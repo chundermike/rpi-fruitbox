@@ -10,6 +10,7 @@ ConfigClass *Config {};
 PlayQueueClass *PlayQueue {};
 AudioClass *Audio {};
 InputClass *Input {};
+GpioClass *Gpio {};
 DatabaseClass *Database {};
 EngineClass *Engine {};
 DisplayClass *Display {};
@@ -61,8 +62,8 @@ void Help(void)
   cout << commandLineArgConfigButtons  << commandLineOptConfigButtons  << ": configure button mappings" << endl;
   cout << commandLineArgCalibrateTouch << commandLineOptCalibrateTouch << ": calibrate touch screen" << endl;
   cout << commandLineArgTestButtons    << commandLineOptTestButtons    << ": test button codes" << endl;
-  cout << commandLineArgInputDevice    << commandLineOptInputDevice    << ": Add input device when configuring / testing buttons " << endl;
-  cout << commandLineArgTouchDevice    << commandLineOptTouchDevice    << ": Specify touch device when configuring / testing buttons " << endl;
+  // cout << commandLineArgInputDevice    << commandLineOptInputDevice    << ": Add input device when configuring / testing buttons " << endl;
+  // cout << commandLineArgTouchDevice    << commandLineOptTouchDevice    << ": Specify touch device when configuring / testing buttons " << endl;
   cout << commandLineArgScreenshot     << commandLineOptScreenshot     << ": save a screenshot of the skin" << endl;
   cout << commandLineArgNoScale        << commandLineOptNoScale        << ": Don't scale the skin to fit the display" << endl;
   // cout << commandLineArgTouchMin      << commandLineOptTouchMin      << ": Top Left touch co-ordinates" << endl;
@@ -71,9 +72,10 @@ void Help(void)
   // cout << commandLineArgGPIOScanRow   << commandLineOptGPIOScanRow   << ": GPIO pins used for scan rows" << endl;
   // cout << commandLineArgGPIOScanCol   << commandLineOptGPIOScanCol   << ": GPIO pins used for scan columns" << endl;
   cout << endl << endl << "Acknowledgments..." << endl << endl;
-  cout << "Allegro v" << major << "." << minor << "." << revision << "[" << release << "] Game Programming library for Graphics, Sound and Input." << endl;
+  cout << "Allegro v" << major << "." << minor << "." << revision << "[" << release << "] Game Programming library for Graphics and Sound." << endl;
   cout << "libmpg123 v1.24.0 for MP3 decoding." << endl;
   cout << "DWJukebox for inspiration!" << endl << endl;
+  cout << FRUITBOX_DONATE << endl;
   exit(-1);
 }
 
@@ -120,13 +122,13 @@ int32_t main(int32_t argc, char *argv[])
 
       if (strcmp(*av, commandLineArgSavePlaylist) == 0)
       {
-        NEXT_ARG; 
+        NEXT_ARG;
         save_playlist_filename = *av;
       }
 
       if (strcmp(*av, commandLineArgDatabase) == 0)
       {
-        NEXT_ARG; 
+        NEXT_ARG;
         Config->general->database_filename = *av;
         cout << NOTE << "Database '" << *av << "' will override Database in skin config file" << endl;
       }
@@ -141,13 +143,13 @@ int32_t main(int32_t argc, char *argv[])
 
       if (strcmp(*av, commandLineArgLoadPlaylist) == 0)
       {
-        NEXT_ARG; 
+        NEXT_ARG;
         load_playlist_filename = *av;
       }
 
       if (strcmp(*av, commandLineArgChooseCfg) == 0)
       {
-        NEXT_ARG; 
+        NEXT_ARG;
         choose_cfg_filename = *av;
         Config->choose_cfg = true;
       }
@@ -172,17 +174,17 @@ int32_t main(int32_t argc, char *argv[])
         test_buttons = true;
       }
 
-      if (strcmp(*av, commandLineArgInputDevice) == 0)
-      {
-        NEXT_ARG; 
-        Config->buttons->input_device.push_back(make_pair(*av, 0));
-      }
+      // if (strcmp(*av, commandLineArgInputDevice) == 0)
+      // {
+        // NEXT_ARG;
+        // Config->buttons->input_device.push_back(make_pair(*av, 0));
+      // }
 
-      if (strcmp(*av, commandLineArgTouchDevice) == 0)
-      {
-        NEXT_ARG; 
-        Config->buttons->touch_device = *av;
-      }
+      // if (strcmp(*av, commandLineArgTouchDevice) == 0)
+      // {
+        // NEXT_ARG;
+        // Config->buttons->touch_device = *av;
+      // }
 
       if (strcmp(*av, commandLineArgScreenshot) == 0)
       {
@@ -196,14 +198,14 @@ int32_t main(int32_t argc, char *argv[])
 
       if (strcmp(*av, commandLineArgButtonMap) == 0)
       {
-        NEXT_ARG; 
+        NEXT_ARG;
         Config->button_map = string(*av);
       }
 
       *av++;
     }
   }
-  else 
+  else
   {
     Help();
   }
@@ -237,6 +239,11 @@ int32_t main(int32_t argc, char *argv[])
   Display->LogoSpinUp();
 
   /////////////////////////////////////////////////////////////////////////////
+  // Create the GPIO object...
+
+  Gpio = new GpioClass();
+
+  /////////////////////////////////////////////////////////////////////////////
   // Initialise the input...
 
   Input = new InputClass(config_buttons, test_buttons, calibrate_touch);
@@ -245,17 +252,15 @@ int32_t main(int32_t argc, char *argv[])
   // Create chooser...
 
   Chooser = new ChooserConfigClass();
-  
-  /////////////////////////////////////////////////////////////////////////////
-  // Load Button mappings...
-
-  Config->LoadButtons(Config->button_map);
 
   /////////////////////////////////////////////////////////////////////////////
-  // now configure GPIO input and outputs, and start the input threads...
+  // Start the input thread...
 
   Input->Start();
-  
+
+  if (config_buttons || test_buttons) return 0; // we are done
+
+
   /////////////////////////////////////////////////////////////////////////////
   // Skin chooser menu...
 
@@ -303,7 +308,7 @@ int32_t main(int32_t argc, char *argv[])
 
   /////////////////////////////////////////////////////////////////////////////
   // load playqueue...
-  
+
   PlayQueue->Load(load_playlist_filename);
 
   /////////////////////////////////////////////////////////////////////////////

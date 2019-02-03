@@ -57,8 +57,6 @@ public:
   void cfgRead(string line) {};
 
   bool need_touchscreen { false };
-  bool need_gpio_input { false };
-  bool need_gpio_output { false };
   bool screenshot { false };
   bool choose_cfg { false };
   bool no_scale { false };

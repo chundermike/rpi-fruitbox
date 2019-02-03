@@ -257,7 +257,18 @@ void DisplayClass::DrawTouchTarget
 }
 
 void DisplayClass::DrawInfoBox
-// draw fruitbox logo on specified background and info box...
+// draw info box with no arrows, default background, and flip display after draw...
+(
+  const string &title,
+  const string &info1,
+  const string &info2
+)
+{
+  DrawInfoBox(title, info1, info2, nullptr, false, true);
+}
+
+void DisplayClass::DrawInfoBox
+// info box with specified background and arrows...
 (
   const string &title,
   const string &info1,

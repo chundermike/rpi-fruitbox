@@ -374,18 +374,16 @@ bool StatusDisplayClass::funcGPIOSetPinHigh(StatusDisplayClass *s, unsigned char
 {
   uint32_t pin { static_cast<uint32_t>(param) };
 
-  if (Config->general->gpio.at(pin) == gpio_e::Output)
-  {
-    Input->GPIOSetPin(pin);
-    return false;
-  }
-
   // we check if it is unused to prevent setting as an output if it is being used as button input
   // if not, we set the direction to output for subsequent calls...
   if (Config->general->gpio.at(pin) == gpio_e::Unused)
   {
-    Config->general->gpio.at(pin) = gpio_e::Output;
-    Input->GPIOConfigurePinAsOutput(pin);
+    Gpio->ConfigurePinAsOutput(pin);
+  }
+
+  if (Config->general->gpio.at(pin) == gpio_e::Output)
+  {
+    Gpio->SetPin(pin);
   }
 
   return false;
@@ -395,18 +393,16 @@ bool StatusDisplayClass::funcGPIOSetPinLow(StatusDisplayClass *s, unsigned char 
 {
   uint32_t pin { static_cast<uint32_t>(param) };
 
-  if (Config->general->gpio.at(pin) == gpio_e::Output)
-  {
-    Input->GPIOClrPin(pin);
-    return false;
-  }
-
   // we check if it is unused to prevent setting as an output if it is being used as button input
   // if not, we set the direction to output for subsequent calls...
   if (Config->general->gpio.at(pin) == gpio_e::Unused)
   {
-    Config->general->gpio.at(pin) = gpio_e::Output;
-    // Input->GPIOConfigurePinAsOutput(pin);
+    Gpio->ConfigurePinAsOutput(pin);
+  }
+
+  if (Config->general->gpio.at(pin) == gpio_e::Output)
+  {
+    Gpio->ClrPin(pin);
   }
 
   return false;
@@ -1018,7 +1014,8 @@ void StatusDisplayClass::init(const uints2_t sze, const uint32_t emsk)
         if ((s.code >= STATUS_VAR_SET_GPIO_00_HI) && (s.code <= STATUS_VAR_SET_GPIO_27_LO))
         {
           // cout << "*** NEED GPIO OUTPUT ***" << endl;
-          Config->need_gpio_output = true;
+          // Config->need_gpio_output = true;
+          Gpio->ConfigurePinAsOutput((s.code - STATUS_VAR_SET_GPIO_00_HI) / 2);
         }
       }
     }

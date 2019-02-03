@@ -55,25 +55,35 @@ void ConfigClass::ChooseMenu(const string choose_cfg_filename, string &filename)
 
   // configure touch areas for chooser screen
 
+  uint32_t posx = Display->info_box_pos.x;
+  uint32_t posy = Display->info_box_pos.y;
+
+  for (uint32_t b = 0; b < NUM_BUTTONS; ++b)
   {
-    uint32_t posx = Display->info_box_pos.x;
-    uint32_t posy = Display->info_box_pos.y;
+   // all buttons touch areas default to info box ...
+    touch_areas->touch_area.at(b).x = posx;
+    touch_areas->touch_area.at(b).y = posy;
+    touch_areas->touch_area.at(b).w = InfoBoxWidth;
+    touch_areas->touch_area.at(b).h = InfoBoxHeight;
+  }
+  // touch on left arrow
+  touch_areas->touch_area.at(BUTTON_LEFT).x = 0;
+  touch_areas->touch_area.at(BUTTON_LEFT).w = posx;
 
-    for (uint32_t b = 0; b < NUM_BUTTONS; ++b)
+  // touch on right arrow
+  touch_areas->touch_area.at(BUTTON_RIGHT).x = posx + InfoBoxWidth;
+  touch_areas->touch_area.at(BUTTON_RIGHT).w = posx;
+
+  // for buttons napped to touch, we (temporarily) copy the choser touch areas to the button touch areas...
+  for (uint32_t b = 0; b < buttons->button.size(); ++b)
+  {
+    if (buttons->button.at(b).type == input_type_e::Touch)
     {
-     // all buttons touch areas default to info box ...
-      touch_areas->touch_area.at(b).x = posx;
-      touch_areas->touch_area.at(b).y = posy;
-      touch_areas->touch_area.at(b).w = InfoBoxWidth;
-      touch_areas->touch_area.at(b).h = InfoBoxHeight;
+      buttons->button.at(b).param.at(0) = touch_areas->touch_area.at(b).x;
+      buttons->button.at(b).param.at(1) = touch_areas->touch_area.at(b).y;
+      buttons->button.at(b).param.at(2) = touch_areas->touch_area.at(b).w;
+      buttons->button.at(b).param.at(3) = touch_areas->touch_area.at(b).h;
     }
-    // touch on left arrow
-    touch_areas->touch_area.at(BUTTON_LEFT).x = 0;
-    touch_areas->touch_area.at(BUTTON_LEFT).w = posx;
-
-    // touch on right arrow
-    touch_areas->touch_area.at(BUTTON_RIGHT).x = posx + InfoBoxWidth;
-    touch_areas->touch_area.at(BUTTON_RIGHT).w = posx;
   }
 
   Chooser->current_cfg = 0;
@@ -152,7 +162,7 @@ void ConfigClass::LoadButtons(const string filename)
     line.erase(0, line.find_first_not_of(" \t"));// remove leading whitespace
     if (line.empty()) continue;
     if (line.at(0) == cfgFile_comment) continue; // comment line
-    buttons->cfgRead(line); // get buttons, touch_device and input_device(s)
+    buttons->cfgRead(line); // get buttons
   }
 
   btnFile.close();
@@ -160,20 +170,19 @@ void ConfigClass::LoadButtons(const string filename)
   // check if we need touchscreen...
   for (auto &b : buttons->button)
   {
-    if (b.type == button_type_e::Touch) need_touchscreen = true;
+    if (b.type == input_type_e::Touch) need_touchscreen = true;
   }
 
   // // check if we need GPIO input...
   for (auto &b : buttons->button)
   {
-    if (b.type == button_type_e::GPIO)
+    if (b.type == input_type_e::GPIO)
     {
-      uint32_t pin { b.param.at(0) };
+      int32_t pin { b.param.at(EVENT_PARAM_VAL1) };
 
       if (pin < NUM_GPIO)
       {
-        general->gpio.at(pin) = gpio_e::Input;
-        need_gpio_input = true;
+        Gpio->ConfigurePinAsInput(pin);
       }
       else
       {
@@ -191,9 +200,6 @@ bool ConfigClass::Load(const string cfg_filename)
   uint32_t cfgFile_line_number {};
 
   ConfigBaseClass::filepath = cfg_filename.substr(0, cfg_filename.find_last_of("/"));
-
-  // cout << "cfg_filename " << cfg_filename << endl;
-  // cout << "ConfigBaseClass::filepath " << ConfigBaseClass::filepath << endl;
 
   filename =  cfg_filename;
 
@@ -329,8 +335,6 @@ void ConfigClass::PostProcess(void)
     select_codes *= s.size();
   }
 
-  // cout << "*** select_codes = " << select_codes << endl;
-
   uint32_t visible_songs { general->songs_per_page * visible_pages };
 
   if (select_codes < visible_songs) error("Not enough select key combinations (%d) for number of visible songs (%d)", select_codes, visible_songs);
@@ -378,17 +382,6 @@ void ConfigClass::PostProcess(void)
   Input->touch_offset_x = buttons->touch_min.x ;
   Input->touch_offset_y = buttons->touch_min.y ;
 
-  // cout << "buttons->touch_min.x " << buttons->touch_min.x << endl;
-  // cout << "buttons->touch_max.x " << buttons->touch_max.x << endl;
-  // cout << "buttons->touch_min.y " << buttons->touch_min.y << endl;
-  // cout << "buttons->touch_max.y " << buttons->touch_max.y << endl;
-  // cout << "Input->touch_offset_x " << Input->touch_offset_x << endl;
-  // cout << "Input->touch_offset_y " << Input->touch_offset_y << endl;
-  // cout << "touch_range_x " << touch_range_x << endl;
-  // cout << "touch_range_y " << touch_range_y << endl;
-  // cout << "Input->touch_scale_x " << Input->touch_scale_x << endl;
-  // cout << "Input->touch_scale_y " << Input->touch_scale_y << endl;
-
   if (touch_range_x)
   {
     Input->touch_scale_x  = static_cast<double>(general->skin_size.x) / static_cast<double>(touch_range_x);
@@ -417,7 +410,7 @@ void ConfigClass::PostProcess(void)
 
   for (uint32_t b = 0; b < buttons->button.size(); ++b)
   {
-    if (buttons->button.at(b).type == button_type_e::Touch)
+    if (buttons->button.at(b).type == input_type_e::Touch)
     {
       buttons->button.at(b).param.at(0) = touch_areas->touch_area.at(b).x;
       buttons->button.at(b).param.at(1) = touch_areas->touch_area.at(b).y;
@@ -500,7 +493,7 @@ void ConfigClass::PostProcess(void)
       i->init({}, StatusEvent_status);
     }
   }
-
+  
   ///////////////////////////////////////////////////////////////////////////////////////////////
 
   // now for the joystick / touch_song object(s) we need to populate its page entry position
@@ -590,15 +583,16 @@ void ConfigClass::PostProcess(void)
     {
       touch_song_defined = true;
       // need_touchscreen = true;
-      if (!Input->touch_installed) // no touch buttons defined but we need touchscreen for touch song mode
-      {
-        Input->touch_installed = Input->openDevice(Config->buttons->touch_device, Input->touch_fd);
-      }
+      // if (Input->touch_fd.size() == 0) // no touch buttons defined but we need touchscreen for touch song mode
+      // {
+        // Input->openDevice(Config->buttons->touch_device, Input->touch_fd);
+      // }
     }
     else if (dynamic_cast<JoystickDisplayClass*>(j) != nullptr) joystick_defined = true;
   }
 
-  if (touch_song_defined && !Input->touch_installed) // if we can't install touchscreen in touch song mode, we fall back to joystick or button mode...
+  // if (touch_song_defined && Input->touch_fd.size() == 0) // if we can't install touchscreen in touch song mode, we fall back to joystick or button mode...
+  if (touch_song_defined && Input->touch_installed == false) // if we can't install touchscreen in touch song mode, we fall back to joystick or button mode...
   {
     if (joystick_defined)
     {
@@ -621,7 +615,7 @@ void ConfigClass::PostProcess(void)
   // check for duplicated button mappings...
   for (uint32_t b1 = 0; b1 < NUM_BUTTONS; ++b1)
   {
-    if (Config->buttons->button.at(b1).type == button_type_e::Touch) continue; // Touch don't count
+    if (Config->buttons->button.at(b1).type == input_type_e::Touch) continue; // Touch don't count
     for (uint32_t b2 = 0; b2 < NUM_BUTTONS; ++b2)
     {
       if (b1 == b2) continue; // don't compare a button with itself

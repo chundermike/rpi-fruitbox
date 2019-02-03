@@ -326,8 +326,9 @@ void EngineClass::Run(void)
     // Display->redraw = false;
 
     ///////////////////////////////////////////////////////////////////////////
-    // check for button event
-    if (Input->queue.size())
+    // check for button events
+    
+    if (Input->queue.size()) // user input controls jukebox itself
     {
       Input->queue_mtx.lock();
       uint32_t event_code = Input->queue.front();
@@ -337,10 +338,12 @@ void EngineClass::Run(void)
       // cout << std::hex << time(nullptr) << " INPUT QUEUE POP " << Input->queue.size() << " " << keycode << endl;
       if (event_code & BUTTON_RELEASED)
       {
+        // cout << "BUTTON_RELEASED" << endl;
         button_pressed_mask &= ~static_cast<uint64_t>(1 << keycode);
       }
       else if (event_code & TOUCH_SONG)
       {
+        // cout << "TOUCH_SONG" << endl;
         joy_x = (event_code >> SONG_PAGE_POS) & SONG_POS_MASK;
         joy_y = (event_code >> SONG_ENTRY_POS) & SONG_POS_MASK;
         UpdateSelectCode(joy_x, joy_y);
@@ -876,7 +879,8 @@ void EngineClass::Run(void)
     ///////////////////////////////////////////////////////////////////////////
     // render the display...
 
-    Display->DrawJukebox(true);
+    Display->DrawJukebox(false);
+    al_flip_display();
 
     ///////////////////////////////////////////////////////////////////////////
     // clear status events for next loop...

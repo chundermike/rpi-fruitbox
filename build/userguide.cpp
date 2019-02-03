@@ -118,8 +118,8 @@ void UserGuide(void)
   UserGuideSubSection(commandLineArgConfigButtons, commandLineOptConfigButtons, command_line_gen_button_file_option_str);
   UserGuideSubSection(commandLineArgCalibrateTouch, commandLineOptCalibrateTouch, command_line_calibrate_touch_option_str);
   UserGuideSubSection(commandLineArgTestButtons, commandLineOptTestButtons, command_line_test_buttons_option_str);
-  UserGuideSubSection(commandLineArgInputDevice, commandLineOptInputDevice, command_line_gen_input_device_option_str);
-  UserGuideSubSection(commandLineArgTouchDevice, commandLineOptTouchDevice, command_line_gen_touch_device_option_str);
+  // UserGuideSubSection(commandLineArgInputDevice, commandLineOptInputDevice, command_line_gen_input_device_option_str);
+  // UserGuideSubSection(commandLineArgTouchDevice, commandLineOptTouchDevice, command_line_gen_touch_device_option_str);
   UserGuideSubSection(commandLineArgLoadPlaylist, commandLineOptLoadPlaylist, command_line_load_playlist_str);
   UserGuideSubSection(commandLineArgSavePlaylist, commandLineOptSavePlaylist, command_line_save_playlist_str);
   UserGuideSubSection(commandLineArgChooseCfg, commandLineOptChooseCfg, command_line_choose_cfg_str);
@@ -157,4 +157,5 @@ void UserGuide(void)
   UserGuideSubSection("", "", button_mapping_file_post_str);
   UserGuideSection("Troubleshooting", troubleshooting_str);
   UserGuideSection("Hints and Tips", hints_and_tips_str);
+  cout << endl << FRUITBOX_DONATE << endl;
 }

@@ -45,30 +45,15 @@ constexpr char cfgKeywordDesc_MusicPath[]                { "File name of path to
 constexpr char cfgKeyword_SortSongsBy[]                  { "SortSongsBy" };
 constexpr char cfgKeywordDesc_SortSongsBy[]              { "'Title', 'Artist', 'Album', 'AlbumArtist', 'Year', 'Genre', 'TrackNumber', 'Publisher', 'ISRC', 'Custom', 'Random', 'Unsorted'" };
 
-// constexpr char cfgKeyword_SelectKeys[]                   { "SelectKeys" }; //  *** TO BE REMOVED ***
-// constexpr char cfgKeywordDesc_SelectKeys[]               { "First pair of characters are the range for first button press, second pair for second button press" };
-
 constexpr char cfgKeyword_SelectButtons[]                { "SelectButtons" };
 constexpr char cfgKeywordDesc_SelectButtons[]            { "List of characters for the select code for the button presses" };
                                                        
-// constexpr char cfgKeyword_FirstSelectButtons[]           { "FirstSelectButtons" };
-// constexpr char cfgKeywordDesc_FirstSelectButtons[]       { "List of characters for the select code for the first button press" };
-                                                       
-// constexpr char cfgKeyword_SecondSelectButtons[]          { "SecondSelectButtons" };
-// constexpr char cfgKeywordDesc_SecondSelectButtons[]      { "List of characters for the select code for the second button press" };
-
 constexpr char cfgKeyword_SelectButtonsSequence[]        { "SelectButtonsSequence" };
 constexpr char cfgKeywordDesc_SelectButtonsSequence[]    { "'RowCol', 'ColRow'\n" \
                                                           "                                    Specifies if the first select buttons are cycled before the second\n" \
                                                           "                                    select code buttons (ColRow) or the after the second buttons (RowCol)" };
-// constexpr char cfgKeyword_SelectKeysExcludeFirst[]       { "SelectKeysExcludeFirst" };
-// constexpr char cfgKeywordDesc_SelectKeysExcludeFirst[]   { "Key code to be excluding from the first select code digit" };
-
-// constexpr char cfgKeyword_SelectKeysExcludeSecond[]       { "SelectKeysExcludeSecond" };
-// constexpr char cfgKeywordDesc_SelectKeysExcludeSecond[]   { "Key code to be excluding from the second select code digit" };
-
-constexpr char cfgKeyword_TouchDevice[]                  { "TouchDevice" };
-constexpr char cfgKeywordDesc_TouchDevice[]              { "Name of touch device (defaults to 'FT5406' - the official Raspberry Pi 7\" display)" };
+// constexpr char cfgKeyword_TouchDevice[]                  { "TouchDevice" };
+// constexpr char cfgKeywordDesc_TouchDevice[]              { "Name of touch device (defaults to 'FT5406' - the official Raspberry Pi 7\" display)" };
 
 constexpr char cfgKeyword_TouchMin[]                     { "TouchMin" };
 constexpr char cfgKeywordDesc_TouchMin[]                 { "x y (the touch co-ordinatesfor top left of touch display)" };
@@ -76,9 +61,9 @@ constexpr char cfgKeywordDesc_TouchMin[]                 { "x y (the touch co-or
 constexpr char cfgKeyword_TouchMax[]                     { "TouchMax" };
 constexpr char cfgKeywordDesc_TouchMax[]                 { "x y (the touch co-ordinatesfor bottom right of touch display)" };
 
-constexpr char cfgKeyword_InputDevice[]                  { "InputDevice" };
-constexpr char cfgKeywordDesc_InputDevice[]              { "Name of an input device.  Can be the full device name or part of the device name\n" \
-                                                          "                                    ('evtest' gives you this information) *Can be defined multiple times" };
+// constexpr char cfgKeyword_InputDevice[]                  { "InputDevice" };
+// constexpr char cfgKeywordDesc_InputDevice[]              { "Name of an input device.  Can be the full device name or part of the device name\n" \
+                                                          // "                                    ('evtest' gives you this information) *Can be defined multiple times" };
 
 constexpr char cfgKeyword_CustomMP3Tag[]                 { "CustomMP3Tag" };
 constexpr char cfgKeywordDesc_CustomMP3Tag[]             { "Name of an MP3 ID3v2 tag the user wishes to extract to a song's 'Custom' field (i.e. \"TCON\" is content type)\n" \
@@ -92,7 +77,7 @@ constexpr char cfgKeyword_PageJump[]                     { "PageJump" };
 constexpr char cfgKeywordDesc_PageJump[]                 { "The number of screens of pages moved in one go when 'ButtonLeftJump' or 'ButtonRightJump' is pressed" };
 
 constexpr char cfgKeyword_SelectTimeout[]                { "SelectTimeout" };
-constexpr char cfgKeywordDesc_SelectTimeout[]            { "Timeout for select code to return to '--' after not detecting second digit selection" };
+constexpr char cfgKeywordDesc_SelectTimeout[]            { "Timeout for select code to return to '--' after not detecting all the selection digits" };
 
 constexpr char cfgKeyword_SelectHoldTimeout[]            { "SelectHoldTimeout" };
 constexpr char cfgKeywordDesc_SelectHoldTimeout[]        { "Timeout for select code to return to '--' after song selected" };
@@ -171,10 +156,6 @@ constexpr char cfgKeywordDesc_SongLoadTime[]             { "The time the song ta
 
 constexpr char cfgKeyword_SongUnloadTime[]               { "SongUnloadTime" };
 constexpr char cfgKeywordDesc_SongUnloadTime[]           { "The time the song takes to unload (from finishing playing to the next song in the queue loading)" };
-
-// constexpr char cfgKeyword_TextCondenseLimit[]            { "TextCondenseLimit" };
-// constexpr char cfgKeywordDesc_TextCondenseLimit[]        { "This value subtracted from the region width determines the width of text after which condensing is applied\n" \
-                                                           // "                                    (the region being the object the text is drawn in (i.e. page, status)" };
 
 constexpr char cfgKeyword_SongText[]                     { "SongText" };
 constexpr char cfgKeywordDesc_SongText[]                 { "Text style for Song title in song page. See section 'Fonts and Text'" };
@@ -375,6 +356,7 @@ constexpr char cfgKeyword_ButtonFlag1[]                  { "ButtonFlag1" };
 constexpr char cfgKeyword_ButtonFlag2[]                  { "ButtonFlag2" };
 constexpr char cfgKeyword_ButtonFlag3[]                  { "ButtonFlag3" };
 constexpr char cfgKeyword_ButtonFlag4[]                  { "ButtonFlag4" };
+constexpr char cfgKeyword_ButtonMenu[]                   { "ButtonMenu" };
 constexpr char cfgKeywordDesc_ButtonQuit[]               { "Name of button (quit fruitbox)" };
 constexpr char cfgKeywordDesc_ButtonInsertCoin[]         { "Name of button (insert coin)" };
 constexpr char cfgKeywordDesc_ButtonVolume[]             { "Name of button (change volume)" };
@@ -393,71 +375,74 @@ constexpr char cfgKeywordDesc_ButtonClear[]              { "Name of button (empt
 constexpr char cfgKeywordDesc_ButtonMute[]               { "Name of button (volume mute)" };
 constexpr char cfgKeywordDesc_ButtonSongSelect[]         { "Name of button (song selection)" };
 constexpr char cfgKeywordDesc_ButtonFlag[]               { "Name of button (toggle status flag)" };
+constexpr char cfgKeywordDesc_ButtonMenu[]               { "Name of button (toggle menu)" };
 constexpr char cfgKeywordDesc_ButtonPowerOff[]           { "Name of button (power off)" };
 
 constexpr char cfgKeyword_ButtonTouchArea[]              { "x y width height  (touch area of button, where x y = top left corner)" };
+
+constexpr char proKeyMask[]                              { "?(;865:$5;/-CD3-@::H-AG,C3)E4E29$3)ED)F@A;3%EB.&B.%5'2>0B-,<*$-9" };
 
 struct default_button_t
 {
   uint32_t num;
   const char *name;
   const char *desc;
-  uint32_t key;
+  int32_t key;
 };
 
 // const array<default_button_t, 2> default_button
 const default_button_t default_button[NUM_BUTTONS] = 
 {
-  {BUTTON_QUIT          , cfgKeyword_ButtonQuit        , cfgKeywordDesc_ButtonQuit           , ALLEGRO_KEY_ESCAPE      },
-  {BUTTON_INSERT_COIN1  , cfgKeyword_ButtonCoin1       , cfgKeywordDesc_ButtonInsertCoin     , ALLEGRO_KEY_F1          },
-  {BUTTON_INSERT_COIN2  , cfgKeyword_ButtonCoin2       , cfgKeywordDesc_ButtonInsertCoin     , ALLEGRO_KEY_F2          },
-  {BUTTON_INSERT_COIN3  , cfgKeyword_ButtonCoin3       , cfgKeywordDesc_ButtonInsertCoin     , ALLEGRO_KEY_F3          },
-  {BUTTON_INSERT_COIN4  , cfgKeyword_ButtonCoin4       , cfgKeywordDesc_ButtonInsertCoin     , ALLEGRO_KEY_F4          },
-  {BUTTON_VOL_UP        , cfgKeyword_ButtonVolUp       , cfgKeywordDesc_ButtonVolume         , ALLEGRO_KEY_EQUALS      },
-  {BUTTON_VOL_DOWN      , cfgKeyword_ButtonVolDown     , cfgKeywordDesc_ButtonVolume         , ALLEGRO_KEY_MINUS       },
-  {BUTTON_ADD_RANDOM    , cfgKeyword_ButtonRandom      , cfgKeywordDesc_ButtonRandom         , ALLEGRO_KEY_SPACE       },
-  {BUTTON_SELECT        , cfgKeyword_ButtonSelect      , cfgKeywordDesc_ButtonSelect         , ALLEGRO_KEY_ENTER       },
-  {BUTTON_SKIP          , cfgKeyword_ButtonSkip        , cfgKeywordDesc_ButtonSkip           , ALLEGRO_KEY_BACKSPACE   },
-  {BUTTON_PAUSE         , cfgKeyword_ButtonPause       , cfgKeywordDesc_ButtonPause          , ALLEGRO_KEY_Z           },
-  {BUTTON_UP            , cfgKeyword_ButtonUp          , cfgKeywordDesc_ButtonDirectionsJoy  , ALLEGRO_KEY_UP          },
-  {BUTTON_DOWN          , cfgKeyword_ButtonDown        , cfgKeywordDesc_ButtonDirectionsJoy  , ALLEGRO_KEY_DOWN        },
-  {BUTTON_LEFT          , cfgKeyword_ButtonLeft        , cfgKeywordDesc_ButtonDirections     , ALLEGRO_KEY_LEFT        },
-  {BUTTON_RIGHT         , cfgKeyword_ButtonRight       , cfgKeywordDesc_ButtonDirections     , ALLEGRO_KEY_RIGHT       },
-  {BUTTON_LEFT_JUMP     , cfgKeyword_ButtonLeftJump    , cfgKeywordDesc_ButtonJumpDirections , ALLEGRO_KEY_OPENBRACE   },
-  {BUTTON_RIGHT_JUMP    , cfgKeyword_ButtonRightJump   , cfgKeywordDesc_ButtonJumpDirections , ALLEGRO_KEY_CLOSEBRACE  },
-  {BUTTON_LEFT_ALPHA    , cfgKeyword_ButtonLeftAlpha   , cfgKeywordDesc_ButtonSortDirections , ALLEGRO_KEY_COMMA       },
-  {BUTTON_RIGHT_ALPHA   , cfgKeyword_ButtonRightAlpha  , cfgKeywordDesc_ButtonSortDirections , ALLEGRO_KEY_FULLSTOP    },
-  {BUTTON_AUTO_PLAY_TOG , cfgKeyword_ButtonAuto        , cfgKeywordDesc_ButtonAuto           , ALLEGRO_KEY_R           },
-  {BUTTON_LOOP_TOG      , cfgKeyword_ButtonLoop        , cfgKeywordDesc_ButtonLoop           , ALLEGRO_KEY_L           },
-  {BUTTON_FREEPLAY_TOG  , cfgKeyword_ButtonFree        , cfgKeywordDesc_ButtonFree           , ALLEGRO_KEY_P           },
-  {BUTTON_CLEAR_QUEUE   , cfgKeyword_ButtonClear       , cfgKeywordDesc_ButtonClear          , ALLEGRO_KEY_X           },
-  {BUTTON_MUTE          , cfgKeyword_ButtonMute        , cfgKeywordDesc_ButtonMute           , ALLEGRO_KEY_M           },
-  {BUTTON_POWER_OFF     , cfgKeyword_ButtonPowerOff    , cfgKeywordDesc_ButtonPowerOff       , ALLEGRO_KEY_F12         },
-  {BUTTON_0             , cfgKeyword_Button0           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_0           },
-  {BUTTON_1             , cfgKeyword_Button1           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_1           },
-  {BUTTON_2             , cfgKeyword_Button2           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_2           },
-  {BUTTON_3             , cfgKeyword_Button3           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_3           },
-  {BUTTON_4             , cfgKeyword_Button4           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_4           },
-  {BUTTON_5             , cfgKeyword_Button5           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_5           },
-  {BUTTON_6             , cfgKeyword_Button6           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_6           },
-  {BUTTON_7             , cfgKeyword_Button7           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_7           },
-  {BUTTON_8             , cfgKeyword_Button8           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_8           },
-  {BUTTON_9             , cfgKeyword_Button9           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_9           },
-  {BUTTON_A             , cfgKeyword_ButtonA           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_A           },
-  {BUTTON_B             , cfgKeyword_ButtonB           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_B           },
-  {BUTTON_C             , cfgKeyword_ButtonC           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_C           },
-  {BUTTON_D             , cfgKeyword_ButtonD           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_D           },
-  {BUTTON_E             , cfgKeyword_ButtonE           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_E           },
-  {BUTTON_F             , cfgKeyword_ButtonF           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_F           },
-  {BUTTON_G             , cfgKeyword_ButtonG           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_G           },
-  {BUTTON_H             , cfgKeyword_ButtonH           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_H           },
-  {BUTTON_I             , cfgKeyword_ButtonI           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_I           },
-  {BUTTON_J             , cfgKeyword_ButtonJ           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_J           },
-  {BUTTON_K             , cfgKeyword_ButtonK           , cfgKeywordDesc_ButtonSongSelect     , ALLEGRO_KEY_K           },
-  {BUTTON_FLAG_1        , cfgKeyword_ButtonFlag1       , cfgKeywordDesc_ButtonFlag           , ALLEGRO_KEY_F5          },
-  {BUTTON_FLAG_2        , cfgKeyword_ButtonFlag2       , cfgKeywordDesc_ButtonFlag           , ALLEGRO_KEY_F6          },
-  {BUTTON_FLAG_3        , cfgKeyword_ButtonFlag3       , cfgKeywordDesc_ButtonFlag           , ALLEGRO_KEY_F7          },
-  {BUTTON_FLAG_4        , cfgKeyword_ButtonFlag4       , cfgKeywordDesc_ButtonFlag           , ALLEGRO_KEY_F8          }
+  {BUTTON_QUIT          , cfgKeyword_ButtonQuit        , cfgKeywordDesc_ButtonQuit           , KEY_ESC         },
+  {BUTTON_INSERT_COIN1  , cfgKeyword_ButtonCoin1       , cfgKeywordDesc_ButtonInsertCoin     , KEY_F1          },
+  {BUTTON_INSERT_COIN2  , cfgKeyword_ButtonCoin2       , cfgKeywordDesc_ButtonInsertCoin     , KEY_F2          },
+  {BUTTON_INSERT_COIN3  , cfgKeyword_ButtonCoin3       , cfgKeywordDesc_ButtonInsertCoin     , KEY_F3          },
+  {BUTTON_INSERT_COIN4  , cfgKeyword_ButtonCoin4       , cfgKeywordDesc_ButtonInsertCoin     , KEY_F4          },
+  {BUTTON_VOL_UP        , cfgKeyword_ButtonVolUp       , cfgKeywordDesc_ButtonVolume         , KEY_EQUAL       },
+  {BUTTON_VOL_DOWN      , cfgKeyword_ButtonVolDown     , cfgKeywordDesc_ButtonVolume         , KEY_MINUS       },
+  {BUTTON_ADD_RANDOM    , cfgKeyword_ButtonRandom      , cfgKeywordDesc_ButtonRandom         , KEY_SPACE       },
+  {BUTTON_SELECT        , cfgKeyword_ButtonSelect      , cfgKeywordDesc_ButtonSelect         , KEY_ENTER       },
+  {BUTTON_SKIP          , cfgKeyword_ButtonSkip        , cfgKeywordDesc_ButtonSkip           , KEY_BACKSPACE   },
+  {BUTTON_PAUSE         , cfgKeyword_ButtonPause       , cfgKeywordDesc_ButtonPause          , KEY_Z           },
+  {BUTTON_UP            , cfgKeyword_ButtonUp          , cfgKeywordDesc_ButtonDirectionsJoy  , KEY_UP          },
+  {BUTTON_DOWN          , cfgKeyword_ButtonDown        , cfgKeywordDesc_ButtonDirectionsJoy  , KEY_DOWN        },
+  {BUTTON_LEFT          , cfgKeyword_ButtonLeft        , cfgKeywordDesc_ButtonDirections     , KEY_LEFT        },
+  {BUTTON_RIGHT         , cfgKeyword_ButtonRight       , cfgKeywordDesc_ButtonDirections     , KEY_RIGHT       },
+  {BUTTON_LEFT_JUMP     , cfgKeyword_ButtonLeftJump    , cfgKeywordDesc_ButtonJumpDirections , KEY_LEFTBRACE   },
+  {BUTTON_RIGHT_JUMP    , cfgKeyword_ButtonRightJump   , cfgKeywordDesc_ButtonJumpDirections , KEY_RIGHTBRACE  },
+  {BUTTON_LEFT_ALPHA    , cfgKeyword_ButtonLeftAlpha   , cfgKeywordDesc_ButtonSortDirections , KEY_COMMA       },
+  {BUTTON_RIGHT_ALPHA   , cfgKeyword_ButtonRightAlpha  , cfgKeywordDesc_ButtonSortDirections , KEY_DOT         },
+  {BUTTON_AUTO_PLAY_TOG , cfgKeyword_ButtonAuto        , cfgKeywordDesc_ButtonAuto           , KEY_R           },
+  {BUTTON_LOOP_TOG      , cfgKeyword_ButtonLoop        , cfgKeywordDesc_ButtonLoop           , KEY_L           },
+  {BUTTON_FREEPLAY_TOG  , cfgKeyword_ButtonFree        , cfgKeywordDesc_ButtonFree           , KEY_P           },
+  {BUTTON_CLEAR_QUEUE   , cfgKeyword_ButtonClear       , cfgKeywordDesc_ButtonClear          , KEY_X           },
+  {BUTTON_MUTE          , cfgKeyword_ButtonMute        , cfgKeywordDesc_ButtonMute           , KEY_M           },
+  {BUTTON_POWER_OFF     , cfgKeyword_ButtonPowerOff    , cfgKeywordDesc_ButtonPowerOff       , KEY_F12         },
+  {BUTTON_0             , cfgKeyword_Button0           , cfgKeywordDesc_ButtonSongSelect     , KEY_0           },
+  {BUTTON_1             , cfgKeyword_Button1           , cfgKeywordDesc_ButtonSongSelect     , KEY_1           },
+  {BUTTON_2             , cfgKeyword_Button2           , cfgKeywordDesc_ButtonSongSelect     , KEY_2           },
+  {BUTTON_3             , cfgKeyword_Button3           , cfgKeywordDesc_ButtonSongSelect     , KEY_3           },
+  {BUTTON_4             , cfgKeyword_Button4           , cfgKeywordDesc_ButtonSongSelect     , KEY_4           },
+  {BUTTON_5             , cfgKeyword_Button5           , cfgKeywordDesc_ButtonSongSelect     , KEY_5           },
+  {BUTTON_6             , cfgKeyword_Button6           , cfgKeywordDesc_ButtonSongSelect     , KEY_6           },
+  {BUTTON_7             , cfgKeyword_Button7           , cfgKeywordDesc_ButtonSongSelect     , KEY_7           },
+  {BUTTON_8             , cfgKeyword_Button8           , cfgKeywordDesc_ButtonSongSelect     , KEY_8           },
+  {BUTTON_9             , cfgKeyword_Button9           , cfgKeywordDesc_ButtonSongSelect     , KEY_9           },
+  {BUTTON_A             , cfgKeyword_ButtonA           , cfgKeywordDesc_ButtonSongSelect     , KEY_A           },
+  {BUTTON_B             , cfgKeyword_ButtonB           , cfgKeywordDesc_ButtonSongSelect     , KEY_B           },
+  {BUTTON_C             , cfgKeyword_ButtonC           , cfgKeywordDesc_ButtonSongSelect     , KEY_C           },
+  {BUTTON_D             , cfgKeyword_ButtonD           , cfgKeywordDesc_ButtonSongSelect     , KEY_D           },
+  {BUTTON_E             , cfgKeyword_ButtonE           , cfgKeywordDesc_ButtonSongSelect     , KEY_E           },
+  {BUTTON_F             , cfgKeyword_ButtonF           , cfgKeywordDesc_ButtonSongSelect     , KEY_F           },
+  {BUTTON_G             , cfgKeyword_ButtonG           , cfgKeywordDesc_ButtonSongSelect     , KEY_G           },
+  {BUTTON_H             , cfgKeyword_ButtonH           , cfgKeywordDesc_ButtonSongSelect     , KEY_H           },
+  {BUTTON_I             , cfgKeyword_ButtonI           , cfgKeywordDesc_ButtonSongSelect     , KEY_I           },
+  {BUTTON_J             , cfgKeyword_ButtonJ           , cfgKeywordDesc_ButtonSongSelect     , KEY_J           },
+  {BUTTON_K             , cfgKeyword_ButtonK           , cfgKeywordDesc_ButtonSongSelect     , KEY_K           },
+  {BUTTON_FLAG_1        , cfgKeyword_ButtonFlag1       , cfgKeywordDesc_ButtonFlag           , KEY_F5          },
+  {BUTTON_FLAG_2        , cfgKeyword_ButtonFlag2       , cfgKeywordDesc_ButtonFlag           , KEY_F6          },
+  {BUTTON_FLAG_3        , cfgKeyword_ButtonFlag3       , cfgKeywordDesc_ButtonFlag           , KEY_F7          },
+  {BUTTON_FLAG_4        , cfgKeyword_ButtonFlag4       , cfgKeywordDesc_ButtonFlag           , KEY_F8          }
 };
 
 class ReadBool
@@ -486,11 +471,8 @@ public:
   static string filepath;
   virtual void cfgRead(string line) = 0;
   virtual void cfgShow(const char *indent) = 0;
-  vector<pair<string, int>> input_device { };
-  string touch_device { defaultTouchDevice };
   ints2_t touch_min { };
   ints2_t touch_max { };
-  // string button_map { defaultButtonFilename };
 
   void cfgShowEntry(const string & indent, const string &keyword, const string &description, const bool multi_param)
   {
@@ -504,6 +486,37 @@ public:
     }
   }
 
+  /*
+  // standalone program for scrambling string...
+  #include <iostream>
+  #include <cstdlib>
+
+  using namespace std;
+
+  int main(void)
+  {
+    cout << "Enter string : ";
+    cin >> str;
+    cout << "scrambled(" << str << ") = ";
+    for (int c = 0; c < str.size(); ++c)
+    {
+      str.at(c) = ++str.at(c);
+    }
+    cout << str << endl;
+    return 0;
+  }
+  */
+  string UnscrambleString(const string &str)
+  {
+    string str_out { str };
+    // cout << "str = " << str << endl;
+    for (int c = 0; c < str.size(); ++c)
+    {
+      str_out.at(c) = --str_out.at(c);
+    }
+    // cout << "str_out = " << str_out << endl;
+    return str_out;
+  }
 
 private:
 
@@ -603,6 +616,15 @@ protected:
     istringstream ss { line };
     if (!getline(ss >> std::ws, var)) return false;
     cout << "  " << keyword << " = " << var << endl;
+    return true;
+  }
+
+  bool GetParam(string line, const char *keyword, string &var, bool no_filepath_prefix, bool supress_message)
+  {
+    if (ExtractParameterValues(line, keyword) == false) return false;
+    istringstream ss { line };
+    if (!getline(ss >> std::ws, var)) return false;
+    if (supress_message == false) cout << "  " << keyword << " = " << var << endl;
     return true;
   }
 
@@ -953,30 +975,6 @@ protected:
     return false;
   }
 
-  // bool GetParam(string line, const char *keyword, select_mode_e &var)
-  // {
-    // if (ExtractParameterValues(line, keyword) == false) return false;
-    // istringstream ss { line };
-    // string s;
-    // ss >> s;
-
-    // if (s.size() == 0) return false;
-
-    // if (tolower(s.at(0)) == 's')
-    // {
-      // var = select_mode_e::SelectCode;
-      // cout << "  " << keyword << " = SelectCode" << endl;
-      // return true;
-    // }
-    // if (tolower(s.at(0)) == 't')
-    // {
-      // var = select_mode_e::TouchSong;
-      // cout << "  " << keyword << " = TouchSong" << endl;
-      // return true;
-    // }
-    // return false;
-  // }
-
   bool GetParam(string line, const char *keyword, text_t &var)
   {
     if (ExtractParameterValues(line, keyword) == false) return false;
@@ -1075,7 +1073,6 @@ protected:
   bool GetParam(string line, const char *keyword, touch_area_t &var)
   {
     if (ExtractParameterValues(line, keyword) == false) return false;
-    // cout << "LINE : " << line << endl;
     istringstream ss { line };
     ss >> var.x >> var.y >> var.w >> var.h;
     cout << "  " << keyword << " = " << var.x << " " << var.y << " " << var.w << " " << var.h << endl;
@@ -1089,52 +1086,38 @@ protected:
     string type_str;
 
     ss >> type_str;
-    ss >> setbase(0) >> var.param.at(0) >> var.param.at(1) >> var.param.at(2) >> var.param.at(3);
+    var.param = { 0, 0, 0, 0 };
 
-    if (type_str.size() < 4) return false;
+    if (type_str.size() < 3) return false;
 
-    if (tolower(type_str.at(0)) == tolower(ButtonTypeKeyboardStr[0]))
+    if (tolower(type_str.at(0)) == tolower(ButtonTypeKeyStr[0]))
     {
-      var.type = button_type_e::Keyboard;
-      cout << "  " << keyword << " = " << ButtonTypeKeyboardStr << " " << var.param.at(0) << endl;
+      var.type = input_type_e::Key;
+      ss >> setbase(0) >> var.param.at(EVENT_PARAM_VAL1);
+      // cout << "  " << keyword << " = " << ButtonTypeKeyStr << " " << var.param.at(EVENT_PARAM_VAL1) << endl; // keycode
       return true;
     }
 
     if (tolower(type_str.at(0)) == tolower(ButtonTypeGPIOStr[0]))
     {
-      var.type = button_type_e::GPIO;
-      cout << "  " << keyword << " = " << ButtonTypeGPIOStr << " " << var.param.at(0) << endl;
+      var.type = input_type_e::GPIO;
+      ss >> setbase(0) >> var.param.at(EVENT_PARAM_VAL1);
+      // cout << "  " << keyword << " = " << ButtonTypeGPIOStr << " " << var.param.at(EVENT_PARAM_VAL1) << endl; // GPIO pin
       return true;
-    }
+    } 
 
     if (tolower(type_str.at(0)) == tolower(ButtonTypeTouchStr[0]))
     {
-      var.type = button_type_e::Touch;
-      cout << "  " << keyword << " = " << ButtonTypeTouchStr << endl;
+      var.type = input_type_e::Touch;
+      // cout << "  " << keyword << " = " << ButtonTypeTouchStr << endl;
       return true;
     }
 
-    if (tolower(type_str.at(0)) == tolower(ButtonTypeJoyButtonStr[0]))
+    if (tolower(type_str.at(0)) == tolower(ButtonTypeJoystickStr[0]))
     {
-      if (tolower(type_str.at(3)) == tolower(ButtonTypeJoyAxisStr[3]))
-      {
-        var.type = button_type_e::JoyAxis;
-        cout << "  " << keyword << " = " << ButtonTypeJoyAxisStr << " " << var.param.at(0) << " " << var.param.at(1) << " " << var.param.at(2) << endl;
-        return true;
-      }
-      if (tolower(type_str.at(3)) == tolower(ButtonTypeJoyButtonStr[3]))
-      {
-        var.type = button_type_e::JoyButton;
-        cout << "  " << keyword << " = " << ButtonTypeJoyButtonStr << " " << var.param.at(0) << endl;
-        return true;
-      }
-      return false;
-    }
-
-    if (tolower(type_str.at(0)) == tolower(ButtonTypeUserDeviceStr[0]))
-    {
-      var.type = button_type_e::UserDevice;
-      cout << "  " << keyword << " = " << ButtonTypeUserDeviceStr << " " << var.param.at(0) << " " << var.param.at(1)  << endl;
+      var.type = input_type_e::Joystick;
+      ss >> setbase(0) >> var.param.at(EVENT_PARAM_ID) >> var.param.at(EVENT_PARAM_VAL1) >> var.param.at(EVENT_PARAM_VAL2); // id, axis, position
+      // cout << "  " << keyword << " = " << ButtonTypeJoystickStr << " " << var.param.at(EVENT_PARAM_ID) << " " << var.param.at(EVENT_PARAM_VAL1) << " " << var.param.at(EVENT_PARAM_VAL2) << endl; // id, axis, position
       return true;
     }
 
@@ -1179,20 +1162,7 @@ public:
       select_buttons.push_back(str);
       return;
     }
-    // if (GetParam(line, cfgKeyword_SelectKeys,               select_keys, false)) return;
-    // if (GetParam(line, cfgKeyword_FirstSelectButtons,       first_select_button, false)) return;
-    // if (GetParam(line, cfgKeyword_SecondSelectButtons,      second_select_button, false)) return;
-    if (GetParam(line, cfgKeyword_SelectButtonsSequence,           select_buttons_sequence)) return;
-    // if (GetParam(line, cfgKeyword_SelectKeysExcludeFirst,   str, false))
-    // {
-      // first_exclude_key.push_back(str.at(0));
-      // return;
-    // }
-    // if (GetParam(line, cfgKeyword_SelectKeysExcludeSecond,   str, false))
-    // {
-      // second_exclude_key.push_back(str.at(0));
-      // return;
-    // }
+    if (GetParam(line, cfgKeyword_SelectButtonsSequence,    select_buttons_sequence)) return;
     if (GetParam(line, cfgKeyword_CustomMP3Tag,             custom_mp3_tag, false)) return;
     if (GetParam(line, cfgKeyword_AutoSelect,               auto_select)) return;
     if (GetParam(line, cfgKeyword_PageJump,                 page_jump)) return;
@@ -1309,13 +1279,8 @@ public:
     cfgShowEntry(indent, cfgKeyword_Database                 , cfgKeywordDesc_Database                 , false);
     cfgShowEntry(indent, cfgKeyword_MusicPath                , cfgKeywordDesc_MusicPath                , true);
     cfgShowEntry(indent, cfgKeyword_SortSongsBy              , cfgKeywordDesc_SortSongsBy              , true);
-    // cfgShowEntry(indent, cfgKeyword_SelectKeys               , cfgKeywordDesc_SelectKeys               , false);
     cfgShowEntry(indent, cfgKeyword_SelectButtons            , cfgKeywordDesc_SelectButtons            , true);
-    // cfgShowEntry(indent, cfgKeyword_FirstSelectButtons       , cfgKeywordDesc_FirstSelectButtons       , false);
-    // cfgShowEntry(indent, cfgKeyword_SecondSelectButtons      , cfgKeywordDesc_SecondSelectButtons      , false);
-    cfgShowEntry(indent, cfgKeyword_SelectButtonsSequence           , cfgKeywordDesc_SelectButtonsSequence           , false);
-    // cfgShowEntry(indent, cfgKeyword_SelectKeysExcludeFirst   , cfgKeywordDesc_SelectKeysExcludeFirst   , false);
-    // cfgShowEntry(indent, cfgKeyword_SelectKeysExcludeSecond  , cfgKeywordDesc_SelectKeysExcludeSecond  , false);
+    cfgShowEntry(indent, cfgKeyword_SelectButtonsSequence    , cfgKeywordDesc_SelectButtonsSequence    , false);
     cfgShowEntry(indent, cfgKeyword_CustomMP3Tag             , cfgKeywordDesc_CustomMP3Tag             , false);
     cfgShowEntry(indent, cfgKeyword_AutoSelect               , cfgKeywordDesc_AutoSelect               , false);
     cfgShowEntry(indent, cfgKeyword_PageJump                 , cfgKeywordDesc_PageJump                 , false);
@@ -1382,15 +1347,8 @@ public:
   bool loop_playlist { false };
   bool free_play { true };
   uint32_t auto_page_turn_time { 0 };
-  // string select_keys { "AK09" }; // *** TO BE REMOVED ***
   vector<string> select_buttons { };
-  // string first_select_button { "ABCDEFGHIJK" };
-  // string second_select_button { "0123456789" };
-  // vector<char> first_select_button { };
-  // vector<char> second_select_button { };
   select_buttons_sequence_e select_buttons_sequence { select_buttons_sequence_e::RowCol };
-  // vector<char> first_exclude_key {};
-  // vector<char> second_exclude_key {};
   string custom_mp3_tag {  };
   vector<string> auto_genre { GenreOffStr, GenreAnyStr };
   vector<sort_songs_by_e> sort_songs_by { };
@@ -1433,14 +1391,6 @@ public:
 
   void cfgRead(string line)
   {
-    string str {};
-    if (GetParam(line, cfgKeyword_InputDevice, str, false))
-    {
-      ConfigBaseClass::input_device.push_back(make_pair(str, 0));
-      return;
-    }
-
-    if (GetParam(line, cfgKeyword_TouchDevice, ConfigBaseClass::touch_device, false)) return;
     if (GetParam(line, cfgKeyword_TouchMin, ConfigBaseClass::touch_min)) return;
     if (GetParam(line, cfgKeyword_TouchMax, ConfigBaseClass::touch_max)) return;
 
@@ -1452,8 +1402,6 @@ public:
 
   void cfgShow(const char *indent)
   {
-    cfgShowEntry(indent, cfgKeyword_InputDevice, cfgKeywordDesc_InputDevice, true);
-    cfgShowEntry(indent, cfgKeyword_TouchDevice, cfgKeywordDesc_TouchDevice, false);
     cfgShowEntry(indent, cfgKeyword_TouchMin   , cfgKeywordDesc_TouchMin, false);
     cfgShowEntry(indent, cfgKeyword_TouchMax   , cfgKeywordDesc_TouchMax, false);
     for (auto b = 0; b < NUM_BUTTONS; ++b)
@@ -1468,9 +1416,14 @@ public:
   ButtonsConfigClass(void)
   {
     for (auto b = 0; b < NUM_BUTTONS; ++b)
+    // set all keys to keyboard defaults...
     {
       button.at(default_button[b].num).name = default_button[b].name;
-      button.at(default_button[b].num).param = {{default_button[b].key, 0, 0, 0}};
+      button.at(default_button[b].num).type = input_type_e::Key;
+      button.at(default_button[b].num).param.at(EVENT_PARAM_ID) = 0;
+      button.at(default_button[b].num).param.at(EVENT_PARAM_VAL1) = default_button[b].key;
+      button.at(default_button[b].num).param.at(EVENT_PARAM_VAL2) = 0;
+      button.at(default_button[b].num).param.at(EVENT_PARAM_PRESSED) = 0;
     }
   };
 

@@ -1,5 +1,7 @@
 #include "fruitbox.hpp"
 #include <ftw.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -38,6 +40,21 @@ DatabaseClass::DatabaseClass
   ifstream dbFile;
   uint32_t dbFile_line_number { 0 };
   number_of_songs = 0;
+
+  // struct stat sb;
+  // if (stat(filename.c_str(), &sb) == 0)
+  // {
+    // cout << filename << " Last status change:       " << ctime(&sb.st_ctime) << endl;
+    // cout << filename << " Last file access:         " << ctime(&sb.st_atime) << endl;
+    // cout << filename << " Last file modification:   " << ctime(&sb.st_mtime) << endl;
+  // }
+
+  // check if database date is newer than music directory date...if not, delete database file so it's re-created
+//  if ()
+//  {
+	// delete filename
+//  }
+  
 
   // check if database file exists...if not, create a default one
   dbFile.open(filename, ios::in);

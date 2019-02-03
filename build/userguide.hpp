@@ -57,31 +57,18 @@ const char buttons_def_str[] = { \
   "to determine one or more button mappings.  See section 'Button Mapping File'.\n\n" \
   "By default, the buttons are mapped to keyboard keys (see section 'Default Buttons'), " \
   "but each key can be re-mapped to any of the following...\n\n" \
-  "1. keyboard key\n" \
+  "1. Keyboard key\n" \
   "2. GPIO input pin\n" \
-  "3. USB joystick axis (stick)\n" \
-  "4. USB joystick button\n" \
-  "5. Region on touch screen\n" \
-  "6. User-defined Input Device(s) *\n" \
+  "3. USB joystick stick / button\n" \
+  "4. Region on touch screen\n" \
   "\nThe fruitbox command line parameter '--config-buttons' can be used to interactively assign buttons, "\
   "and generate the button map file.  The btn file can be manually edited later if minor adjustments " \
   "are required.  The '--test-buttons' command line parameter can be used to check what codes are generated " \
-  "without creating a button mapping file.  If the command line option '--input-device' is specified " \
-  "along with '--config-buttons' or '--test-buttons', then the specified input device(s) are included " \
-  "in the button detection.  Any selected devices are then specified " \
-  "in the button file.  This is useful if your input device is not a joystick, keyboard or touch device.  The "\
-  "'--touch-device' option works the same as the '--input-device' option but is used for specifying a touch input device.\n\n" \
+  "without creating a button mapping file.\n\n" \
   "For touch screen buttons, the touch areas are defined in the skin file itself, using the [touch areas] " \
   "section, because these are skin-related.  However, the button assignment to touch input is done in the " \
   "btn file because this is hardware and not skin related.  Button assignments " \
-  "are not specified in the skin to ensure skins remain compatible with different button hardware setups.\n\n"
-  "* The user can specify other input devices using the 'InputDevice' and/or the 'TouchDevice' configuration parameters.  The parameter " \
-  "values can be the full name or part of the name of the input device. (this can be found using 'evtest' or by typing " \
-  "\"cat /proc/bus/input/devices\").  " \
-  "fruitbox will support general input devices which generate EV_KEY event types (again, check with 'evtest').  You " \
-  "can specify as many InputDevices as you like .  The '--input-device' command line option can be used to specify " \
-  "an input device name(s) if generating the button file using the '--config-buttons' command line option.  Likewise " \
-  "the TouchDevice and --touch-device options can be used to specify a touch input device."
+  "are not specified in the skin to ensure skins remain compatible with different button hardware setups."
 };
 
 const char font_text_def_str[] = { \
@@ -206,22 +193,7 @@ const char command_line_gen_button_file_option_str[] = { \
 const char command_line_calibrate_touch_option_str[] = { \
   "Used in conjunction with '--config-buttons' , this allows the user to interactively specify the " \
   "touch-min and touch-max values rather than through the command line options.  It will also write " \
-  "these values to the button mappinf file for future use."
-};
-
-const char command_line_gen_input_device_option_str[] = { \
-  "Used in conjunction with '--config-buttons' or '--test-buttons', this allows an input device(s) to " \
-  "be specified which is then included in the button assignment.  The <name> can be the complete device name " \
-  "or just a sub section of it.  (A device name can be found using an external application such as 'evtest', or by typing " \
-  "\"cat /proc/bus/input/devices\")."
-};
-
-const char command_line_gen_touch_device_option_str[] = { \
-  "Used in conjunction with '--config-buttons' or '--test-buttons', this allows a touch screen device to " \
-  "be specified which is then included in the button assignment.  The <name> can be the complete device name " \
-  "or just a sub section of it.  (A device name can be found using an external application such as 'evtest', or by typing " \
-  "\"cat /proc/bus/input/devices\").  If not specified, fruitbox will try and find the default 'FT5406' device (the official " \
-  "Raspberry Pi 7\" touch screen display)"
+  "these values to the button mapping file for future use."
 };
 
 const char command_line_cfg_option_str[] = { \
@@ -274,7 +246,7 @@ const char coin_str[] = { \
 const char joystick_str[] = { \
   "If a [joystick] object is specified in the skin file, then joystick mode is activated.  " \
   "This allows a song to be chosen using the ButtonUp, ButtonDown, ButtonLeft and ButtonRight buttons " \
-  "instead of entering the select code.  Pressing the Select Button will then add that song to the play queue (AutoSelect mode " \
+  "instead of entering the select code.  Pressing ButtonSelect will then add that song to the play queue (AutoSelect mode " \
   "is disabled when joystick mode is active).\n\n" \
   "The joystick image specified is positioned in the same place as the song title being selected, and its size " \
   "is calculated to fit exactly into the region containing the song title.  Specifying the 'Size' parameter in the " \
@@ -500,13 +472,10 @@ const char button_mapping_file_post_str[] = { \
   "\nEach of the above Button* parameters can be assigned one of the following values...\n\n" \
   "  = Keyboard <code>\n" \
   "  = GPIO <number>\n" \
-  "  = Touch\n" \
-  "  = JoyAxis <stick> <axis> <position> <id>\n" \
-  "  = JoyButton <code> <id>\n" \
-  "  = Device <code> <id>\n\n" \
-  "The above <code>, <number>, <stick>, <axis>, <position> and <id> values can be determined by fruitbox using the " \
-  "'--config-buttons' or '--test-buttons' command line options.  There are no values for the 'Touch' option; the touch " \
-  "area for the specified button should be defined in the [touch areas] section of the skin configuration file."
+  "  = Touch <id>\n" \
+  "  = Joystick <id> <axis> <position>\n" \
+  "The above <code>, <number>, <id>, <axis> and <position> values can be determined by fruitbox using the " \
+  "'--config-buttons' or '--test-buttons' command line options."
 };
 
 
