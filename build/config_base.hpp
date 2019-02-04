@@ -380,8 +380,6 @@ constexpr char cfgKeywordDesc_ButtonPowerOff[]           { "Name of button (powe
 
 constexpr char cfgKeyword_ButtonTouchArea[]              { "x y width height  (touch area of button, where x y = top left corner)" };
 
-constexpr char proKeyMask[]                              { "?(;865:$5;/-CD3-@::H-AG,C3)E4E29$3)ED)F@A;3%EB.&B.%5'2>0B-,<*$-9" };
-
 struct default_button_t
 {
   uint32_t num;
@@ -484,38 +482,6 @@ public:
     {
       cout << indent << setw(maxCfgKeywordWidth) << left << keyword << description << endl;
     }
-  }
-
-  /*
-  // standalone program for scrambling string...
-  #include <iostream>
-  #include <cstdlib>
-
-  using namespace std;
-
-  int main(void)
-  {
-    cout << "Enter string : ";
-    cin >> str;
-    cout << "scrambled(" << str << ") = ";
-    for (int c = 0; c < str.size(); ++c)
-    {
-      str.at(c) = ++str.at(c);
-    }
-    cout << str << endl;
-    return 0;
-  }
-  */
-  string UnscrambleString(const string &str)
-  {
-    string str_out { str };
-    // cout << "str = " << str << endl;
-    for (int c = 0; c < str.size(); ++c)
-    {
-      str_out.at(c) = --str_out.at(c);
-    }
-    // cout << "str_out = " << str_out << endl;
-    return str_out;
   }
 
 private:
