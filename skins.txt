@@ -12,3 +12,4 @@ File = skins/NumberOne/fruitbox.cfg
 File = skins/Splat/fruitbox.cfg
 File = skins/MikeTV/fruitbox.cfg
 File = skins/Wurly/fruitbox.cfg
+File = skins/WurlyVideo/fruitbox.cfg
