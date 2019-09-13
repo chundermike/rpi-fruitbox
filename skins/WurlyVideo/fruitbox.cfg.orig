@@ -1,0 +1,235 @@
+[general]
+SkinName = Wurly
+SkinDescription = by chundermike
+SkinSize = 1920 1080
+Database = ../fruitbox.db
+MusicPath = ../Music/
+SortSongsBy Title
+SortSongsBy Artist
+SelectButtons = ABCDE
+SelectButtons = 1234
+AutoSelect = Yes
+SelectTimeout = 150
+SelectHoldTimeout = 150
+AutoPageTurnTime = 3000
+MaxPlaylistLength = 20
+LoopPlaylist = no
+AutoPlay = yes
+AutoPlayGap = 3000
+PlaysPerCoin1 = 0
+SongsPerPage = 2
+PageSize = 400 100
+SongHistoryDepth = 20
+
+PairSongs = Dual
+ArtistDescription = Artist
+ArtistDescription = " / "
+ArtistDescription = PairedArtist
+
+PageMoveStyle = 20 5 yes
+SongLoadTime = 580 # optimised for 50Hz display; if load video "skips", then adjust this value
+SongUnloadTime = 350 # as above
+ArtistText = 0 0 0 0 255 centre true true false 0 0 300
+AlbumText = 0 0 0 0 255 center false false false 0 0 300
+SongText = 0 200 0 0 255 center true true false 0 0 360
+
+
+[font]
+File = typewriter.ttf
+Height = 25
+
+[font]
+File = hatten.ttf
+Height = 50
+
+[font]
+File = dotmatrx.ttf
+Height = 20
+
+[page]
+Position = 12 50
+Angle = 0
+Background = page_bkgnd.png
+Movedelay = 10
+
+[page]
+Position = 1500 50
+Angle = 0
+Background = page_bkgnd.png
+Movedelay = 4
+
+[page]
+Position = 12 160
+Angle = 0
+Background = page_bkgnd.png
+Movedelay = 5
+
+[page]
+Position = 1500 160
+Angle = 0
+Background = page_bkgnd.png
+Movedelay = 9
+
+[page]
+Position = 12 270
+Angle = 0
+Background = page_bkgnd.png
+Movedelay = 7
+
+[page]
+Position = 1500 270
+Angle = 359
+Background = page_bkgnd.png
+Movedelay = 1
+
+[page]
+Position = 12 385
+Angle = 1
+Background = page_bkgnd.png
+Movedelay = 6
+
+[page]
+Position = 1500 385
+Angle = 0
+Background = page_bkgnd.png
+Movedelay = 10
+
+[page]
+Position = 12 500
+Angle = 0
+Background = page_bkgnd.png
+Movedelay = 2
+
+[page]
+Position = 1500 500
+Angle = 0
+Background = page_bkgnd.png
+Movedelay = 3
+
+[bitmap]
+File = song_none.png
+Position = 486 40
+Size = 940 580
+
+[status]
+Video = load_song.ogv
+LoopVideo = no
+Position = 486 40
+Size = 940 580
+Contents = status_load.txt
+TimerTickPeriod = 1
+
+[status]
+Bitmap = play_song_01.png
+Bitmap = play_song_02.png
+Bitmap = play_song_03.png
+Bitmap = play_song_04.png
+Bitmap = play_song_05.png
+Bitmap = play_song_06.png
+Bitmap = play_song_07.png
+Bitmap = play_song_08.png
+Bitmap = play_song_09.png
+Bitmap = play_song_10.png
+Bitmap = play_song_11.png
+Bitmap = play_song_12.png
+Bitmap = play_song_13.png
+Bitmap = play_song_14.png
+Bitmap = play_song_15.png
+Bitmap = play_song_16.png
+Bitmap = play_song_17.png
+Bitmap = play_song_18.png
+Bitmap = play_song_19.png
+Bitmap = play_song_20.png
+Bitmap = play_song_21.png
+Bitmap = play_song_22.png
+Bitmap = play_song_23.png
+Bitmap = play_song_24.png
+Bitmap = play_song_25.png
+Bitmap = play_song_26.png
+Bitmap = play_song_27.png
+Bitmap = play_song_28.png
+Bitmap = play_song_29.png
+Bitmap = play_song_30.png
+Bitmap = play_song_31.png
+Bitmap = play_song_32.png
+Position = 486 40
+Size = 940 580
+Contents = status_play.txt
+TimerTickPeriod = 1
+
+[status]
+Video = unload_song.ogv
+LoopVideo = no
+Position = 486 40
+Size = 940 580
+Contents = status_unload.txt
+TimerTickPeriod = 1
+
+[status]
+Position = 700 750
+Size = 525 100
+Text = 2 182 255 182 255 center false true false 0 0 520
+Contents = status0.txt
+TimerTickPeriod = 50
+linespacing = 1
+
+[status]
+Position = 700 780
+Size = 525 130
+Text = 2 182 255 182 255 center false true false 0 0 520
+Contents = status1.txt
+LineSpacing = 1
+
+[status]
+Position = 360 800
+Size = 190 260
+Text = 1 64 192 64 255 center false false false 0 0
+Contents = status2.txt
+
+[status]
+Position = 1365 800
+Size = 190 260
+Text = 1 64 192 64 255 center false false false 0 0
+Contents = status3.txt
+TimerTickPeriod = 150
+
+[status]
+Contents select_lights_off.txt
+Bitmap = instructions-left-off.png
+Size = 318 380
+Position = 0 640
+
+[status]
+Contents select_lights_on.txt
+Bitmap = instructions-left-01.png
+Bitmap = instructions-left-02.png
+Bitmap = instructions-left-03.png
+
+Size = 318 380
+Position = 0 640
+TimerTickPeriod = 1
+
+[status]
+Contents coin_lights_off.txt
+Bitmap = instructions-right-off.png
+Size = 318 380
+Position = 1615 640
+
+[status]
+Contents coin_lights_on.txt
+Bitmap = instructions-right-01.png
+Bitmap = instructions-right-02.png
+Bitmap = instructions-right-03.png
+Size = 318 380
+Position = 1615 640
+TimerTickPeriod = 1
+
+[bitmap]
+File = foreground.png
+Position = 0 0
+Size = 1920 1080
+
+#[joystick]
+#Bitmap = ../glass.png
+#Offset = -10 -10
+#Size 330 50
