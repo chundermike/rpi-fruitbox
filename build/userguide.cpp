@@ -15,6 +15,7 @@ using namespace std;
 
 constexpr uint32_t rightMargin           { 80 };
 constexpr uint32_t maxWordSize           { 20 };
+constexpr char userguideFilename[]       { "userguide.txt" };
 constexpr char sectionNumberSepStr[]     { ": " };
 constexpr char sectionindentStr[]        { "  " };
 constexpr char subSectionindentStr []    { "    " };
@@ -23,37 +24,39 @@ constexpr char subSubSectionindentStr[]  { "      " };
 size_t section_number = 0;
 size_t sub_section_number = 0;
 
+ofstream userguide {};
+
 void UserGuideLine(const char *body, const char *indent)
 {
   const char *b = body;
   char c;
   uint32_t x {};
 
-  cout << indent;
+  userguide << indent;
   while (c = *b++)
   {
-    if (((x == 0) && ( c == ' ')) || (c == '\n')); else putchar(c);
+    if (((x == 0) && ( c == ' ')) || (c == '\n')); else userguide << c;
     x++;
     if ((x == rightMargin) || (c == '\n') || ((c == ' ') && (x > rightMargin - maxWordSize)))
     {
-      cout << endl << indent;
+      userguide << endl << indent;
       x = 0;
     }
   };
-  cout << endl;
+  userguide << endl;
 }
 
 void UserGuideBody(const char *body, const char *indent)
 {
   UserGuideLine(body, indent);
-  cout << endl;
+  userguide << endl;
 }
 
 void UserGuideSection(const char *heading, const char *body)
 {
   section_number++;
   sub_section_number = 0;
-  cout << endl << sectionindentStr << static_cast<int>(section_number) << sectionNumberSepStr << heading << endl << endl;
+  userguide << endl << sectionindentStr << static_cast<int>(section_number) << sectionNumberSepStr << heading << endl << endl;
 
   UserGuideBody(body, sectionindentStr);
 }
@@ -63,7 +66,7 @@ void UserGuideSubSection(const char *heading, const char *sub_heading, const cha
   if (heading[0])
   {
     sub_section_number++;
-    cout << endl << sectionindentStr << static_cast<int>(section_number) << "." << static_cast<int>(sub_section_number) << sectionNumberSepStr << heading << sub_heading << endl << endl;
+    userguide << endl << sectionindentStr << static_cast<int>(section_number) << "." << static_cast<int>(sub_section_number) << sectionNumberSepStr << heading << sub_heading << endl << endl;
   }
   UserGuideBody(body, subSectionindentStr);
 }
@@ -83,28 +86,30 @@ void UserGuideShowConfigParameters(const char *indent)
 
 void UserGuideShowGenres(const char *indent)
 {
-  cout << endl << sectionindentStr << "** Recognised AutoGenre values are..." << endl << endl << sectionindentStr;
+  userguide << endl << sectionindentStr << "** Recognised AutoGenre values are..." << endl << endl << sectionindentStr;
   for (uint32_t g = 0; g < NUM_GENRES; ++g)
   {
-    cout << setw(30) << GenreStr.at(g);
-    if ((g % 4) == 3) cout << endl << sectionindentStr;
+    userguide << setw(30) << GenreStr.at(g);
+    if ((g % 4) == 3) userguide << endl << sectionindentStr;
   }
-  cout << endl;
-  cout << sectionindentStr << "Note that you can also define your own Genres and fruitbox will recognise these if the 'AutoGenre' " << endl;
-  cout << sectionindentStr << "field matches the name in the MP3 (ID3v2) genre tag." << endl << endl;
-  cout << sectionindentStr << "fruitbox will make every effort to choose a song from the specified AutoGenre, but is constrained" << endl;
-  cout << sectionindentStr << "by the song history and number of songs available to choose from.  If it cannot choose a song" << endl;
-  cout << sectionindentStr << "in a reasonable time, it will play any song." << endl << endl;
+  userguide << endl;
+  userguide << sectionindentStr << "Note that you can also define your own Genres and fruitbox will recognise these if the 'AutoGenre' " << endl;
+  userguide << sectionindentStr << "field matches the name in the MP3 (ID3v2) genre tag." << endl << endl;
+  userguide << sectionindentStr << "fruitbox will make every effort to choose a song from the specified AutoGenre, but is constrained" << endl;
+  userguide << sectionindentStr << "by the song history and number of songs available to choose from.  If it cannot choose a song" << endl;
+  userguide << sectionindentStr << "in a reasonable time, it will play any song." << endl << endl;
 }
 
 void UserGuideShowButtonFileParameters(const char *indent)
 {
   Config->buttons->cfgShow(indent);
-  cout << endl;
+  userguide << endl;
 }
 
 void UserGuide(void)
 {
+  userguide.open(userguideFilename);
+  
   UserGuideSection("Introduction", introduction_str);
   UserGuideSection("Starting Up", starting_up_str);
   UserGuideSection("Operation", operation_str);
@@ -115,6 +120,7 @@ void UserGuide(void)
   UserGuideSubSection(commandLineArgMusicPath, commandLineOptMusicPath, command_line_musicpath_option_str);
   UserGuideSubSection(commandLineArgUserGuide, commandLineOptUserGuide, command_line_user_guide_option_str);
   UserGuideSubSection(commandLineArgDebugSongNums, commandLineOptDebugSongNums, command_line_debug_song_nums_option_str);
+  UserGuideSubSection(commandLineArgNoDbUpdate, commandLineOptNoDbUpdate, command_line_no_db_update_option_str);
   UserGuideSubSection(commandLineArgConfigButtons, commandLineOptConfigButtons, command_line_gen_button_file_option_str);
   UserGuideSubSection(commandLineArgCalibrateTouch, commandLineOptCalibrateTouch, command_line_calibrate_touch_option_str);
   UserGuideSubSection(commandLineArgTestButtons, commandLineOptTestButtons, command_line_test_buttons_option_str);
@@ -157,5 +163,7 @@ void UserGuide(void)
   UserGuideSubSection("", "", button_mapping_file_post_str);
   UserGuideSection("Troubleshooting", troubleshooting_str);
   UserGuideSection("Hints and Tips", hints_and_tips_str);
-  cout << endl << FRUITBOX_DONATE << endl;
+  userguide << endl << FRUITBOX_DONATE << endl;
+  userguide.close();
+  cout << "User Guide written to \"" << userguideFilename << "\"." << endl;
 }

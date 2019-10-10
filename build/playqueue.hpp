@@ -4,8 +4,9 @@ class PlayQueueClass {
 public:
   void Load(const string filename);
   void Save(const string filename);
+  int FindSong(song_t *song);
   song_t * QuerySong(const int32_t from_top);
-  void Add(song_t *song, play_type_e credit_play);
+  bool Add(song_t *song, play_type_e credit_play);
   void Remove(void);
   void Clear(void);
   uint32_t NumSongsTotal(void);

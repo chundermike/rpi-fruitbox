@@ -24,6 +24,8 @@ string DatabaseClass::database_filename { };
 ofstream DatabaseClass::dbFile { };
 bool DatabaseClass::file_created { false };
 bool DatabaseClass::music_path_written { false };
+bool DatabaseClass::db_out_of_date { false };
+time_t DatabaseClass::db_mtime {};
 
 constexpr int  search_depth     { 16 };
 constexpr char dbFile_delimiter { '|' };
@@ -40,27 +42,49 @@ DatabaseClass::DatabaseClass
   ifstream dbFile;
   uint32_t dbFile_line_number { 0 };
   number_of_songs = 0;
-
-  // struct stat sb;
-  // if (stat(filename.c_str(), &sb) == 0)
-  // {
-    // cout << filename << " Last status change:       " << ctime(&sb.st_ctime) << endl;
-    // cout << filename << " Last file access:         " << ctime(&sb.st_atime) << endl;
-    // cout << filename << " Last file modification:   " << ctime(&sb.st_mtime) << endl;
-  // }
-
-  // check if database date is newer than music directory date...if not, delete database file so it's re-created
-//  if ()
-//  {
-	// delete filename
-//  }
   
+  struct stat sb;
+
+  if (stat(filename.c_str(), &sb) == 0)
+  {
+    // log_file << filename << " Last file modification:   " << ctime(&sb.st_mtime) << " " << sb.st_mtime << endl;
+    db_mtime = sb.st_mtime;
+  }
+
+  for (auto i : Config->general->music_path)
+  {
+    ftw(i.c_str(), CheckDate, search_depth);
+    // if (stat(i.c_str(), &sb) == 0)
+    // {
+      // if (sb.st_mtime > db_mtime) // music_path has been modified after database file...
+      // {
+        // db_out_of_date = true;
+      // }
+    // }
+  }
+
+  // delete database file if it's out of date...
+
+  if (db_out_of_date)
+  {
+    log_file << NOTE << "Database out of date, ";
+    if (no_db_update)
+    {
+      log_file << "but regeneration disabled with " << commandLineArgNoDbUpdate << " command line option" << endl;
+    }
+    else {
+      log_file << "will regenerate it." << endl;
+      string cmd { "sudo rm " + filename };
+      // log_file << "CMD = " << cmd << endl;
+      int s = system(cmd.c_str());
+    }
+  }
 
   // check if database file exists...if not, create a default one
   dbFile.open(filename, ios::in);
   if (!dbFile.is_open())
   { // doesn't exist so create it..
-    cout << "Database '" << filename << "' not found, so will create it for you..." << endl;
+    log_file << "Database '" << filename << "' not found, so will create it for you..." << endl;
     Create(filename);
     dbFile.open(filename, ios::in);
     if (!dbFile.is_open())
@@ -71,7 +95,7 @@ DatabaseClass::DatabaseClass
 
   // now read database file...
 
-  cout << "Loading database '" << filename << "'..." << endl;
+  log_file << "Loading database '" << filename << "'..." << endl;
 
   DatabaseClass::database.clear(); // start with an empty database (Create will have filled it)
 
@@ -131,13 +155,13 @@ DatabaseClass::DatabaseClass
     {
       song.filename = DatabaseClass::music_path + song.filename;
     }
-    // cout << song.filename << endl;
+    // log_file << song.filename << endl;
     // ...and store the song in database
     DatabaseClass::database.push_back(song);
     continue;
 
     bad_line:
-    cout << endl << WARNING << "Badly formatted song entry ('" << filename << "', line " << dbFile_line_number << ")" << endl;
+    log_file << endl << WARNING << "Badly formatted song entry ('" << filename << "', line " << dbFile_line_number << ")" << endl;
   }
 
   dbFile.close();
@@ -145,7 +169,7 @@ DatabaseClass::DatabaseClass
   DatabaseClass::database.shrink_to_fit(); // free unused capacity
 
   number_of_songs = DatabaseClass::database.size();
-  cout << number_of_songs << " songs found" << endl;
+  log_file << number_of_songs << " songs found" << endl;
 
   if (number_of_songs == 0) {
     error("database file '%s' contains no songs.  Please delete it and re-run fruitbox, making sure the MusicPath parameter in your configuration file points to a directory which contains some MP3 files", filename.c_str());
@@ -155,7 +179,7 @@ DatabaseClass::DatabaseClass
 
   for (auto &song_sort : Config->general->sort_songs_by)
   {
-    cout << "Sorting songs by ";
+    log_file << "Sorting songs by ";
     static bool (*sort_func)(const song_t &song_a, const song_t &song_b);
 
     // choose sort method...
@@ -164,63 +188,63 @@ DatabaseClass::DatabaseClass
     {
       case sort_songs_by_e::Title :
         sort_func = SortByTitle;
-        cout << "Title..." << endl;
+        log_file << "Title..." << endl;
         break;
 
       case sort_songs_by_e::Artist :
         sort_func = SortByArtist;
-        cout << "Artist..." << endl;
+        log_file << "Artist..." << endl;
         break;
 
       case sort_songs_by_e::Album :
         sort_func = SortByAlbum;
-        cout << "Album..." << endl;
+        log_file << "Album..." << endl;
         break;
 
       case sort_songs_by_e::AlbumArtist :
         sort_func = SortByAlbumArtist;
-        cout << "Album Artist..." << endl;
+        log_file << "Album Artist..." << endl;
         break;
 
       case sort_songs_by_e::Year :
         sort_func = SortByYear;
-        cout << "Year..." << endl;
+        log_file << "Year..." << endl;
         break;
 
       case sort_songs_by_e::Genre :
         sort_func = SortByGenre;
-        cout << "Genre..." << endl;
+        log_file << "Genre..." << endl;
         break;
 
       case sort_songs_by_e::TrackNumber :
         sort_func = SortByTrackNumber;
-        cout << "Track Number..." << endl;
+        log_file << "Track Number..." << endl;
         break;
 
       case sort_songs_by_e::Publisher :
         sort_func = SortByPublisher;
-        cout << "Publisher..." << endl;
+        log_file << "Publisher..." << endl;
         break;
 
       case sort_songs_by_e::ISRC :
         sort_func = SortByISRC;
-        cout << "ISRC..." << endl;
+        log_file << "ISRC..." << endl;
         break;
 
       case sort_songs_by_e::Custom :
         sort_func = SortByCustom;
-        cout << "Custom MP3 tag..." << endl;
+        log_file << "Custom MP3 tag..." << endl;
         break;
 
       case sort_songs_by_e::Random :
         sort_func = nullptr;
-        cout << "Random..." << endl;
+        log_file << "Random..." << endl;
         std::random_shuffle(DatabaseClass::database.begin(), DatabaseClass::database.end());
         break;
 
       case sort_songs_by_e::Unsorted :
         sort_func = nullptr;
-        cout << "database order (Unsorted)" << endl;
+        log_file << "database order (Unsorted)" << endl;
         break;
 
     }
@@ -233,6 +257,31 @@ DatabaseClass::DatabaseClass
   BuildPages();
   status.num_songs_str = to_string(number_of_songs);
   status.num_pages_str = to_string(number_of_pages);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// use file tree walker to recursively check directory timestamps for database out-of-date check...
+
+int DatabaseClass::CheckDate
+(
+  const char        *path,
+  const struct stat *sptr,
+  int               type
+)
+{
+  string p { path };
+  if (type == FTW_D)
+  { // directory
+    struct stat sb;
+    if (stat(path, &sb) == 0)
+    {
+      if (sb.st_mtime > DatabaseClass::db_mtime) // music_path has been modified after database file...
+      {
+        DatabaseClass::db_out_of_date = true;
+      }
+    }
+  }
+  return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -322,23 +371,23 @@ void DatabaseClass::Create
   const string filename
 )
 {
-  cout << "Creating new database '" << filename << "'..." << endl;
-  cout << "This may take some time, but only needs to be done once." << endl;
-  cout << "If your music library changes please delete '" << Config->general->database_filename << "' and re-run fruitbox.\n" << endl;
-  cout << "Alternatively, if you are feeling brave, you can edit the database file directly," << endl;
-  cout << "using a text editor.  This can be useful if you want to add or remove songs manually," << endl;
-  cout << "and/or modify their tag data (song title, artist name, etc.)" << endl << endl;
+  log_file << "Creating new database '" << filename << "'..." << endl;
+  log_file << "This may take some time, but only needs to be done once." << endl;
+  log_file << "If your music library changes please delete '" << Config->general->database_filename << "' and re-run fruitbox.\n" << endl;
+  log_file << "Alternatively, if you are feeling brave, you can edit the database file directly," << endl;
+  log_file << "using a text editor.  This can be useful if you want to add or remove songs manually," << endl;
+  log_file << "and/or modify their tag data (song title, artist name, etc.)" << endl << endl;
 
   DatabaseClass::database_filename = filename;
 
   for (auto i : Config->general->music_path)
   { // for each music path specified in the config
-    cout << "Searching " << i << " ..." << endl;
+    log_file << "Searching " << i << " ..." << endl;
     DatabaseClass::music_path_written = false;
     DatabaseClass::music_path = i;
     ftw(i.c_str(), Search, search_depth);
   }
-  cout << endl;
+  log_file << endl;
 
   number_of_songs = DatabaseClass::database.size();
 
@@ -379,52 +428,52 @@ bool DatabaseClass::CheckNewSortSectionStart(song_t &song)
   {
     case sort_songs_by_e::Title :
       str = &song.title;
-      // cout << "Title..." << endl;
+      // log_file << "Title..." << endl;
       break;
 
     case sort_songs_by_e::Artist :
       str = &song.artist;
-      // cout << "Artist..." << endl;
+      // log_file << "Artist..." << endl;
       break;
 
     case sort_songs_by_e::Album :
       str = &song.album;
-      // cout << "Album..." << endl;
+      // log_file << "Album..." << endl;
       break;
 
     case sort_songs_by_e::AlbumArtist :
       str = &song.albumArtist;
-      // cout << "Album Artist..." << endl;
+      // log_file << "Album Artist..." << endl;
       break;
 
     case sort_songs_by_e::Year :
       str = &song.year;
-      // cout << "Year..." << endl;
+      // log_file << "Year..." << endl;
       break;
 
     case sort_songs_by_e::Genre :
       str = &song.genre;
-      // cout << "Genre..." << endl;
+      // log_file << "Genre..." << endl;
       break;
 
     case sort_songs_by_e::TrackNumber :
       str = &song.trackNumberStr;
-      // cout << "Track Number..." << endl;
+      // log_file << "Track Number..." << endl;
       break;
 
     case sort_songs_by_e::Publisher :
       str = &song.publisher;
-      // cout << "Publisher..." << endl;
+      // log_file << "Publisher..." << endl;
       break;
 
     case sort_songs_by_e::ISRC :
       str = &song.isrc;
-      // cout << "ISRC..." << endl;
+      // log_file << "ISRC..." << endl;
       break;
 
     case sort_songs_by_e::Custom :
       str = &song.custom_tag;
-      // cout << "Custom MP3 tag..." << endl;
+      // log_file << "Custom MP3 tag..." << endl;
       break;
 
     case sort_songs_by_e::Random :
@@ -437,7 +486,7 @@ bool DatabaseClass::CheckNewSortSectionStart(song_t &song)
 
   }
 
-  // cout << "String : " << *str << endl;
+  // log_file << "String : " << *str << endl;
 
   if (str->size())
   {
@@ -445,7 +494,7 @@ bool DatabaseClass::CheckNewSortSectionStart(song_t &song)
     if (previous_first_char != first_char)
     {
       previous_first_char = first_char;
-      // cout << "NEW SORT SECTION!!" << endl;
+      // log_file << "NEW SORT SECTION!!" << endl;
       return true;
     }
   }
@@ -464,8 +513,8 @@ void DatabaseClass::BuildPages(void)
   uint32_t entry_number_this_page { 0 };
   string previousAlbum {};
 
-  // cout << "number of song pages..." << Config->general->num_pages << endl;
-  cout << "Building song pages..." << endl;
+  // log_file << "number of song pages..." << Config->general->num_pages << endl;
+  log_file << "Building song pages..." << endl;
 
   for (uint32_t current_song { 0 }; current_song < DatabaseClass::database.size(); ++current_song)
   { // for every song in the database
@@ -481,14 +530,14 @@ void DatabaseClass::BuildPages(void)
 
     if (entry_number_this_page == 0)
     { // first entry on a page
-      // cout << " number_of_pages % Config->general->num_pages " << number_of_pages << " " << Config->general->num_pages << " " << number_of_pages % Config->general->num_pages << endl;
+      // log_file << " number_of_pages % Config->general->num_pages " << number_of_pages << " " << Config->general->num_pages << " " << number_of_pages % Config->general->num_pages << endl;
       if ((number_of_pages % Config->general->num_pages) == 0)
       // check first song every Config->general->num_pages
       {
         if (CheckNewSortSectionStart(DatabaseClass::database.at(current_song)))
         {
           jump_sort_page.push_back(number_of_pages);// / Config->general->num_pages);
-          // cout << "jump_sort_page.push_back(" << number_of_pages << ")" << endl;
+          // log_file << "jump_sort_page.push_back(" << number_of_pages << ")" << endl;
         }
       }
       number_of_pages++;
@@ -536,11 +585,11 @@ void DatabaseClass::BuildPages(void)
   #if 0
   // debug print out of pages...
   for (uint32_t p {} ; p < song_lookup.size(); ++p) {
-    cout << endl << "page " << p << " ..." << endl;
+    log_file << endl << "page " << p << " ..." << endl;
 
     for (auto e : song_lookup.at(p)) {
-      if (e == nullptr) cout << "------" << endl;
-      else cout << e->title << endl;
+      if (e == nullptr) log_file << "------" << endl;
+      else log_file << e->title << endl;
     }
   }
   #endif

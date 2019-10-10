@@ -45,13 +45,20 @@ constexpr char cfgKeywordDesc_MusicPath[]                { "File name of path to
 constexpr char cfgKeyword_SortSongsBy[]                  { "SortSongsBy" };
 constexpr char cfgKeywordDesc_SortSongsBy[]              { "'Title', 'Artist', 'Album', 'AlbumArtist', 'Year', 'Genre', 'TrackNumber', 'Publisher', 'ISRC', 'Custom', 'Random', 'Unsorted'" };
 
+constexpr char cfgKeyword_NoDuplicates[]                 { "NoDuplicates" };
+constexpr char cfgKeywordDesc_NoDuplicates[]             { "Prevent songs being added to the playqueue if they are already in the playqueue" };
+                                                       
+constexpr char cfgKeyword_DuplicatesUseCredits[]         { "DuplicatesUseCredits" };
+constexpr char cfgKeywordDesc_DuplicatesUseCredits[]     { "Determines of a selected song which is already playing or in the queue (duplicate song)\n" \
+                                                           "                                    uses up a credit" };
+
 constexpr char cfgKeyword_SelectButtons[]                { "SelectButtons" };
 constexpr char cfgKeywordDesc_SelectButtons[]            { "List of characters for the select code for the button presses" };
                                                        
 constexpr char cfgKeyword_SelectButtonsSequence[]        { "SelectButtonsSequence" };
 constexpr char cfgKeywordDesc_SelectButtonsSequence[]    { "'RowCol', 'ColRow'\n" \
-                                                          "                                    Specifies if the first select buttons are cycled before the second\n" \
-                                                          "                                    select code buttons (ColRow) or the after the second buttons (RowCol)" };
+                                                           "                                    Specifies if the first select buttons are cycled before the second\n" \
+                                                           "                                    select code buttons (ColRow) or the after the second buttons (RowCol)" };
 // constexpr char cfgKeyword_TouchDevice[]                  { "TouchDevice" };
 // constexpr char cfgKeywordDesc_TouchDevice[]              { "Name of touch device (defaults to 'FT5406' - the official Raspberry Pi 7\" display)" };
 
@@ -256,6 +263,12 @@ constexpr char cfgKeywordDesc_BitmapDirectory[]          { "Location of image fi
 
 constexpr char cfgKeyword_TimerTickPeriod[]              { "TimerTickPeriod" };
 constexpr char cfgKeywordDesc_TimerTickPeriod[]          { "Time (in video frame ticks) of status box timer period" };
+
+constexpr char cfgKeyword_TimerOneShot[]                 { "TimerOneShot" };
+constexpr char cfgKeywordDesc_TimerOneShot[]             { "'Yes' - timer stops after one tick, 'No' - timer runs indefinitely (default)" };
+
+constexpr char cfgKeyword_TimerEnable[]                  { "TimerEnable" };
+constexpr char cfgKeywordDesc_TimerEnable[]              { "'Yes' - timer initially enabled (default), 'No' - timer initially disabled" };
 
 constexpr char cfgKeyword_Text[]                         { "Text" };
 constexpr char cfgKeywordDesc_Text[]                     { "Status box text style.  See section 'Fonts and Text'" };
@@ -476,11 +489,11 @@ public:
   {
     if (multi_param)
     {
-      cout << indent << keyword << setw(maxCfgKeywordWidth - keyword.size()) << left << multiCfgParameter << description << endl;
+      log_file << indent << keyword << setw(maxCfgKeywordWidth - keyword.size()) << left << multiCfgParameter << description << endl;
     }
     else
     {
-      cout << indent << setw(maxCfgKeywordWidth) << left << keyword << description << endl;
+      log_file << indent << setw(maxCfgKeywordWidth) << left << keyword << description << endl;
     }
   }
 
@@ -544,7 +557,7 @@ protected:
     istringstream ss { line };
     string str {};
     if (!getline(ss >> std::ws, str)) return false;
-    cout << "  " << keyword << " = " << str << endl;
+    log_file << "  " << keyword << " = " << str << endl;
     if (str.size() == 0) return false;
     var.first = title_desc_e::String;
 
@@ -581,7 +594,7 @@ protected:
     if (ExtractParameterValues(line, keyword) == false) return false;
     istringstream ss { line };
     if (!getline(ss >> std::ws, var)) return false;
-    cout << "  " << keyword << " = " << var << endl;
+    log_file << "  " << keyword << " = " << var << endl;
     return true;
   }
 
@@ -590,7 +603,7 @@ protected:
     if (ExtractParameterValues(line, keyword) == false) return false;
     istringstream ss { line };
     if (!getline(ss >> std::ws, var)) return false;
-    if (supress_message == false) cout << "  " << keyword << " = " << var << endl;
+    if (supress_message == false) log_file << "  " << keyword << " = " << var << endl;
     return true;
   }
 
@@ -600,7 +613,7 @@ protected:
     istringstream ss { line };
     if (!getline(ss >> std::ws, var)) return false;
     var = ConfigBaseClass::filepath + '/' + var;
-    cout << "  " << keyword << " = " << var << endl;
+    log_file << "  " << keyword << " = " << var << endl;
     return true;
   }
 
@@ -609,7 +622,7 @@ protected:
     if (ExtractParameterValues(line, keyword) == false) return false;
     istringstream ss { line };
     ss >> ReadBool(var);
-    cout << "  " << boolalpha << keyword << " = " << var << endl;
+    log_file << "  " << boolalpha << keyword << " = " << var << endl;
     return true;
   }
 
@@ -618,7 +631,7 @@ protected:
     if (ExtractParameterValues(line, keyword) == false) return false;
     istringstream ss { line };
     ss >> var;
-    cout << "  " << keyword << " = " << var << endl;
+    log_file << "  " << keyword << " = " << var << endl;
     return true;
   }
 
@@ -627,7 +640,7 @@ protected:
     if (ExtractParameterValues(line, keyword) == false) return false;
     istringstream ss { line };
     ss >> var;
-    cout << "  " << keyword << " = " << var << endl;
+    log_file << "  " << keyword << " = " << var << endl;
     return true;
   }
 
@@ -636,7 +649,7 @@ protected:
     if (ExtractParameterValues(line, keyword) == false) return false;
     istringstream ss { line };
     ss >> var.x >> var.y;
-    cout << "  " << keyword << " = " << var.x << " " << var.y << endl;
+    log_file << "  " << keyword << " = " << var.x << " " << var.y << endl;
     return true;
   }
 
@@ -645,7 +658,7 @@ protected:
     if (ExtractParameterValues(line, keyword) == false) return false;
     istringstream ss { line };
     ss >> var.x >> var.y;
-    cout << "  " << keyword << " = " << var.x << " " << var.y << endl;
+    log_file << "  " << keyword << " = " << var.x << " " << var.y << endl;
     return true;
   }
 
@@ -661,21 +674,21 @@ protected:
     if (tolower(s.at(0)) == 'n')
     {
       var = pair_songs_e::No;
-      cout << "  " << keyword << " = No" << endl;
+      log_file << "  " << keyword << " = No" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'y')
     {
       var = pair_songs_e::Yes;
-      cout << "  " << keyword << " = Yes" << endl;
+      log_file << "  " << keyword << " = Yes" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'd')
     {
       var = pair_songs_e::Dual;
-      cout << "  " << keyword << " = Dual" << endl;
+      log_file << "  " << keyword << " = Dual" << endl;
       return true;
     }
 
@@ -694,14 +707,14 @@ protected:
     if (tolower(s.at(0)) == 's')
     {
       var = page_mode_e::Singles;
-      cout << "  " << keyword << " = Singles" << endl;
+      log_file << "  " << keyword << " = Singles" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'a')
     {
       var = page_mode_e::Albums;
-      cout << "  " << keyword << " = Albums" << endl;
+      log_file << "  " << keyword << " = Albums" << endl;
       return true;
     }
 
@@ -720,14 +733,14 @@ protected:
     if (tolower(s.at(0)) == 'r')
     {
       var = select_buttons_sequence_e::RowCol;
-      cout << "  " << keyword << " = RowCol" << endl;
+      log_file << "  " << keyword << " = RowCol" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'c')
     {
       var = select_buttons_sequence_e::ColRow;
-      cout << "  " << keyword << " = ColRow" << endl;
+      log_file << "  " << keyword << " = ColRow" << endl;
       return true;
     }
 
@@ -746,42 +759,42 @@ protected:
     if (tolower(s.at(0)) == 'a')
     {
       var = artwork_mode_e::Auto;
-      cout << "  " << keyword << " = Auto" << endl;
+      log_file << "  " << keyword << " = Auto" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'n')
     {
       var = artwork_mode_e::None;
-      cout << "  " << keyword << " = None" << endl;
+      log_file << "  " << keyword << " = None" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'e')
     {
       var = artwork_mode_e::Embedded;
-      cout << "  " << keyword << " = Embedded" << endl;
+      log_file << "  " << keyword << " = Embedded" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 's')
     {
       var = artwork_mode_e::Specified;
-      cout << "  " << keyword << " = Specified" << endl;
+      log_file << "  " << keyword << " = Specified" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'f')
     {
       var = artwork_mode_e::Folder;
-      cout << "  " << keyword << " = Folder" << endl;
+      log_file << "  " << keyword << " = Folder" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'l')
     {
       var = artwork_mode_e::Logo;
-      cout << "  " << keyword << " = Logo" << endl;
+      log_file << "  " << keyword << " = Logo" << endl;
       return true;
     }
 
@@ -803,13 +816,13 @@ protected:
       if (tolower(s.at(1)) == 'i')
       {
         var = sort_songs_by_e::Title;
-        cout << "  " << keyword << " = Title" << endl;
+        log_file << "  " << keyword << " = Title" << endl;
         return true;
       }
       else
       {
         var = sort_songs_by_e::TrackNumber;
-        cout << "  " << keyword << " = TrackNumber" << endl;
+        log_file << "  " << keyword << " = TrackNumber" << endl;
         return true;
       }
     }
@@ -819,7 +832,7 @@ protected:
       if (tolower(s.at(1)) == 'r')
       {
         var = sort_songs_by_e::Artist;
-        cout << "  " << keyword << " = Artist" << endl;
+        log_file << "  " << keyword << " = Artist" << endl;
         return true;
       }
       else if (tolower(s.at(1)) == 'l')
@@ -827,13 +840,13 @@ protected:
         if (s.size() > 5)
         {
           var = sort_songs_by_e::AlbumArtist;
-          cout << "  " << keyword << " = AlbumArtist" << endl;
+          log_file << "  " << keyword << " = AlbumArtist" << endl;
           return true;
         }
         else
         {
           var = sort_songs_by_e::Album;
-          cout << "  " << keyword << " = Album" << endl;
+          log_file << "  " << keyword << " = Album" << endl;
           return true;
         }
       }
@@ -842,49 +855,49 @@ protected:
     if (tolower(s.at(0)) == 'y')
     {
       var = sort_songs_by_e::Year;
-      cout << "  " << keyword << " = Year" << endl;
+      log_file << "  " << keyword << " = Year" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'g')
     {
       var = sort_songs_by_e::Genre;
-      cout << "  " << keyword << " = Genre" << endl;
+      log_file << "  " << keyword << " = Genre" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'r')
     {
       var = sort_songs_by_e::Random;
-      cout << "  " << keyword << " = Random" << endl;
+      log_file << "  " << keyword << " = Random" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'u')
     {
       var = sort_songs_by_e::Unsorted;
-      cout << "  " << keyword << " = Unsorted" << endl;
+      log_file << "  " << keyword << " = Unsorted" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'p')
     {
       var = sort_songs_by_e::Publisher;
-      cout << "  " << keyword << " = Publisher" << endl;
+      log_file << "  " << keyword << " = Publisher" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'i')
     {
       var = sort_songs_by_e::ISRC;
-      cout << "  " << keyword << " = ISRC" << endl;
+      log_file << "  " << keyword << " = ISRC" << endl;
       return true;
     }
 
     if (tolower(s.at(0)) == 'c')
     {
       var = sort_songs_by_e::Custom;
-      cout << "  " << keyword << " = Custom MP3 tag" << endl;
+      log_file << "  " << keyword << " = Custom MP3 tag" << endl;
       return true;
     }
 
@@ -905,13 +918,13 @@ protected:
     if (tolower(s.at(0)) == 'v')
     {
       var = bitmap_scale_e::Volume;
-      cout << "  " << keyword << " = Volume" << endl;
+      log_file << "  " << keyword << " = Volume" << endl;
       return true;
     }
     if (tolower(s.at(0)) == 'n')
     {
       var = bitmap_scale_e::NowPlayingElapsedTime;
-      cout << "  " << keyword << " = NowPlayingElapsedTime" << endl;
+      log_file << "  " << keyword << " = NowPlayingElapsedTime" << endl;
       return true;
     }
     return false;
@@ -929,13 +942,13 @@ protected:
     if (tolower(s.at(0)) == 's')
     {
       var = bitmap_scale_mode_e::Scaled;
-      cout << "  " << keyword << " = Scaled" << endl;
+      log_file << "  " << keyword << " = Scaled" << endl;
       return true;
     }
     if (tolower(s.at(0)) == 'c')
     {
       var = bitmap_scale_mode_e::Clipped;
-      cout << "  " << keyword << " = Clipped" << endl;
+      log_file << "  " << keyword << " = Clipped" << endl;
       return true;
     }
     return false;
@@ -957,24 +970,24 @@ protected:
     }
     ss >> ReadBool(var.capitalise) >> ReadBool(var.condense) >> ReadBool(var.quoted);
     ss >> var.offset.x >> var.offset.y;
-    cout << "  " << keyword << " = " << var.font_number << " " << var.colour.r <<  " " << var.colour.g <<  " " << var.colour.b <<  " " << var.colour.a;
+    log_file << "  " << keyword << " = " << var.font_number << " " << var.colour.r <<  " " << var.colour.g <<  " " << var.colour.b <<  " " << var.colour.a;
     switch (var.alignment)
     {
       case ALLEGRO_ALIGN_CENTRE :
-        cout << " centre";
+        log_file << " centre";
         break;
 
       case ALLEGRO_ALIGN_RIGHT :
-        cout << " right";
+        log_file << " right";
         break;
 
       default :
-        cout << " left";
+        log_file << " left";
         break;
     }
     ss >> var.max_width;
-    cout << boolalpha << " " << var.capitalise << " " << var.condense << " " << var.quoted;
-    cout << " " << var.offset.x << " " << var.offset.y << " " << var.max_width << endl;
+    log_file << boolalpha << " " << var.capitalise << " " << var.condense << " " << var.quoted;
+    log_file << " " << var.offset.x << " " << var.offset.y << " " << var.max_width << endl;
     return true;
   }
 
@@ -987,7 +1000,7 @@ protected:
     if (var.handle == nullptr) // not already defined
     {
       if ((var.handle = al_load_bitmap(var.filename.c_str())) == nullptr) error("Couldn't load bitmap '%s'", var.filename.c_str());
-      cout << "  " << keyword << " = " << var.filename << endl;
+      log_file << "  " << keyword << " = " << var.filename << endl;
     }
     return true;
   }
@@ -1001,7 +1014,7 @@ protected:
     if (var.handle == nullptr) // not already defined
     {
       // if ((var.handle = al_open_video(var.filename.c_str())) == nullptr) error("Couldn't load video '%s'", var.filename.c_str());
-      cout << "  " << keyword << " = " << var.filename << endl;
+      log_file << "  " << keyword << " = " << var.filename << endl;
     }
     return true;
   }
@@ -1021,7 +1034,7 @@ protected:
       if ((var.handle = al_load_sample(var.filename.c_str())) == nullptr) error("Couldn't load sound '%s'", var.filename.c_str());
       al_play_sample(var.handle, 0.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &var.id);
       var.length = 10 * al_get_sample_length(var.handle) / al_get_sample_frequency(var.handle); // in hundreds of msec
-      cout << "  " << keyword << " = " << vol << " " << var.filename << endl;
+      log_file << "  " << keyword << " = " << vol << " " << var.filename << endl;
     }
     return true;
   }
@@ -1032,7 +1045,7 @@ protected:
     istringstream ss { line };
     ss >> var.speed >> var.effect;
     ss >> ReadBool(var.fading);
-    cout << boolalpha << "  " << keyword << " = " << var.speed << " " << var.effect << " " << var.fading << endl;
+    log_file << boolalpha << "  " << keyword << " = " << var.speed << " " << var.effect << " " << var.fading << endl;
     return true;
   }
 
@@ -1041,7 +1054,7 @@ protected:
     if (ExtractParameterValues(line, keyword) == false) return false;
     istringstream ss { line };
     ss >> var.x >> var.y >> var.w >> var.h;
-    cout << "  " << keyword << " = " << var.x << " " << var.y << " " << var.w << " " << var.h << endl;
+    log_file << "  " << keyword << " = " << var.x << " " << var.y << " " << var.w << " " << var.h << endl;
     return true;
   }
 
@@ -1060,7 +1073,15 @@ protected:
     {
       var.type = input_type_e::Key;
       ss >> setbase(0) >> var.param.at(EVENT_PARAM_VAL1);
-      // cout << "  " << keyword << " = " << ButtonTypeKeyStr << " " << var.param.at(EVENT_PARAM_VAL1) << endl; // keycode
+      // log_file << "  " << keyword << " = " << ButtonTypeKeyStr << " " << var.param.at(EVENT_PARAM_VAL1) << endl; // keycode
+      return true;
+    }
+
+    if (tolower(type_str.at(0)) == tolower(ButtonTypeMouseButtonStr[0]))
+    {
+      var.type = input_type_e::MouseButton;
+      ss >> setbase(0) >> var.param.at(EVENT_PARAM_ID) >> var.param.at(EVENT_PARAM_VAL1);
+      // log_file << "  " << keyword << " = " << ButtonTypeMouseButtonStr << " " << var.param.at(EVENT_PARAM_ID) << var.param.at(EVENT_PARAM_VAL1) << endl; // handler_num, keycode
       return true;
     }
 
@@ -1068,23 +1089,31 @@ protected:
     {
       var.type = input_type_e::GPIO;
       ss >> setbase(0) >> var.param.at(EVENT_PARAM_VAL1);
-      // cout << "  " << keyword << " = " << ButtonTypeGPIOStr << " " << var.param.at(EVENT_PARAM_VAL1) << endl; // GPIO pin
+      // log_file << "  " << keyword << " = " << ButtonTypeGPIOStr << " " << var.param.at(EVENT_PARAM_VAL1) << endl; // GPIO pin
       return true;
     } 
 
     if (tolower(type_str.at(0)) == tolower(ButtonTypeTouchStr[0]))
     {
       var.type = input_type_e::Touch;
-      // cout << "  " << keyword << " = " << ButtonTypeTouchStr << endl;
+      // log_file << "  " << keyword << " = " << ButtonTypeTouchStr << endl;
       return true;
     }
 
-    if (tolower(type_str.at(0)) == tolower(ButtonTypeJoystickStr[0]))
+    if (tolower(type_str.at(0)) == tolower(ButtonTypeJoyStickStr[0])) // 'J'
     {
-      var.type = input_type_e::Joystick;
-      ss >> setbase(0) >> var.param.at(EVENT_PARAM_ID) >> var.param.at(EVENT_PARAM_VAL1) >> var.param.at(EVENT_PARAM_VAL2); // id, axis, position
-      // cout << "  " << keyword << " = " << ButtonTypeJoystickStr << " " << var.param.at(EVENT_PARAM_ID) << " " << var.param.at(EVENT_PARAM_VAL1) << " " << var.param.at(EVENT_PARAM_VAL2) << endl; // id, axis, position
-      return true;
+      if (tolower(type_str.at(3)) == tolower(ButtonTypeJoyStickStr[3])) // 'S'
+      {
+        var.type = input_type_e::JoyStick;
+        ss >> setbase(0) >> var.param.at(EVENT_PARAM_ID) >> var.param.at(EVENT_PARAM_VAL1) >> var.param.at(EVENT_PARAM_VAL2); // handler_num, axis, position
+        return true;
+      }
+      else // JoyButton ('B')
+      {
+        var.type = input_type_e::JoyButton;
+        ss >> setbase(0) >> var.param.at(EVENT_PARAM_ID) >> var.param.at(EVENT_PARAM_VAL1); // handler_num, button code
+        return true;
+      }
     }
 
     return false;
@@ -1136,6 +1165,8 @@ public:
     if (GetParam(line, cfgKeyword_SelectHoldTimeout,        select_hold_timeout)) return;
     if (GetParam(line, cfgKeyword_AutoPageTurnTime,         auto_page_turn_time)) return;
     if (GetParam(line, cfgKeyword_MaxPlaylistLength,        max_playlist_length)) return;
+    if (GetParam(line, cfgKeyword_NoDuplicates,             no_duplicates)) return;
+    if (GetParam(line, cfgKeyword_DuplicatesUseCredits,     duplicates_use_credits)) return;
     if (GetParam(line, cfgKeyword_LoopPlaylist,             loop_playlist)) return;
     if (GetParam(line, cfgKeyword_AutoPlay,                 auto_play)) return;
     if (GetParam(line, cfgKeyword_AutoPlayGap,              auto_play_gap)) return;
@@ -1245,6 +1276,8 @@ public:
     cfgShowEntry(indent, cfgKeyword_Database                 , cfgKeywordDesc_Database                 , false);
     cfgShowEntry(indent, cfgKeyword_MusicPath                , cfgKeywordDesc_MusicPath                , true);
     cfgShowEntry(indent, cfgKeyword_SortSongsBy              , cfgKeywordDesc_SortSongsBy              , true);
+    cfgShowEntry(indent, cfgKeyword_NoDuplicates             , cfgKeywordDesc_NoDuplicates             , false);
+    cfgShowEntry(indent, cfgKeyword_DuplicatesUseCredits     , cfgKeywordDesc_DuplicatesUseCredits     , false);
     cfgShowEntry(indent, cfgKeyword_SelectButtons            , cfgKeywordDesc_SelectButtons            , true);
     cfgShowEntry(indent, cfgKeyword_SelectButtonsSequence    , cfgKeywordDesc_SelectButtonsSequence    , false);
     cfgShowEntry(indent, cfgKeyword_CustomMP3Tag             , cfgKeywordDesc_CustomMP3Tag             , false);
@@ -1310,6 +1343,8 @@ public:
   bool auto_select { false };
   bool auto_play { false };
   uint32_t auto_play_gap { 50 };
+  bool no_duplicates { false };
+  bool duplicates_use_credits { false };
   bool loop_playlist { false };
   bool free_play { true };
   uint32_t auto_page_turn_time { 0 };
@@ -1497,7 +1532,7 @@ public:
 
     if (!cfgFile.is_open())
     {
-      cout << WARNING << "Couldn't open '" << cfg_file.at(current_cfg) << "' for input" << endl;
+      log_file << WARNING << "Couldn't open '" << cfg_file.at(current_cfg) << "' for input" << endl;
       return false;
     }
     else

@@ -14,18 +14,13 @@ constexpr char commandLineArgUserGuide[]        { "--user-guide" };
 constexpr char commandLineArgSavePlaylist[]     { "--save-playlist" };
 constexpr char commandLineArgLoadPlaylist[]     { "--load-playlist" };
 constexpr char commandLineArgDebugSongNums[]    { "--debug-song-nums" };
+constexpr char commandLineArgNoDbUpdate[]       { "--no-database-update" };
 constexpr char commandLineArgConfigButtons[]    { "--config-buttons" };
 constexpr char commandLineArgCalibrateTouch[]   { "--calibrate-touch" };
 constexpr char commandLineArgTestButtons[]      { "--test-buttons" };
-// constexpr char commandLineArgInputDevice[]      { "--input-device" };
-// constexpr char commandLineArgTouchDevice[]      { "--touch-device" };
 constexpr char commandLineArgScreenshot[]       { "--screenshot" };
 constexpr char commandLineArgNoScale[]          { "--no-scale" };
-// constexpr char commandLineArgTouchMin[]         { "--touch-min" };
-// constexpr char commandLineArgTouchMax[]         { "--touch-max" };
 constexpr char commandLineArgButtonMap[]        { "--button-map" };
-// constexpr char commandLineArgGPIOScanRow[]      { "--gpio-scan-row" };
-// constexpr char commandLineArgGPIOScanCol[]      { "--gpio-scan-col" };
 
 constexpr char commandLineOptCfg[]              { " <filename>           " };
 constexpr char commandLineOptDatabase[]         { " <filename>      " };
@@ -35,23 +30,16 @@ constexpr char commandLineOptUserGuide[]        { "               " };
 constexpr char commandLineOptSavePlaylist[]     { " <filename> "};
 constexpr char commandLineOptLoadPlaylist[]     { " <filename> "};
 constexpr char commandLineOptDebugSongNums[]    { "          "};
+constexpr char commandLineOptNoDbUpdate[]       { "       "};
 constexpr char commandLineOptConfigButtons[]    { "           "};
 constexpr char commandLineOptCalibrateTouch[]   { "          "};
 constexpr char commandLineOptTestButtons[]      { "             "};
-// constexpr char commandLineOptInputDevice[]      { " <name>      "};
-// constexpr char commandLineOptTouchDevice[]      { " <name>      "};
 constexpr char commandLineOptScreenshot[]       { "               "};
 constexpr char commandLineOptNoScale[]          { "                 "};
-// constexpr char commandLineOptTouchMin[]         { " <x> <y>        "};
-// constexpr char commandLineOptTouchMax[]         { " <x> <y>        "};
 constexpr char commandLineOptButtonMap[]        { " <filename>    "};
-// constexpr char commandLineOptGPIOScanRow[]      { " <list of gpio pins>" };
-// constexpr char commandLineOptGPIOScanCol[]      { " <list of gpio pins>" };
-
 
 constexpr char defaultButtonFilename[]      { "fruitbox.btn" };
 constexpr char defaultScreenshotFilename[]  { "screenshot.jpg" };
-// constexpr char defaultTouchDevice[]         { "FT5406" };
 constexpr char defaultFirstSelectButtons[]  { "ABCDEFGHIJK" };
 constexpr char defaultSecondSelectButtons[] { "0123456789" };
 
@@ -68,7 +56,9 @@ auto SecondsToMinutes = [](uint32_t A) -> uint32_t { return (A / 60) % 60; } ;
 auto SecondsToSeconds = [](uint32_t A) -> uint32_t { return A % 60; } ;
 
 constexpr char ButtonTypeKeyStr[]           { "Key" };
-constexpr char ButtonTypeJoystickStr[]      { "Joystick" };
+constexpr char ButtonTypeMouseButtonStr[]   { "MouseButton" };
+constexpr char ButtonTypeJoyStickStr[]      { "JoyStick" };
+constexpr char ButtonTypeJoyButtonStr[]     { "JoyButton" };
 constexpr char ButtonTypeGPIOStr[]          { "GPIO" };
 constexpr char ButtonTypeTouchStr[]         { "Touch" };
 
@@ -99,7 +89,7 @@ enum class bitmap_scale_e
 {
   None,
   Volume,
-  NowPlayingElapsedTime,
+  NowPlayingElapsedTime
 };
 
 enum class bitmap_scale_mode_e
@@ -171,7 +161,7 @@ enum class title_desc_e
 enum class select_mode_e
 {
   SelectCode,
-  Joystick,
+  JoyStick,
   TouchSong
 };
 
@@ -189,7 +179,9 @@ enum class input_type_e
 {
   None,
   Key,
-  Joystick,
+  MouseButton,
+  JoyStick,
+  JoyButton,
   Touch,
   GPIO
 };
@@ -348,9 +340,9 @@ struct status_t
   string last_visible_page_str {};
   uint32_t now_playing_start_time { 0 };
   string now_playing_elapsed_time_str { invalidTimeMS };
-  string now_playing_time_remaining_str { invalidTimeMS };
   string now_playing_length_str { invalidTimeMS };
   string last_played_length_str { invalidTimeMS };
+  string now_playing_time_remaining_str { invalidTimeMS };
   float now_playing_time_remaining_scale { 0.0 };
   string credits_str { "00" };
   string volume_str { "---" };

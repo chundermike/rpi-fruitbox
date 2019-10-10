@@ -27,6 +27,7 @@ public:
   void DrawInfoBox(const string &title, const string &info1, const string &info2, ALLEGRO_BITMAP *background, bool draw_arrows, bool flip);
   void DrawTouchTarget(uint32_t x, uint32_t y);
   uints2_t info_box_pos {};
+  bool active { false};
   // bool redraw { false };
 private:
   splash_state_t splash_state {};

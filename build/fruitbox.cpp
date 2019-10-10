@@ -2,7 +2,9 @@
 
 using namespace std;
 
+ofstream log_file {};
 bool debug_song_nums { false };
+bool no_db_update { false };
 bool config_buttons { false };
 bool calibrate_touch { false };
 bool test_buttons { false };
@@ -38,7 +40,24 @@ void error(const char *fmt, ...)
   va_start(args, fmt);
   vsprintf(s, fmt, args);
   va_end(args);
+  log_file << ERROR << s << endl;
   cout << ERROR << s << endl;
+  if (Display)
+  {
+    if (Display->active)
+    {
+      if (Input)
+      {
+        Display->DrawInfoBox("ERROR", s, "Press any key");
+        Input->WaitForButtonPress();
+      }
+      else
+      {
+        Display->DrawInfoBox("ERROR", s, "");
+        usleep(5000000);
+      }
+    }
+  }
   // CleanUp();
   exit(-1);
 }
@@ -55,22 +74,17 @@ void Help(void)
   cout << commandLineArgDatabase       << commandLineOptDatabase       << ": select database file (overrides skin cfg Database)" << endl;
   cout << commandLineArgMusicPath      << commandLineOptMusicPath      << ": select music path (overrides skin cfg MusicPath)" << endl;
   cout << commandLineArgChooseCfg      << commandLineOptChooseCfg      << ": choose a skin using the menu defined in <filename>" << endl;
-  cout << commandLineArgUserGuide      << commandLineOptUserGuide      << ": shows the user guide" << endl;
+  cout << commandLineArgUserGuide      << commandLineOptUserGuide      << ": creates the user guide (\"userguide.txt\" file)" << endl;
   cout << commandLineArgSavePlaylist   << commandLineOptSavePlaylist   << ": on exit, save the current playlist to <filename>" << endl;
   cout << commandLineArgLoadPlaylist   << commandLineOptLoadPlaylist   << ": load the playlist from <filename>" << endl;
   cout << commandLineArgDebugSongNums  << commandLineOptDebugSongNums  << ": show song/albums numbers next to songs to help identify them" << endl;
+  cout << commandLineArgNoDbUpdate     << commandLineOptNoDbUpdate     << ": Disable update of database if out of date" << endl;
   cout << commandLineArgConfigButtons  << commandLineOptConfigButtons  << ": configure button mappings" << endl;
   cout << commandLineArgCalibrateTouch << commandLineOptCalibrateTouch << ": calibrate touch screen" << endl;
   cout << commandLineArgTestButtons    << commandLineOptTestButtons    << ": test button codes" << endl;
-  // cout << commandLineArgInputDevice    << commandLineOptInputDevice    << ": Add input device when configuring / testing buttons " << endl;
-  // cout << commandLineArgTouchDevice    << commandLineOptTouchDevice    << ": Specify touch device when configuring / testing buttons " << endl;
   cout << commandLineArgScreenshot     << commandLineOptScreenshot     << ": save a screenshot of the skin" << endl;
   cout << commandLineArgNoScale        << commandLineOptNoScale        << ": Don't scale the skin to fit the display" << endl;
-  // cout << commandLineArgTouchMin      << commandLineOptTouchMin      << ": Top Left touch co-ordinates" << endl;
-  // cout << commandLineArgTouchMax      << commandLineOptTouchMax      << ": Bottom Right touch co-ordinates" << endl;
   cout << commandLineArgButtonMap     << commandLineOptButtonMap     << ": Button mapping file (default fruitbox.btn)" << endl;
-  // cout << commandLineArgGPIOScanRow   << commandLineOptGPIOScanRow   << ": GPIO pins used for scan rows" << endl;
-  // cout << commandLineArgGPIOScanCol   << commandLineOptGPIOScanCol   << ": GPIO pins used for scan columns" << endl;
   cout << endl << endl << "Acknowledgments..." << endl << endl;
   cout << "Allegro v" << major << "." << minor << "." << revision << "[" << release << "] Game Programming library for Graphics and Sound." << endl;
   cout << "libmpg123 v1.24.0 for MP3 decoding." << endl;
@@ -84,14 +98,20 @@ void Help(void)
   // CleanUp();
 // }
 
+
 int32_t main(int32_t argc, char *argv[])
 {
   bool quit { false };
   struct timeval t1;
   string cfg_file { };
-
+  
+  log_file.open("fruitbox.log");
+  
   cout << endl << FRUITBOX_DESCRIPTION << endl;
   cout << FRUITBOX_SUMMARY << endl;
+
+  log_file << endl << FRUITBOX_DESCRIPTION << endl;
+  log_file << FRUITBOX_SUMMARY << endl;
 
   Config = new ConfigClass();
 
@@ -130,7 +150,7 @@ int32_t main(int32_t argc, char *argv[])
       {
         NEXT_ARG;
         Config->general->database_filename = *av;
-        cout << NOTE << "Database '" << *av << "' will override Database in skin config file" << endl;
+        log_file << NOTE << "Database '" << *av << "' will override Database in skin config file" << endl;
       }
 
       if (strcmp(*av, commandLineArgMusicPath) == 0)
@@ -138,7 +158,7 @@ int32_t main(int32_t argc, char *argv[])
         Config->general->command_line_music_path = true;
         NEXT_ARG;
         Config->general->music_path.push_back(*av);
-        cout << NOTE << "MusicPath '" << *av << "' will override MusicPath in skin config file" << endl;
+        log_file << NOTE << "MusicPath '" << *av << "' will override MusicPath in skin config file" << endl;
       }
 
       if (strcmp(*av, commandLineArgLoadPlaylist) == 0)
@@ -157,6 +177,11 @@ int32_t main(int32_t argc, char *argv[])
       if (strcmp(*av, commandLineArgDebugSongNums) == 0)
       {
         debug_song_nums = true;
+      }
+
+      if (strcmp(*av, commandLineArgNoDbUpdate) == 0)
+      {
+        no_db_update = true;
       }
 
       if (strcmp(*av, commandLineArgConfigButtons) == 0)
@@ -321,6 +346,9 @@ int32_t main(int32_t argc, char *argv[])
 
   Engine->Run();
 
+  cout << endl << FRUITBOX_DONATE << endl;
+  log_file << endl << FRUITBOX_DONATE << endl;
+  
   return 0;
 }
 

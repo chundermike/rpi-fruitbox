@@ -33,7 +33,7 @@ void ConfigClass::ChooseMenu(const string choose_cfg_filename, string &filename)
   string line;
 
   // open choose_cfg_filename
-  cout << "Reading skin chooser file '" << choose_cfg_filename << "'..." << endl;
+  log_file << "Reading skin chooser file '" << choose_cfg_filename << "'..." << endl;
   chooserFile.open(choose_cfg_filename, ios::in);
   if (!chooserFile.is_open()) error("Couldn't open '%s' for input", choose_cfg_filename.c_str());
 
@@ -154,7 +154,7 @@ void ConfigClass::LoadButtons(const string filename)
   btnFile.open(filename, ios::in);
   if (!btnFile.is_open()) return;
 
-  cout << "Loading button mapping file '" << filename << "'..." << endl;
+  log_file << "Loading button mapping file '" << filename << "'..." << endl;
 
   while (getline(btnFile, line))
   {
@@ -210,7 +210,7 @@ bool ConfigClass::Load(const string cfg_filename)
     error("Couldn't open configuration file '%s' for input", cfg_filename.c_str());
   }
 
-  cout << "Reading configuration '" << cfg_filename << "'..." << endl;
+  log_file << "Reading configuration '" << cfg_filename << "'..." << endl;
 
   ConfigBaseClass *obj { general };
 
@@ -224,7 +224,7 @@ bool ConfigClass::Load(const string cfg_filename)
     if (line.at(0) == cfgFile_section_start)
     { // a new section...
       addObject(obj); // add previous object to list (as appropriate)
-      cout << endl << "  " << line << endl;
+      log_file << endl << "  " << line << endl;
       if (line.find(cfgSection_general) != string::npos)
       {
         obj = general;
@@ -264,7 +264,7 @@ bool ConfigClass::Load(const string cfg_filename)
       }
       else
       {
-        cout << WARNING << "Unrecognised section (line " << cfgFile_line_number << ")" << endl;
+        log_file << WARNING << "Unrecognised section (line " << cfgFile_line_number << ")" << endl;
         obj = nullptr;
       }
     } else { // no section character, so assume a config parameter...
@@ -275,7 +275,7 @@ bool ConfigClass::Load(const string cfg_filename)
 
   cfgFile.close();
 
-  cout << endl;
+  log_file << endl;
 
   if (general->num_pages == 0) error("Must define at least one [page]");
 
@@ -335,9 +335,14 @@ void ConfigClass::PostProcess(void)
     select_codes *= s.size();
   }
 
-  uint32_t visible_songs { general->songs_per_page * visible_pages };
-
-  if (select_codes < visible_songs) error("Not enough select key combinations (%d) for number of visible songs (%d)", select_codes, visible_songs);
+  uint32_t selectable_entries { visible_pages };
+  
+  if (general->page_mode == page_mode_e::Singles)
+  {
+    selectable_entries *= general->songs_per_page;
+  }
+  
+  if (select_codes < selectable_entries) error("Not enough select key combinations (%d) for number of selectable entries (%d)", select_codes, selectable_entries);
 
   // compute bases for each select digit...  
   for (auto b = 0; b < general->select_buttons.size(); ++b)
@@ -458,7 +463,7 @@ void ConfigClass::PostProcess(void)
       }
       else
       {
-        general->select_mode = select_mode_e::Joystick;
+        general->select_mode = select_mode_e::JoyStick;
       }
 
       if (i->size.y == 0) // size not defined in config file so calculate it based on page characteristics
@@ -596,7 +601,7 @@ void ConfigClass::PostProcess(void)
   {
     if (joystick_defined)
     {
-      general->select_mode = select_mode_e::Joystick;
+      general->select_mode = select_mode_e::JoyStick;
     }
     else
     {
@@ -605,7 +610,7 @@ void ConfigClass::PostProcess(void)
   }
 
   // after establishing select mode, if it's joystick we must turn off auto select...
-  if (general->select_mode == select_mode_e::Joystick)
+  if (general->select_mode == select_mode_e::JoyStick)
   {
     general->auto_select = false; // a joystick defined means auto select must be turned off
   }

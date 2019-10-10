@@ -24,34 +24,34 @@ public:
 
   void cfgShow(const char *indent)
   {
-    cout << indent << cfgSection_general << endl;
+    log_file << indent << cfgSection_general << endl;
     general->cfgShow(indent);
 
-    cout << endl << indent << cfgSection_touch_areas << endl;
+    log_file << endl << indent << cfgSection_touch_areas << endl;
     touch_areas->cfgShow(indent);
 
-    cout << endl << indent << cfgSection_sounds << endl;
+    log_file << endl << indent << cfgSection_sounds << endl;
     sounds->cfgShow(indent);
 
-    cout << endl << indent << cfgSection_font << multiCfgParameter << endl;
+    log_file << endl << indent << cfgSection_font << multiCfgParameter << endl;
     tmp_font->cfgShow(indent);
 
-    cout << endl << indent << cfgSection_page << multiCfgParameter << endl;
+    log_file << endl << indent << cfgSection_page << multiCfgParameter << endl;
     tmp_page->cfgShow(indent);
 
-    cout << endl << indent << cfgSection_status << multiCfgParameter << endl;
+    log_file << endl << indent << cfgSection_status << multiCfgParameter << endl;
     tmp_status->cfgShow(indent);
 
-    cout << endl << indent << cfgSection_bitmap << multiCfgParameter << endl;
+    log_file << endl << indent << cfgSection_bitmap << multiCfgParameter << endl;
     tmp_bitmap->cfgShow(indent);
 
-    cout << endl << indent << cfgSection_joystick << multiCfgParameter << endl;
+    log_file << endl << indent << cfgSection_joystick << multiCfgParameter << endl;
     tmp_joystick->cfgShow(indent);
 
-    cout << endl << indent << cfgSection_touch_song << endl;
+    log_file << endl << indent << cfgSection_touch_song << endl;
     tmp_touch_song->cfgShow(indent);
 
-    cout << endl;
+    log_file << endl;
   }
 
   void cfgRead(string line) {};

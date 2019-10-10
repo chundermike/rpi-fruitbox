@@ -11,9 +11,9 @@ constexpr int32_t SpinOffsetY   { -70 * 512 / 800 }; /*  svg centre offset * png
 
 DisplayClass::DisplayClass(void)
 {
-  cout << "Detecting display...";
+  log_file << "Detecting display...";
   if (al_get_display_mode(0, &display_size) == nullptr) error("Failed to get display mode");
-  cout << display_size.width << " x " << display_size.height << " (" << display_size.refresh_rate << "Hz)" << endl;
+  log_file << display_size.width << " x " << display_size.height << " (" << display_size.refresh_rate << "Hz)" << endl;
 
   display = al_create_display(display_size.width, display_size.height);
   if (display == nullptr) error("Failed to create %d x %d display", display_size.width, display_size.height);
@@ -59,6 +59,8 @@ DisplayClass::DisplayClass(void)
   splash_state.s = splash_state.dw > splash_state.dh ? splash_state.dh : splash_state.dw;
   splash_state.w = splash_state.s / (2.0 * static_cast<float>(splash_state.lw)); /* make logo roughly half the smallest screen dimension */
   splash_state.h = splash_state.s / (2.0 * static_cast<float>(splash_state.lw)); /* make logo roughly half the smallest screen dimension */
+
+  active = true;
 }
 
 DisplayClass::~DisplayClass()
@@ -343,7 +345,7 @@ void DisplayClass::JukeboxFadeIn(void)
 {
   al_set_target_bitmap(al_get_backbuffer(display));
 
-  for (size_t fade {200}; fade > 0; --fade)
+  for (size_t fade {200}; fade > 0; fade -= 4)
   {
     float f { static_cast<float>(fade)/200 };
     splash_state.fcol = al_map_rgba_f(f, f, f, f);
@@ -365,7 +367,7 @@ void DisplayClass::LogoFadeOut(void)
 {
   al_set_target_bitmap(al_get_backbuffer(display));
 
-  for (size_t fade {100}; fade > 0; fade-=2)
+  for (size_t fade {100}; fade > 0; fade -= 4)
   {
     float f { static_cast<float>(fade) / 100 };
     splash_state.fcol = al_map_rgba_f(f, f, f, f);

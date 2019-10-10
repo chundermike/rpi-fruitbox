@@ -44,6 +44,32 @@ string PlayQueueClass::TotalTimeComingUp(void)
   return StrHMS(t);
 }
 
+// FindSong  : return whether the song is already in the queue or not.  Used
+// to see if a song is already in the queue if no_duplicates is set.
+int PlayQueueClass::FindSong(song_t *song)
+{
+  song_t *songq;
+  std::string songname;
+  std::string songqname;
+  uint32_t cntr;
+  uint32_t occ { static_cast<uint32_t>(queue.size()) };
+  songqname = status.now_playing->title;
+  songname = song->title;
+  if (songname.compare(songqname) == 0) return 1; //song is currently playing
+  if (occ == 0) return 0; //nothing in the queue
+  // Loop through the queue and look for the song
+  for (cntr = 0; cntr < occ; ++cntr)
+  {
+    songq = queue.at(cntr);
+    songqname = songq->title;
+    if (songname.compare(songqname) == 0)
+    {
+      return 1;
+    }
+  }
+  return 0;
+}
+
 // QuerySong : return the song information for the entry in the queue "from_top" entries from the top
 // i.e. if from_top = 0, this returns the next entry in the queue
 // i.e. if from_top = 1, this returns the second entry in the queue
@@ -62,18 +88,18 @@ song_t * PlayQueueClass::QuerySong(const int32_t from_top)
   song->type = song_type_e::unknown;
   if (file_ext == ".mp3") song->type = song_type_e::mp3;
   if (file_ext == ".ogv") song->type = song_type_e::ogv;
-    // cout << "song->filename " << song->filename << endl;
+    // log_file << "song->filename " << song->filename << endl;
   if (song->filename.find(URLPrefix) != string::npos) // string contains "http"
   {
-    // cout << "SONG IS URL!!!" << endl;
+    // log_file << "SONG IS URL!!!" << endl;
     song->type = song_type_e::url;
   }
 
-  // cout << endl << "Query " << from_top << "..." << endl;
-  // cout << "title = " << song->title << endl;
-  // cout << "artist = " << song->artist << endl;
-  // cout << "album artist = " << song->albumArtist << endl;
-  // cout << "track = " << song->trackNumberStr << endl << endl;
+  // log_file << endl << "Query " << from_top << "..." << endl;
+  // log_file << "title = " << song->title << endl;
+  // log_file << "artist = " << song->artist << endl;
+  // log_file << "album artist = " << song->albumArtist << endl;
+  // log_file << "track = " << song->trackNumberStr << endl << endl;
   return song;
 }
 
@@ -95,21 +121,47 @@ void PlayQueueClass::AddToHistory(const int32_t from_top)
   mtx.unlock();
 }
 
-void PlayQueueClass::Add(song_t *song, play_type_e credit_play)
-{ // add song(s) to the end of the queue
+bool PlayQueueClass::Add(song_t *song, play_type_e credit_play)
+// add song(s) to the end of the queue
+// returns true if duplicate song selected
+{
+  bool credit_mode { false };
+  if ((Config->general->free_play == false) && (static_cast<bool>(credit_play) == true))
+  {
+    credit_mode = true;
+  }
+
   mtx.lock();
   if (queue.size() < Config->general->max_playlist_length) // room in play queue
   {
-    if ((Config->general->free_play == false) && (static_cast<bool>(credit_play) == true))
-    { // credit check...
-      if (status.credits == 0) // no money left!
+    if (credit_mode) // check if we have credit...
+    {
+      if (status.credits == 0) // none left!
       {
         mtx.unlock();
-        return;
+        return false;
       }
+      // use up a credit...
       status.credits--;
       Engine->status_event |= StatusEvent_creditsChange;
     }
+    
+    if (Config->general->no_duplicates == true) // check for a duplicated song (selected song is already in the queue or currently playing)
+    {
+      if (FindSong(song) == 1) // song is already in the queue (or currently playing)
+      {
+        if (credit_mode && (Config->general->duplicates_use_credits == false))
+        {
+          status.credits++; // restore credit from decrement above as this song is duplicated, so we don't charge the user for it
+          Engine->status_event &= ~StatusEvent_creditsChange; // credits haven't changed after all
+        }
+        // return early so we don't add the song to the queue...
+        mtx.unlock();
+        return true;
+      }
+    }
+
+    // add song to queue...
     queue.push_back(song);
     total_time += song->length;
     empty = false;
@@ -120,6 +172,8 @@ void PlayQueueClass::Add(song_t *song, play_type_e credit_play)
     Engine->status_event |= StatusEvent_playqueueChange;
   }
   mtx.unlock();
+  
+  return false;
 }
 
 void PlayQueueClass::Remove(void)
@@ -167,11 +221,11 @@ void PlayQueueClass::Load(const string filename)
     playlistFile.open(filename.c_str(), ios::in);
     if (!playlistFile.is_open())
     {
-      cout << WARNING << "Couldn't open ''" << filename.c_str() << "'" << endl;
+      log_file << WARNING << "Couldn't open ''" << filename.c_str() << "'" << endl;
     }
     else
     {
-      cout << "Loading playlist '" << filename << "'..." << endl;
+      log_file << "Loading playlist '" << filename << "'..." << endl;
       while (getline(playlistFile, line))
       // read line (containing filename)
       {
@@ -203,11 +257,11 @@ void PlayQueueClass::Save(const string filename)
     playlistFile.open(filename.c_str(), ios::out);
     if (!playlistFile.is_open())
     {
-      cout << WARNING << "Couldn't create ''" << filename.c_str() << "'" << endl;
+      log_file << WARNING << "Couldn't create ''" << filename.c_str() << "'" << endl;
     }
     else
     {
-      cout << "Saving playlist '" << filename << "'..." << endl;
+      log_file << "Saving playlist '" << filename << "'..." << endl;
       playlistFile << "# fruitbox " << FRUITBOX_VERSION << " playlist file " << endl << endl;
       for (auto i : queue)
       {

@@ -44,6 +44,7 @@ void AudioClass::RemoveSong
   status.now_playing_length_str = invalidTimeMS;
   status.now_playing_elapsed_time_str = invalidTimeMS;
   status.now_playing_time_remaining_str = invalidTimeMS;
+  status.now_playing_time_remaining_scale = 0.0;
 
   SongPlayThread_status_event |= StatusEvent_playqueueChange;
 }
@@ -242,7 +243,7 @@ bool AudioClass::AttachMP3ToMixer
 
   if (rate == 0)
   {
-    cout << WARNING << "Audio Rate zero! for file '" << filename << "'" << endl;
+    log_file << WARNING << "Audio Rate zero! for file '" << filename << "'" << endl;
     RemoveSong(false);
     return false;
   }
@@ -270,20 +271,20 @@ size_t AudioClass::CurlGetFormat
   int err;
 
 #ifdef _CURL
-  cout << "CurlGetFormat" << endl;
+  // cout << "CurlGetFormat" << endl;
   mpg123_feed(AudioClass::mp3, (const unsigned char*) buffer, size * nmemb);
 
   do
   {
     if (mpg123_decode_frame(AudioClass::mp3, &frame_offset, &AudioClass::mp3_buffer, &decoded_bytes) == MPG123_NEW_FORMAT)
     {
-      cout << "MPG123_NEW_FORMAT" << endl;
+      // cout << "MPG123_NEW_FORMAT" << endl;
       Audio->AttachMP3ToMixer(status.now_playing->filename);
       return decoded_bytes;
     }
   } while (AudioClass::play_song);
 
-  cout << "CurlGetFormat return" << endl;
+  // cout << "CurlGetFormat return" << endl;
 #endif
   return decoded_bytes;
 }
@@ -301,9 +302,9 @@ size_t AudioClass::CurlGetMP3
   int err;
 
 #ifdef _CURL
-  cout << "CurlGetMP3" << endl;
+  // cout << "CurlGetMP3" << endl;
   mpg123_feed(AudioClass::mp3, (const unsigned char*) buffer, size * nmemb);
-  cout << "size * nmemb " << size * nmemb << endl;
+  // cout << "size * nmemb " << size * nmemb << endl;
 
   if (AudioClass::mp3_stream)
   {
@@ -313,14 +314,14 @@ size_t AudioClass::CurlGetMP3
       if (AudioClass::mp3_buffer != nullptr) // we have somewhere to store decoded data
       {
         // keep reading until have AudioClass::mp3_buffer_size bytes to play out...
-        cout << "mpg123_read : bytes_remaining " << AudioClass::bytes_remaining << endl;
+        // cout << "mpg123_read : bytes_remaining " << AudioClass::bytes_remaining << endl;
         if (mpg123_read(AudioClass::mp3, static_cast<unsigned char*>(AudioClass::mp3_buffer + AudioClass::mp3_buffer_size - bytes_remaining), bytes_remaining, &decoded_bytes) == MPG123_OK)
         {
-          cout << "decoded_bytes " << decoded_bytes << endl;
+          // cout << "decoded_bytes " << decoded_bytes << endl;
           AudioClass::bytes_remaining -= decoded_bytes;
           if (AudioClass::bytes_remaining == 0)
           {
-            cout << "al_set_audio_stream_fragment" << endl;
+            // cout << "al_set_audio_stream_fragment" << endl;
             al_set_audio_stream_fragment(AudioClass::mp3_stream, AudioClass::mp3_buffer); // ready to play out
             AudioClass::bytes_remaining = AudioClass::mp3_buffer_size;
           }
@@ -329,7 +330,7 @@ size_t AudioClass::CurlGetMP3
     } while (AudioClass::play_song && AudioClass::bytes_remaining);
   }
 
-  cout << "CurlGetMP3 return" << endl;
+  // cout << "CurlGetMP3 return" << endl;
 #endif
   return size * nmemb;
 }
@@ -378,10 +379,8 @@ void AudioClass::PlaySongThread(void)
           // Playback of MP3 URL (M3U/PLS) files...done in CurlWriteCallback()
           #ifdef _CURL
           case song_type_e::url :
-            cout << "debug4" << endl;
             curl_easy_perform(curl);
 
-            cout << "debug5a" << endl;
             // song finished naturally or play_song set false (song skipped)...
             if (AudioClass::mp3_stream)
             {
@@ -389,7 +388,6 @@ void AudioClass::PlaySongThread(void)
               al_destroy_audio_stream(AudioClass::mp3_stream);
               AudioClass::mp3_stream = nullptr;
             }
-            cout << "debug5b" << endl;
             mpg123_close(AudioClass::mp3);
             SongPlayThread_status_event |= StatusEvent_songStop;
             break;
@@ -472,7 +470,7 @@ void AudioClass::PlaySongThread(void)
                 break;
 
               default : // song_type_e::unknown
-                cout << WARNING << "Unknown file type '" << next_up->filename << "'" << endl;
+                log_file << WARNING << "Unknown file type '" << next_up->filename << "'" << endl;
                 RemoveSong(false);
                 continue;
                 break;
@@ -493,10 +491,10 @@ void AudioClass::PlaySongThread(void)
           if (status.now_playing->type == song_type_e::url)
           {
             AudioClass::url_get_format = true;
-            cout << "URL filename '" << status.now_playing->filename << "' opened" << endl;
+            // cout << "URL filename '" << status.now_playing->filename << "' opened" << endl;
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlGetFormat);
             curl_easy_setopt(curl, CURLOPT_URL, status.now_playing->filename.c_str());
-            cout << "debug7" << endl;
+            // cout << "debug7" << endl;
             curl_easy_perform(curl);
             AudioClass::bytes_remaining = AudioClass::mp3_buffer_size;
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlGetMP3);
@@ -549,7 +547,7 @@ AudioClass::AudioClass(void)
 {
   int err {MPG123_OK};
 
-  cout << "Initialising audio ..." << endl;
+  log_file << "Initialising audio ..." << endl;
 
   skipped = false;
   AudioClass::play_song = false;
@@ -655,7 +653,7 @@ void AudioClass::GetMP3SongInfo
   }
   mpg123_getformat(mp, &rt, &ch, &enc);
   if (rt == 0) {
-    cout << WARNING << "Audio Rate zero! (" << filename << ")" << endl;
+    log_file << WARNING << "Audio Rate zero! (" << filename << ")" << endl;
     song.push_back(s);
     return;
   }

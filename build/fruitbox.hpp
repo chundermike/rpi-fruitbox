@@ -36,6 +36,7 @@
 
 #include <mpg123.h>
 
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_memfile.h>
 #include <allegro5/allegro_image.h>
@@ -45,6 +46,8 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_video.h>
+
+extern std::ofstream log_file;
 
 #include "fruitbox_types.hpp"
 #include "gpio.hpp"
@@ -76,15 +79,15 @@
 
 // #define _CURL
 
-#define FRUITBOX_VERSION                      "v1.14"
-#define FRUITBOX_PRO_VERSION                  FRUITBOX_VERSION " Pro"
+#define FRUITBOX_VERSION                      "v1.15"
 #define FRUITBOX_DESCRIPTION                  "fruitbox " FRUITBOX_VERSION " (" __DATE__ ", " __TIME__ ") by Mike Kingsley"
-#define FRUITBOX_SUMMARY                      "A customisable MP3 Retro Jukebox for the Raspberry Pi"
+#define FRUITBOX_SUMMARY                      "A customisable MP3 Retro Jukebox for the Raspberry Pi."
 #define FRUITBOX_DONATE                       "To encourage future development, please consider making a donation\nto the author at https://paypal.me/rpifruitbox"
 void error(const char *fmt, ...);
 
 extern status_t status;
 extern bool debug_song_nums;
+extern bool no_db_update;
 extern ALLEGRO_DISPLAY *display;
 extern string save_playlist_filename;
 extern string load_playlist_filename;

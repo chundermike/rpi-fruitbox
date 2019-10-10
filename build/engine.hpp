@@ -24,6 +24,7 @@ public:
   uint32_t joy_y { };
   bool mute { false };
   bool invalid_choice { false };
+  bool duplicate_choice { false };
   string StrMS(uint32_t ms) {
     stringstream s;
     s << setfill('0') << setw(2) << SecondsToMinutes(ms) << ":"

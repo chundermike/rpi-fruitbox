@@ -43,8 +43,7 @@ const char cfg_file_str[] = { \
   "file by prefixing any comment text with the '#' character.\n\n" \
   "The following list shows all the possible parameters for each section.  If a parameter is " \
   "not specified in the configuration file, fruitbox will use a default value.\n\nNote that entries marked " \
-  "with a '*' means that these groups / parameters can be defined multiple times.  Also note that " \
-  "undefined parameters in a section can be inherited from a previously defined section of the same type.\n\n" \
+  "with a '*' means that these groups / parameters can be defined multiple times.\n" \
   "Note: filenames for 'Database' and 'MusicPath' parameters have file paths relative to the directory fruitbox " \
   "was run from, whereas filenames for all other parameters (sound files, bitmap files, status text files, font files) " \
   "have paths which are relative to the directory the configuration file itself is in.  This allows configuration files " \
@@ -105,7 +104,7 @@ const char command_line_help_option_str[] = { \
 };
 
 const char command_line_user_guide_option_str[] = { \
-  "Show this user guide (but I guess you already worked that one out...)"
+  "Create this user-guide to file \"userguide.txt\" (but I guess you already worked that one out...)"
 };
 
 const char command_line_database_option_str[] = { \
@@ -181,6 +180,11 @@ const char command_line_debug_song_nums_option_str[] = { \
   "Show select code alongside song entries"
 };
 
+const char command_line_no_db_update_option_str[] = { \
+  "Normally fruitbox will update the database if it has a modification time earler than the contents of any of the MusicPath directories." \
+  "This option disables this check, so it is up to the user to delete the database file in order for it to be regenerated."
+};
+
 const char command_line_test_buttons_option_str[] = { \
   "This option allows button codes to be checked without creating a button mapping file."
 };
@@ -208,7 +212,8 @@ const char database_creation_str[] = { \
   "(for example a directory on the SD card itself or a USB memory drive), which contains MP3 songs (which can be in sub-directories).\n\n" \
   "Building the database file may take some considerable time if your music library is large, but " \
   "it only needs to be done once, and subsequent start-ups of fruitbox will be very fast.  If you add or remove music from your library, " \
-  "you will need to delete the database file in order for fruitbox to re-generate it correctly.  Alternatively, the database file " \
+  "fruitbox will regenerate it automatically, providing the changes are in the same MusicPath directory.  If not, you will have to manually " \
+  "delete the database filefor frtuibox to re-generate it correctly.  Alternatively, the database file " \
   "can be edited by hand in a standard text editor if you have small changes to make or are feeling brave!.  This can be useful " \
   "if you wish to add or remove particular songs, or tweak the song details, without having to re-generate the database from scratch.  " \
   "Note that the song order in the database file is irrelevant; after fruitbox has read the songs from the database file it will sort them " \

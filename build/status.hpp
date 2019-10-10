@@ -129,56 +129,61 @@
 #define STATUS_VAR_STOP_VIDEO                       (STATUS_VAR_OFFSET + 120)
 #define STATUS_VAR_PAUSE_VIDEO                      (STATUS_VAR_OFFSET + 121)
 #define STATUS_VAR_UNPAUSE_VIDEO                    (STATUS_VAR_OFFSET + 122)
-#define STATUS_VAR_IF_FREE_PLAY                     (STATUS_VAR_OFFSET + 123)
-#define STATUS_VAR_IF_NOT_FREE_PLAY                 (STATUS_VAR_OFFSET + 124)
-#define STATUS_VAR_IF_NO_CREDITS                    (STATUS_VAR_OFFSET + 125)
-#define STATUS_VAR_IF_ANY_CREDITS                   (STATUS_VAR_OFFSET + 126)
-#define STATUS_VAR_IF_SONG_PLAYING                  (STATUS_VAR_OFFSET + 127)
-#define STATUS_VAR_IF_NOT_SONG_PLAYING              (STATUS_VAR_OFFSET + 128)
-#define STATUS_VAR_IF_VIDEO_SONG_PLAYING            (STATUS_VAR_OFFSET + 129)
-#define STATUS_VAR_IF_NOT_VIDEO_SONG_PLAYING        (STATUS_VAR_OFFSET + 130)
-// #define STATUS_VAR_IF_RADIO_PLAYING                 (STATUS_VAR_OFFSET + 131)
-// #define STATUS_VAR_IF_NOT_RADIO_PLAYING             (STATUS_VAR_OFFSET + 132)
-#define STATUS_VAR_IF_SONG_LOADING                  (STATUS_VAR_OFFSET + 133 - 2)
-#define STATUS_VAR_IF_NOT_SONG_LOADING              (STATUS_VAR_OFFSET + 134 - 2)
-#define STATUS_VAR_IF_SONG_UNLOADING                (STATUS_VAR_OFFSET + 135 - 2)
-#define STATUS_VAR_IF_NOT_SONG_UNLOADING            (STATUS_VAR_OFFSET + 136 - 2)
-#define STATUS_VAR_IF_ANY_COMING_UP                 (STATUS_VAR_OFFSET + 137 - 2)
-#define STATUS_VAR_IF_NONE_COMING_UP                (STATUS_VAR_OFFSET + 138 - 2)
-#define STATUS_VAR_IF_SONG_COMING_UP                (STATUS_VAR_OFFSET + 139 - 2)
-#define STATUS_VAR_IF_AUTO_PLAY_MODE                (STATUS_VAR_OFFSET + 140 - 2)
-#define STATUS_VAR_IF_NOT_AUTO_PLAY_MODE            (STATUS_VAR_OFFSET + 141 - 2)
-#define STATUS_VAR_IF_LOOP_MODE                     (STATUS_VAR_OFFSET + 142 - 2)
-#define STATUS_VAR_IF_NOT_LOOP_MODE                 (STATUS_VAR_OFFSET + 143 - 2)
-#define STATUS_VAR_IF_TIMER_HI                      (STATUS_VAR_OFFSET + 144 - 2)
-#define STATUS_VAR_IF_TIMER_LO                      (STATUS_VAR_OFFSET + 145 - 2)
-#define STATUS_VAR_IF_TIMER_TICK                    (STATUS_VAR_OFFSET + 146 - 2)
-#define STATUS_VAR_IF_MUTE                          (STATUS_VAR_OFFSET + 147 - 2)
-#define STATUS_VAR_IF_NOT_MUTE                      (STATUS_VAR_OFFSET + 148 - 2)
-#define STATUS_VAR_IF_PAGE_MOVING                   (STATUS_VAR_OFFSET + 149 - 2)
-#define STATUS_VAR_IF_NOT_PAGE_MOVING               (STATUS_VAR_OFFSET + 150 - 2)
-#define STATUS_VAR_IF_PLAYQUEUE_EMPTY               (STATUS_VAR_OFFSET + 151 - 2)
-#define STATUS_VAR_IF_NOT_PLAYQUEUE_EMPTY           (STATUS_VAR_OFFSET + 152 - 2)
-#define STATUS_VAR_IF_PLAYQUEUE_FULL                (STATUS_VAR_OFFSET + 153 - 2)
-#define STATUS_VAR_IF_NOT_PLAYQUEUE_FULL            (STATUS_VAR_OFFSET + 154 - 2)
-#define STATUS_VAR_IF_STEREO                        (STATUS_VAR_OFFSET + 155 - 2)
-#define STATUS_VAR_IF_NOT_STEREO                    (STATUS_VAR_OFFSET + 156 - 2)
-#define STATUS_VAR_IF_PAUSED                        (STATUS_VAR_OFFSET + 157 - 2)
-#define STATUS_VAR_IF_NOT_PAUSED                    (STATUS_VAR_OFFSET + 158 - 2)
-#define STATUS_VAR_IF_INVALID_CHOICE                (STATUS_VAR_OFFSET + 159 - 2)
-#define STATUS_VAR_IF_NOT_INVALID_CHOICE            (STATUS_VAR_OFFSET + 160 - 2)
-#define STATUS_VAR_IF_FLAG_HI                       (STATUS_VAR_OFFSET + 161 - 2)
-#define STATUS_VAR_IF_FLAG_LO                       (STATUS_VAR_OFFSET + 162 - 2)
-//                                                                       163 - 2 // placemarkers for FLAGS 2..4
-//                                                                       164 - 2
-//                                                                       165 - 2
-//                                                                       166 - 2
-//                                                                       167 - 2
-//                                                                       168 - 2
-#define STATUS_VAR_IF_BUTTON_PRESSED                (STATUS_VAR_OFFSET + 169 - 2)
-#define STATUS_VAR_IF_NOT_BUTTON_PRESSED            (STATUS_VAR_OFFSET + 170 - 2)
-#define STATUS_VAR_NO_DRAW                          (STATUS_VAR_OFFSET + 171 - 2)
-#define STATUS_VAR_END_IF                           (STATUS_VAR_OFFSET + 172 - 2)
+#define STATUS_VAR_STOP_TIMER                       (STATUS_VAR_OFFSET + 123)
+#define STATUS_VAR_START_TIMER                      (STATUS_VAR_OFFSET + 124)
+#define STATUS_VAR_RESET_TIMER                      (STATUS_VAR_OFFSET + 125)
+#define STATUS_VAR_IF_FREE_PLAY                     (STATUS_VAR_OFFSET + 126)
+#define STATUS_VAR_IF_NOT_FREE_PLAY                 (STATUS_VAR_OFFSET + 127)
+#define STATUS_VAR_IF_NO_CREDITS                    (STATUS_VAR_OFFSET + 128)
+#define STATUS_VAR_IF_ANY_CREDITS                   (STATUS_VAR_OFFSET + 129)
+#define STATUS_VAR_IF_SONG_PLAYING                  (STATUS_VAR_OFFSET + 130)
+#define STATUS_VAR_IF_NOT_SONG_PLAYING              (STATUS_VAR_OFFSET + 131)
+#define STATUS_VAR_IF_VIDEO_SONG_PLAYING            (STATUS_VAR_OFFSET + 132)
+#define STATUS_VAR_IF_NOT_VIDEO_SONG_PLAYING        (STATUS_VAR_OFFSET + 133)
+// #define STATUS_VAR_IF_RADIO_PLAYING                 (STATUS_VAR_OFFSET + 134)
+// #define STATUS_VAR_IF_NOT_RADIO_PLAYING             (STATUS_VAR_OFFSET + 135)
+#define STATUS_VAR_IF_SONG_LOADING                  (STATUS_VAR_OFFSET + 136 - 2)
+#define STATUS_VAR_IF_NOT_SONG_LOADING              (STATUS_VAR_OFFSET + 137 - 2)
+#define STATUS_VAR_IF_SONG_UNLOADING                (STATUS_VAR_OFFSET + 138 - 2)
+#define STATUS_VAR_IF_NOT_SONG_UNLOADING            (STATUS_VAR_OFFSET + 139 - 2)
+#define STATUS_VAR_IF_ANY_COMING_UP                 (STATUS_VAR_OFFSET + 140 - 2)
+#define STATUS_VAR_IF_NONE_COMING_UP                (STATUS_VAR_OFFSET + 141 - 2)
+#define STATUS_VAR_IF_SONG_COMING_UP                (STATUS_VAR_OFFSET + 142 - 2)
+#define STATUS_VAR_IF_AUTO_PLAY_MODE                (STATUS_VAR_OFFSET + 143 - 2)
+#define STATUS_VAR_IF_NOT_AUTO_PLAY_MODE            (STATUS_VAR_OFFSET + 144 - 2)
+#define STATUS_VAR_IF_LOOP_MODE                     (STATUS_VAR_OFFSET + 145 - 2)
+#define STATUS_VAR_IF_NOT_LOOP_MODE                 (STATUS_VAR_OFFSET + 146 - 2)
+#define STATUS_VAR_IF_TIMER_HI                      (STATUS_VAR_OFFSET + 147 - 2)
+#define STATUS_VAR_IF_TIMER_LO                      (STATUS_VAR_OFFSET + 148 - 2)
+#define STATUS_VAR_IF_TIMER_TICK                    (STATUS_VAR_OFFSET + 149 - 2)
+#define STATUS_VAR_IF_MUTE                          (STATUS_VAR_OFFSET + 150 - 2)
+#define STATUS_VAR_IF_NOT_MUTE                      (STATUS_VAR_OFFSET + 151 - 2)
+#define STATUS_VAR_IF_PAGE_MOVING                   (STATUS_VAR_OFFSET + 152 - 2)
+#define STATUS_VAR_IF_NOT_PAGE_MOVING               (STATUS_VAR_OFFSET + 153 - 2)
+#define STATUS_VAR_IF_PLAYQUEUE_EMPTY               (STATUS_VAR_OFFSET + 154 - 2)
+#define STATUS_VAR_IF_NOT_PLAYQUEUE_EMPTY           (STATUS_VAR_OFFSET + 155 - 2)
+#define STATUS_VAR_IF_PLAYQUEUE_FULL                (STATUS_VAR_OFFSET + 156 - 2)
+#define STATUS_VAR_IF_NOT_PLAYQUEUE_FULL            (STATUS_VAR_OFFSET + 157 - 2)
+#define STATUS_VAR_IF_STEREO                        (STATUS_VAR_OFFSET + 158 - 2)
+#define STATUS_VAR_IF_NOT_STEREO                    (STATUS_VAR_OFFSET + 159 - 2)
+#define STATUS_VAR_IF_PAUSED                        (STATUS_VAR_OFFSET + 160 - 2)
+#define STATUS_VAR_IF_NOT_PAUSED                    (STATUS_VAR_OFFSET + 161 - 2)
+#define STATUS_VAR_IF_INVALID_CHOICE                (STATUS_VAR_OFFSET + 162 - 2)
+#define STATUS_VAR_IF_NOT_INVALID_CHOICE            (STATUS_VAR_OFFSET + 163 - 2)
+#define STATUS_VAR_IF_DUPLICATE_CHOICE              (STATUS_VAR_OFFSET + 164 - 2)
+#define STATUS_VAR_IF_NOT_DUPLICATE_CHOICE          (STATUS_VAR_OFFSET + 165 - 2)
+#define STATUS_VAR_IF_FLAG_HI                       (STATUS_VAR_OFFSET + 166 - 2)
+#define STATUS_VAR_IF_FLAG_LO                       (STATUS_VAR_OFFSET + 167 - 2)
+//                                                                       168 - 2 // placemarkers for FLAGS 2..4
+//                                                                       169 - 2
+//                                                                       170 - 2
+//                                                                       171 - 2
+//                                                                       172 - 2
+//                                                                       173 - 2
+#define STATUS_VAR_IF_BUTTON_PRESSED                (STATUS_VAR_OFFSET + 174 - 2)
+#define STATUS_VAR_IF_NOT_BUTTON_PRESSED            (STATUS_VAR_OFFSET + 175 - 2)
+#define STATUS_VAR_NO_DRAW                          (STATUS_VAR_OFFSET + 176 - 2)
+#define STATUS_VAR_END_IF                           (STATUS_VAR_OFFSET + 177 - 2)
 
 const char STAT_DESC_NULL[] = {""};
 const char STAT_DESC_NPTI[] = {"The name of the song which is currently playing"};
@@ -249,6 +254,9 @@ const char STAT_DESC_STRV[] = {"Start video playing"};
 const char STAT_DESC_STPV[] = {"Stop video playing"};
 const char STAT_DESC_PAUV[] = {"Pause video playing"};
 const char STAT_DESC_UNPV[] = {"Un-pause video playing"};
+const char STAT_DESC_STOT[] = {"Stop the status TimerTick timer"};
+const char STAT_DESC_STAT[] = {"Start the status TimerTick timer"};
+const char STAT_DESC_REST[] = {"Reset the status TimerTick timer"};
 const char STAT_DESC_IFSM[] = {"Activates the text following it if the secret menu enabled"};
 const char STAT_DESC_INSM[] = {"Activates the text following it if the secret menu disabled"};
 const char STAT_DESC_IFFP[] = {"Activates the text following it if Free Play mode is enabled"};
@@ -290,6 +298,8 @@ const char STAT_DESC_IFPA[] = {"Activates the text following it if the current s
 const char STAT_DESC_INPA[] = {"Activates the text following it if the current song is not paused"};
 const char STAT_DESC_IFIC[] = {"Activates the text following it if the last song selection was invalid"};
 const char STAT_DESC_INIC[] = {"Activates the text following it if the last song selection was not invalid"};
+const char STAT_DESC_IFDC[] = {"Activates the text following it if the last song selection was a duplicate choice"};
+const char STAT_DESC_INDC[] = {"Activates the text following it if the last song selection was not a duplicate choice"};
 const char STAT_DESC_IFLH[] = {"Activates the text following it if the specified status flag is high"};
 const char STAT_DESC_IFLL[] = {"Activates the text following it if the specified status flag is low"};
 const char STAT_DESC_IFMU[] = {"Activates the text following it when the song volume is muted"};
@@ -298,6 +308,8 @@ const char STAT_DESC_ENIF[] = {"Marks the end of a text section playing by the p
 const char STAT_DESC_ENND[] = {"Supresses drawing of the status object"};
 const char STAT_DESC_IFBP[] = {"Activates the text following it if the specified button is pressed"};
 const char STAT_DESC_INBP[] = {"Activates the text following it if the specified button is not pressed"};
+const char STAT_DESC_IFAB[] = {"Activates the text following it if any button is pressed"};
+const char STAT_DESC_INAB[] = {"Activates the text following it if any button is not pressed"};
 
 
 class StatusDisplayClass : public DisplayBaseClass {
@@ -317,6 +329,8 @@ public:
     if (GetParam(line, cfgKeyword_LineSpacing,     line_spacing)) return;
     if (GetParam(line, cfgKeyword_LoopVideo,       loop_video)) return;
     if (GetParam(line, cfgKeyword_TimerTickPeriod, timer_tick_period)) return;
+    if (GetParam(line, cfgKeyword_TimerOneShot,    timer_oneshot)) return;
+    if (GetParam(line, cfgKeyword_TimerEnable,     timer_enable)) return;
     if (GetParam(line, cfgKeyword_BitmapDirectory, bitmap_directory)) return;
     if (GetParam(line, cfgKeyword_Bitmap,          bm)) {
       bitmap_list.push_back(bm.handle);
@@ -338,6 +352,8 @@ public:
     cfgShowEntry(indent, cfgKeyword_LineSpacing     , cfgKeywordDesc_StatusLineSpacing , false);
     cfgShowEntry(indent, cfgKeyword_LoopVideo       , cfgKeywordDesc_LoopVideo         , false);
     cfgShowEntry(indent, cfgKeyword_TimerTickPeriod , cfgKeywordDesc_TimerTickPeriod   , false);
+    cfgShowEntry(indent, cfgKeyword_TimerOneShot    , cfgKeywordDesc_TimerOneShot      , false);
+    cfgShowEntry(indent, cfgKeyword_TimerEnable     , cfgKeywordDesc_TimerEnable       , false);
     cfgShowEntry(indent, cfgKeyword_BitmapDirectory , cfgKeywordDesc_BitmapDirectory   , false);
     cfgShowEntry(indent, cfgKeyword_Bitmap          , cfgKeywordDesc_Bitmap            , true);
     cfgShowEntry(indent, cfgKeyword_Video           , cfgKeywordDesc_Video            , true);
@@ -346,9 +362,15 @@ public:
   StatusDisplayClass* clone() const { return new StatusDisplayClass(*this); }
 
   void renew(void) {
+    // ensure no parameters from a previous status object are inhereited to the next status objects
+    desc_name.clear();
+    output_filename.clear();
     size.x = size.y = 0;
-    bitmap_list.clear(); // ensure no bitmaps from a previous status object are included in the next status objects
-    output_filename.clear(); // ensure no output_filename from a previous status object is defined in the next status objects
+    loop_video = false;
+    timer_tick_period = 1;
+    timer_oneshot = false;
+    timer_enable = true;
+    bitmap_list.clear();
     video.handle = nullptr;
     bitmap_directory.clear();
   };
@@ -429,6 +451,9 @@ public:
   static bool funcStopVideo(StatusDisplayClass *s, unsigned char param);
   static bool funcPauseVideo(StatusDisplayClass *s, unsigned char param);
   static bool funcUnPauseVideo(StatusDisplayClass *s, unsigned char param);
+  static bool funcStopTimer(StatusDisplayClass *s, unsigned char param);
+  static bool funcStartTimer(StatusDisplayClass *s, unsigned char param);
+  static bool funcResetTimer(StatusDisplayClass *s, unsigned char param);
   static bool funcIfFreeplay(StatusDisplayClass *s, unsigned char param);
   static bool funcIfNotFreeplay(StatusDisplayClass *s, unsigned char param);
   static bool funcIfNoCredits(StatusDisplayClass *s, unsigned char param);
@@ -465,6 +490,8 @@ public:
   static bool funcIfNotPaused(StatusDisplayClass *s, unsigned char param);
   static bool funcIfInvalidChoice(StatusDisplayClass *s, unsigned char param);
   static bool funcIfNotInvalidChoice(StatusDisplayClass *s, unsigned char param);
+  static bool funcIfDuplicateChoice(StatusDisplayClass *s, unsigned char param);
+  static bool funcIfNotDuplicateChoice(StatusDisplayClass *s, unsigned char param);
   static bool funcIfFlagHigh(StatusDisplayClass *s, unsigned char param);
   static bool funcIfFlagLow(StatusDisplayClass *s, unsigned char param);
   static bool funcIfMute(StatusDisplayClass *s, unsigned char param);
@@ -484,8 +511,6 @@ public:
       << setfill('0') << setw(2) << SecondsToSeconds(ms);
     return s.str();
   }
-  uint32_t timer_hi {};
-  uint32_t timer_ticks {};
   string coming_up_song_length_str {};
   vector<ALLEGRO_BITMAP*> bitmap_list {};
   int32_t bitmap_idx {};
@@ -499,6 +524,11 @@ public:
   text_t text {};
   uint32_t line_spacing {};
   uint32_t timer_tick_period { 1 };
+  uint32_t timer_hi {};
+  uint32_t timer_count {};
+  bool timer_tick { false };
+  bool timer_enable { true };
+  bool timer_oneshot { false };
   string bitmap_directory {};
   static vector<string> static_bitmap_name;
   vector<string> bitmap_name;
@@ -647,6 +677,9 @@ const vector <status_vars_t> (status_vars) {
   {"$STOP_VIDEO",                         STAT_DESC_STPV, STATUS_VAR_STOP_VIDEO,                       0xff,                       false, &StatusDisplayClass::funcStopVideo,               StatusEvent_none},
   {"$PAUSE_VIDEO",                        STAT_DESC_PAUV, STATUS_VAR_PAUSE_VIDEO,                      0xff,                       false, &StatusDisplayClass::funcPauseVideo,              StatusEvent_none},
   {"$UNPAUSE_VIDEO",                      STAT_DESC_UNPV, STATUS_VAR_UNPAUSE_VIDEO,                    0xff,                       false, &StatusDisplayClass::funcUnPauseVideo,            StatusEvent_none},
+  {"$STOP_TIMER",                         STAT_DESC_STOT, STATUS_VAR_STOP_TIMER,                       0xff,                       false, &StatusDisplayClass::funcStopTimer,               StatusEvent_none},
+  {"$START_TIMER",                        STAT_DESC_STAT, STATUS_VAR_START_TIMER,                      0xff,                       false, &StatusDisplayClass::funcStartTimer,              StatusEvent_none},
+  {"$RESET_TIMER",                        STAT_DESC_REST, STATUS_VAR_RESET_TIMER,                      0xff,                       false, &StatusDisplayClass::funcResetTimer,              StatusEvent_none},
   {"$IF_FREE_PLAY",                       STAT_DESC_IFFP, STATUS_VAR_IF_FREE_PLAY,                     0xff,                       true,  &StatusDisplayClass::funcIfFreeplay,              StatusEvent_freeplayModeChange},
   {"$IF_NOT_FREE_PLAY",                   STAT_DESC_INFP, STATUS_VAR_IF_NOT_FREE_PLAY,                 0xff,                       true,  &StatusDisplayClass::funcIfNotFreeplay,           StatusEvent_freeplayModeChange},
   {"$IF_NO_CREDITS",                      STAT_DESC_IFNC, STATUS_VAR_IF_NO_CREDITS,                    0xff,                       true,  &StatusDisplayClass::funcIfNoCredits,             StatusEvent_creditsChange},
@@ -685,6 +718,8 @@ const vector <status_vars_t> (status_vars) {
   {"$IF_NOT_PAUSED",                      STAT_DESC_INPA, STATUS_VAR_IF_NOT_PAUSED,                    0xff,                       true,  &StatusDisplayClass::funcIfNotPaused,             StatusEvent_songPauseChange},
   {"$IF_INVALID_CHOICE",                  STAT_DESC_IFIC, STATUS_VAR_IF_INVALID_CHOICE,                0xff,                       true,  &StatusDisplayClass::funcIfInvalidChoice,         StatusEvent_chooseSong},
   {"$IF_NOT_INVALID_CHOICE",              STAT_DESC_INIC, STATUS_VAR_IF_NOT_INVALID_CHOICE,            0xff,                       true,  &StatusDisplayClass::funcIfNotInvalidChoice,      StatusEvent_chooseSong},
+  {"$IF_DUPLICATE_CHOICE",                STAT_DESC_IFDC, STATUS_VAR_IF_DUPLICATE_CHOICE,              0xff,                       true,  &StatusDisplayClass::funcIfDuplicateChoice,       StatusEvent_chooseSong},
+  {"$IF_NOT_DUPLICATE_CHOICE",            STAT_DESC_INDC, STATUS_VAR_IF_NOT_DUPLICATE_CHOICE,          0xff,                       true,  &StatusDisplayClass::funcIfNotDuplicateChoice,    StatusEvent_chooseSong},
   {"$IF_FLAG_1_HI",                       STAT_DESC_IFLH, STATUS_VAR_IF_FLAG_HI,                       0x00,                       true,  &StatusDisplayClass::funcIfFlagHigh,              StatusEvent_flagChange},
   {"$IF_FLAG_1_LO",                       STAT_DESC_IFLL, STATUS_VAR_IF_FLAG_LO,                       0x00,                       true,  &StatusDisplayClass::funcIfFlagLow,               StatusEvent_flagChange},
   {"$IF_FLAG_2_HI",                       STAT_DESC_IFLH, STATUS_VAR_IF_FLAG_HI,                       0x01,                       true,  &StatusDisplayClass::funcIfFlagHigh,              StatusEvent_flagChange},
@@ -693,6 +728,8 @@ const vector <status_vars_t> (status_vars) {
   {"$IF_FLAG_3_LO",                       STAT_DESC_IFLL, STATUS_VAR_IF_FLAG_LO,                       0x02,                       true,  &StatusDisplayClass::funcIfFlagLow,               StatusEvent_flagChange},
   {"$IF_FLAG_4_HI",                       STAT_DESC_IFLH, STATUS_VAR_IF_FLAG_HI,                       0x03,                       true,  &StatusDisplayClass::funcIfFlagHigh,              StatusEvent_flagChange},
   {"$IF_FLAG_4_LO",                       STAT_DESC_IFLL, STATUS_VAR_IF_FLAG_LO,                       0x03,                       true,  &StatusDisplayClass::funcIfFlagLow,               StatusEvent_flagChange},
+  {"$IF_ANY_BUTTON_PRESSED",              STAT_DESC_IFAB, STATUS_VAR_IF_BUTTON_PRESSED,                BUTTON_ANY,                 true,  &StatusDisplayClass::funcIfButtonPressed,         StatusEvent_buttonChanged},
+  {"$IF_NOT_ANY_BUTTON_PRESSED",          STAT_DESC_INAB, STATUS_VAR_IF_NOT_BUTTON_PRESSED,            BUTTON_ANY,                 true,  &StatusDisplayClass::funcIfNotButtonPressed,      StatusEvent_buttonChanged},
   {"$IF_BUTTON_QUIT_PRESSED",             STAT_DESC_IFBP, STATUS_VAR_IF_BUTTON_PRESSED,                BUTTON_QUIT,                true,  &StatusDisplayClass::funcIfButtonPressed,         StatusEvent_buttonChanged},
   {"$IF_NOT_BUTTON_QUIT_PRESSED",         STAT_DESC_INBP, STATUS_VAR_IF_NOT_BUTTON_PRESSED,            BUTTON_QUIT,                true,  &StatusDisplayClass::funcIfNotButtonPressed,      StatusEvent_buttonChanged},
   {"$IF_BUTTON_COIN1_PRESSED",            STAT_DESC_IFBP, STATUS_VAR_IF_BUTTON_PRESSED,                BUTTON_INSERT_COIN1,        true,  &StatusDisplayClass::funcIfButtonPressed,         StatusEvent_buttonChanged},

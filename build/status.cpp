@@ -473,16 +473,19 @@ bool StatusDisplayClass::funcDrawRandomBitmap(StatusDisplayClass *s, unsigned ch
 bool StatusDisplayClass::funcUndrawBitmap(StatusDisplayClass *s, unsigned char param)
 {
   s->draw_bitmap = false;
+  return false;
 }
 
 bool StatusDisplayClass::funcDrawVideo(StatusDisplayClass *s, unsigned char param)
 {
   s->draw_video = true;
+  return false;
 }
 
 bool StatusDisplayClass::funcUndrawVideo(StatusDisplayClass *s, unsigned char param)
 {
   s->draw_video = false;
+  return false;
 }
 
 bool StatusDisplayClass::funcStartVideo(StatusDisplayClass *s, unsigned char param)
@@ -526,6 +529,24 @@ bool StatusDisplayClass::funcUnPauseVideo(StatusDisplayClass *s, unsigned char p
   {
     al_set_video_playing(s->video.handle, true);
   }
+  return false;
+}
+
+bool StatusDisplayClass::funcStopTimer(StatusDisplayClass *s, unsigned char param)
+{
+  s->timer_enable = false;
+  return false;
+}
+
+bool StatusDisplayClass::funcStartTimer(StatusDisplayClass *s, unsigned char param)
+{
+  s->timer_enable = true;
+  return false;
+}
+
+bool StatusDisplayClass::funcResetTimer(StatusDisplayClass *s, unsigned char param)
+{
+  s->timer_count = 0;
   return false;
 }
 
@@ -741,7 +762,7 @@ bool StatusDisplayClass::funcIfTimerLo(StatusDisplayClass *s, unsigned char para
 
 bool StatusDisplayClass::funcIfTimerTick(StatusDisplayClass *s, unsigned char param)
 {
-  if (s->timer_ticks)
+  if (!s->timer_tick)
   {
     return s->SkipToEndIf();
   }
@@ -856,6 +877,24 @@ bool StatusDisplayClass::funcIfNotInvalidChoice(StatusDisplayClass *s, unsigned 
   return false;
 }
 
+bool StatusDisplayClass::funcIfDuplicateChoice(StatusDisplayClass *s, unsigned char param)
+{
+  if (!Engine->duplicate_choice)
+  {
+    return s->SkipToEndIf();
+  }
+  return false;
+}
+
+bool StatusDisplayClass::funcIfNotDuplicateChoice(StatusDisplayClass *s, unsigned char param)
+{
+  if (Engine->duplicate_choice)
+  {
+    return s->SkipToEndIf();
+  }
+  return false;
+}
+
 bool StatusDisplayClass::funcIfFlagHigh(StatusDisplayClass *s, unsigned char param)
 {
   uint32_t flag { static_cast<uint32_t>(param) };
@@ -897,7 +936,12 @@ bool StatusDisplayClass::funcIfNotMute(StatusDisplayClass *s, unsigned char para
 
 bool StatusDisplayClass::funcIfButtonPressed(StatusDisplayClass *s, unsigned char param)
 {
-  uint32_t button = (1 << static_cast<uint32_t>(param));
+  uint64_t button = (1 << static_cast<uint64_t>(param));
+  if (param == BUTTON_ANY)
+  // make the button we're looking for the same as the actual button pressed...
+  {
+    button = Engine->button_pressed_mask;
+  }
   if (!(Engine->button_pressed_mask & button))
   { // if button not pressed then we skip the text section (to $END_IF or end of line)
     return s->SkipToEndIf();
@@ -907,7 +951,12 @@ bool StatusDisplayClass::funcIfButtonPressed(StatusDisplayClass *s, unsigned cha
 
 bool StatusDisplayClass::funcIfNotButtonPressed(StatusDisplayClass *s, unsigned char param)
 {
-  uint32_t button = (1 << static_cast<uint32_t>(param));
+  uint64_t button = (1 << static_cast<uint64_t>(param));
+  if (param == BUTTON_ANY)
+  // make the button we're looking for the same as the actual button pressed...
+  {
+    button = Engine->button_pressed_mask;
+  }
   if (Engine->button_pressed_mask & button)
   { // if button pressed then we skip the text section (to $END_IF or end of line)
     return s->SkipToEndIf();
@@ -1013,8 +1062,6 @@ void StatusDisplayClass::init(const uints2_t sze, const uint32_t emsk)
         event_mask |= s.event_bit;
         if ((s.code >= STATUS_VAR_SET_GPIO_00_HI) && (s.code <= STATUS_VAR_SET_GPIO_27_LO))
         {
-          // cout << "*** NEED GPIO OUTPUT ***" << endl;
-          // Config->need_gpio_output = true;
           Gpio->ConfigurePinAsOutput((s.code - STATUS_VAR_SET_GPIO_00_HI) / 2);
         }
       }
@@ -1029,7 +1076,6 @@ void StatusDisplayClass::init(const uints2_t sze, const uint32_t emsk)
   event_mask &= ~StatusEvent_initEmpty; // no longer need the init event mask bit
 }
 
-// bool StatusDisplayClass::SkipToEndIf(const string &src, uint32_t line_pos)
 bool StatusDisplayClass::SkipToEndIf(void)
 /*
   skip to the position in the line where the enclosing $END_IF is from the start point
@@ -1064,7 +1110,7 @@ bool StatusDisplayClass::SkipToEndIf(void)
 
 void StatusDisplayClass::update
 /*
-  Parse each line in the liens array...normal characters get printed
+  Parse each line in the lines array...normal characters get printed
   out, but embedded $VAR characters get their associated function called
   to do their specific task...
 */
@@ -1089,10 +1135,19 @@ void StatusDisplayClass::update
 
   if (event & StatusEvent_timerChange)
   {
-    if (++timer_ticks == timer_tick_period)
+    timer_tick = false;
+    if (timer_enable)
     {
-      timer_ticks = 0;
-      timer_hi = 1 - timer_hi;
+      if (++timer_count == timer_tick_period)
+      {
+        timer_tick = true;
+        timer_count = 0;
+        timer_hi = 1 - timer_hi;
+        if (timer_oneshot)
+        {
+          timer_enable = false;
+        }
+      }
     }
   }
 
@@ -1105,7 +1160,7 @@ void StatusDisplayClass::update
     }
     // else
     // {
-      // cout << WARNING << "Couldn't open file '" << output_filename << "' for output" << endl;
+      // log_file << WARNING << "Couldn't open file '" << output_filename << "' for output" << endl;
     // }
   }
 

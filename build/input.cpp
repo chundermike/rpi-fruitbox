@@ -1,4 +1,5 @@
 #include "fruitbox.hpp"
+// #include <termios.h>
 
 #define ABS_CENTRE_LO     112
 #define ABS_CENTRE_HI     144
@@ -28,31 +29,50 @@ InputClass::InputClass(bool i_config_buttons, bool i_test_buttons, bool i_calibr
 
 InputClass::~InputClass()
 {
+  // for (auto &d : input_device)
+  // {
+    // tcflush(d.fd, TCIFLUSH);
+  // }
 }
 
 void InputClass::openDevices(void)
 {
   string line {};
   string name {};
+  string phys {};
   size_t pos {};
   ifstream devices_file {};
   int fd {};
 
   devices_file.open("/proc/bus/input/devices", ios::in);
   if (!devices_file.is_open()) return;
+
   while (getline(devices_file, line))
   {
     input_device_t device {};
     // search for our device...
     istringstream ss { line };
-
     // find name and save for later after Handler field extracted...
     if ((pos = line.find("Name=")) != string::npos)
     {
       pos += 5; // skip over "Name="
-      if (pos <= string::npos)
+      if (pos < line.size())
       {
         name = &line.at(pos);
+      }
+    }
+
+    // find phys and save for later after Handler field extracted...
+    if ((pos = line.find("Phys=")) != string::npos)
+    {
+      pos += 5; // skip over "Phys="
+      if (pos < line.size())
+      {
+        phys = &line.at(pos);
+        if ((pos = phys.find_first_of('/')) != string::npos)
+        {
+          phys.erase(pos, phys.back());
+        }
       }
     }
 
@@ -63,25 +83,30 @@ void InputClass::openDevices(void)
       {
         string event_path {"/dev/input/"};
 
+        // try { device.event_num = static_cast<uint32_t>(stoi(line.substr(pos+5))); }
+        // catch (const std::invalid_argument &err) { }
+        // catch (const std::out_of_range &err) { }
+
         event_path.append(&line.at(pos));
-        pos = event_path.find_first_not_of(' ');
-        if (pos != string::npos)
+        if ((pos = event_path.find_first_not_of(' ')) != string::npos)
         {
           event_path.erase(0, pos);
         }
-        pos = event_path.find_first_of(' ');
-        if (pos != string::npos)
+        if ((pos = event_path.find_first_of(' ')) != string::npos)
         {
-          event_path.erase(event_path.find_first_of(' '), event_path.back());
+          event_path.erase(pos, event_path.back());
         }
         device.name = name;
         device.event_path = event_path;
         name.clear();
 
+        device.phys = phys;
+        phys.clear();
+
         // we then try and open this device file...
         if ((device.fd = open(event_path.c_str(), O_RDONLY | O_RSYNC | O_NONBLOCK) ) == -1)
         {
-          cout << WARNING << "Couldn't Open ";
+          log_file << WARNING << "Couldn't Open ";
         }
         else
         {
@@ -94,8 +119,8 @@ void InputClass::openDevices(void)
           // check for joystick device type and extract number (if any)...
           if ((pos = line.find("js")) != string::npos)
           {
-            device.type = input_type_e::Joystick;
-            try { device.js_num = static_cast<uint32_t>(stoi(line.substr(pos+2))); }
+            device.type = input_type_e::JoyStick;
+            try { device.handler_num = static_cast<uint32_t>(stoi(line.substr(pos+2))); }
             catch (const std::invalid_argument &err) { }
             catch (const std::out_of_range &err) { }
           }
@@ -103,9 +128,10 @@ void InputClass::openDevices(void)
           // check for mouse device type (touchscreen or touchpad) and extract number (if any)...
           if ((pos = line.find("mouse")) != string::npos)
           {
-            // try { device.mouse_num = static_cast<uint32_t>(stoi(line.substr(pos+5))); }
-            // catch (const std::invalid_argument &err) { }
-            // catch (const std::out_of_range &err) { }
+            // cout << "MOUSE" << endl;
+            try { device.handler_num = static_cast<uint32_t>(stoi(line.substr(pos+5))); }
+            catch (const std::invalid_argument &err) { }
+            catch (const std::out_of_range &err) { }
 
             // check for touch button capability...
             {
@@ -119,26 +145,34 @@ void InputClass::openDevices(void)
                 unsigned char bits[nchar];
                 // Get the bit fields of available keys.
                 ioctl(device.fd, EVIOCGBIT(EV_KEY, sizeof(bits)), &bits);
+            // cout << "EV_KEY MOUSE" << endl;
                 if (bits[key/8] & (1 << (key % 8)))
                 {
                   device.type = input_type_e::Touch;
+            // cout << "TOUCH MOUSE" << endl;
                   device.state = input_device_state_e::idle;
                   touch_installed = true;
                 }
+                else
+                {
+                  device.type = input_type_e::MouseButton;
+                }
               }
+            // cout << "END MOUSE" << endl;
             }
           }
 
           // save the opened device to the vector list...
-          cout << NOTE << "Opened ";
+          log_file << NOTE << "Opened ";
           input_device.push_back(device);
         }
-        cout << device.name << " (" << device.event_path << ")" << endl;
+        log_file << device.name << " (" << device.event_path << ")" << endl;
       }
     }
   }
   devices_file.close();
 
+#ifdef _RPI
   // now add gpio to device vector...
   input_device_t device {};
   device.type = input_type_e::GPIO;
@@ -146,9 +180,35 @@ void InputClass::openDevices(void)
   device.event_path = "";
   device.fd = 0;
   input_device.push_back(device);
-}
+#endif
 
-// #include <termios.h>
+  // If we have multiple joysticks of the same type, the joystick buttons will map to the same Key codes,
+  // so we must uniquely identify them.  This already happens automatically for Joysticks, through the js<x> handler field,
+  // but joystick buttons map to kbd codes.
+  // To overcome this, we now try and associate joystick buttons with the joystick device, by scanning all the devices we have...
+  // Each time we find a device with a handler_num != -1, we try and find a matching phys string with another device.
+  // If we find one, this is the device which holds the joystick buttons, so we change its handler_num to be the same,
+  // and change its device type to JoyButton rather then Key...
+
+  for (auto &d : input_device)
+  {
+    if (d.handler_num == UNDEFINED_HANDLER_NUM) continue;
+    for (auto &d2 : input_device)
+    {
+      if ((d2.handler_num == UNDEFINED_HANDLER_NUM) && (d.phys == d2.phys)) // d2 is not allocated a joystick number (so it must be a joystick kbd) d1 and d2 are the same device pair
+      {
+        // log_file << "Pairing " << d2.handler_num << " with " << d.handler_num << endl;
+        d2.handler_num = d.handler_num;
+        if (d.type == input_type_e::JoyStick) // check because it could be a keyboard/keyboard pair
+        {
+          d2.type = input_type_e::JoyButton;
+        }
+        log_file << NOTE << "Paired " << d2.event_path << " with " << d.event_path << endl;
+      }
+    }
+  }
+
+}
 
 void InputClass::Start(void)
 {
@@ -161,13 +221,11 @@ void InputClass::Start(void)
     }
   }
 
-
   // struct termios raw;
   // tcgetattr(STDIN_FILENO, &raw);
-  // raw.c_lflag &= ~(ECHO);
-  // tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+  // raw.c_lflag &= ~(ECHO | ECHOE);
+  // tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 
-  // 
   // start the input thread which reads input devices and processes button presses using FindButton()
   // FindButton() either places button matches on the Input button queue, or processes the input events
   // directly in test_buttons or config_buttons mode(s).
@@ -232,6 +290,15 @@ void InputClass::CalibrateTouch(void)
 
   Display->DrawInfoBox(CalibrateTouchTitleStr, "Calibraton Complete", "");
   sleep(1);
+}
+
+raw_t* InputClass::WaitForButtonPress(void)
+{
+  raw.enable = true;
+  unique_lock<mutex> raw_guard(raw.mtx);
+  raw.valid.wait(raw_guard);
+  raw_guard.unlock();
+  return &raw;
 }
 
 void InputClass::TestButtons(void)
@@ -351,10 +418,23 @@ void InputClass::scanDevice(input_device_t &device, input_event_t &event)
                 device.state = input_device_state_e::waiting_for_touch_abs_x;
               }
             }
-            else // keyboard or joystick button press/release
+            else // keyboard or joystick button or mouse button press/release
             {
-              event.type = input_type_e::Key;
-              event.param.at(EVENT_PARAM_ID) = device.js_num;
+              if (device.type == input_type_e::Key)
+              {
+                event.type = input_type_e::Key;
+              }
+              else if (device.type == input_type_e::JoyStick)
+              {
+                event.type = input_type_e::JoyButton;
+                event.param.at(EVENT_PARAM_ID) = device.handler_num;
+              }
+              else
+              {
+                event.type = input_type_e::MouseButton;
+                event.param.at(EVENT_PARAM_ID) = device.handler_num;
+              }
+
               event.param.at(EVENT_PARAM_VAL1) = ev[i].code;
               event.param.at(EVENT_PARAM_VAL2) = 0;
               event.param.at(EVENT_PARAM_PRESSED) = ev[i].value;
@@ -368,7 +448,7 @@ void InputClass::scanDevice(input_device_t &device, input_event_t &event)
             else if (ev[i].code >= ABS_HAT0X && ev[i].code <= ABS_HAT3Y) is_stick = true;
 
             if (!is_stick) break;
-            
+
             // get the min and max values
             int abs[6] = {0};
             int32_t abs_min {};
@@ -385,8 +465,8 @@ void InputClass::scanDevice(input_device_t &device, input_event_t &event)
             {
               if (ev[i].value == abs_max)
               {
-                event.type = input_type_e::Joystick;
-                event.param.at(EVENT_PARAM_ID) = device.js_num;
+                event.type = input_type_e::JoyStick;
+                event.param.at(EVENT_PARAM_ID) = device.handler_num;
                 event.param.at(EVENT_PARAM_VAL1) = ev[i].code; // ABS_* (axis)
                 event.param.at(EVENT_PARAM_VAL2) = 0; // left or up
                 event.param.at(EVENT_PARAM_PRESSED) = 1;
@@ -396,8 +476,8 @@ void InputClass::scanDevice(input_device_t &device, input_event_t &event)
 
               else if (ev[i].value == abs_min)
               {
-                event.type = input_type_e::Joystick;
-                event.param.at(EVENT_PARAM_ID) = device.js_num;
+                event.type = input_type_e::JoyStick;
+                event.param.at(EVENT_PARAM_ID) = device.handler_num;
                 event.param.at(EVENT_PARAM_VAL1) = ev[i].code; // ABS_* (axis)
                 event.param.at(EVENT_PARAM_VAL2) = 1; // right or down
                 event.param.at(EVENT_PARAM_PRESSED) = 1;
@@ -410,8 +490,8 @@ void InputClass::scanDevice(input_device_t &device, input_event_t &event)
             {
               if (ev[i].value == abs_mid && ev[i].code == device.joystick_moved_code)
               {
-                event.type = input_type_e::Joystick;
-                event.param.at(EVENT_PARAM_ID) = device.js_num;
+                event.type = input_type_e::JoyStick;
+                event.param.at(EVENT_PARAM_ID) = device.handler_num;
                 event.param.at(EVENT_PARAM_VAL1) = ev[i].code; // ABS_* (axis)
                 event.param.at(EVENT_PARAM_VAL2) = 0; // unused
                 event.param.at(EVENT_PARAM_PRESSED) = 0;
@@ -554,10 +634,12 @@ bool InputClass::FindButton(const input_event_t &event)
       stringstream ss { ios_base::app | ios_base::out };
       switch (event.type)
       {
-        case input_type_e::Key      : ss << ButtonTypeKeyStr << " " << event.param.at(EVENT_PARAM_VAL1); break;
-        case input_type_e::Joystick : ss << ButtonTypeJoystickStr << " " << event.param.at(EVENT_PARAM_ID) << " " << event.param.at(EVENT_PARAM_VAL1) << " " << event.param.at(EVENT_PARAM_VAL2); break;
-        case input_type_e::Touch    : ss << ButtonTypeTouchStr; break; // << " " << event.param.at(EVENT_PARAM_ID); break;
-        case input_type_e::GPIO     : ss << ButtonTypeGPIOStr << " " << event.param.at(EVENT_PARAM_VAL1); break;
+        case input_type_e::Key         : ss << ButtonTypeKeyStr << " " << event.param.at(EVENT_PARAM_VAL1); break;
+        case input_type_e::MouseButton : ss << ButtonTypeMouseButtonStr << " " << event.param.at(EVENT_PARAM_ID) << " " << event.param.at(EVENT_PARAM_VAL1); break;
+        case input_type_e::JoyStick    : ss << ButtonTypeJoyStickStr << " " << event.param.at(EVENT_PARAM_ID) << " " << event.param.at(EVENT_PARAM_VAL1) << " " << event.param.at(EVENT_PARAM_VAL2); break;
+        case input_type_e::JoyButton   : ss << ButtonTypeJoyButtonStr << " " << event.param.at(EVENT_PARAM_ID) << " " << event.param.at(EVENT_PARAM_VAL1); break;
+        case input_type_e::Touch       : ss << ButtonTypeTouchStr; break;
+        case input_type_e::GPIO        : ss << ButtonTypeGPIOStr << " " << event.param.at(EVENT_PARAM_VAL1); break;
         default : ss << "Unknown"; break;
       }
 
@@ -604,19 +686,45 @@ bool InputClass::FindButton(const input_event_t &event)
             break;
 
           case input_type_e::Key :
-            if (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL1) == event.param.at(EVENT_PARAM_VAL1)) done = true;
+            if (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL1) == event.param.at(EVENT_PARAM_VAL1))
+            {
+              done = true;
+            }
+            break;
+
+          case input_type_e::MouseButton :
+            if ((Config->buttons->button.at(b).param.at(EVENT_PARAM_ID) == event.param.at(EVENT_PARAM_ID)) &&
+                (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL1) == event.param.at(EVENT_PARAM_VAL1)))
+                {
+                  done = true;
+                }
             break;
 
           case input_type_e::GPIO :
-            if (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL1) == event.param.at(EVENT_PARAM_VAL1)) done = true;
+            if (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL1) == event.param.at(EVENT_PARAM_VAL1))
+            {
+              done = true;
+            }
             break;
 
-          case input_type_e::Joystick :
-            if ((Config->buttons->button.at(b).param.at(EVENT_PARAM_ID) == event.param.at(EVENT_PARAM_ID)) && 
-                (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL1) == event.param.at(EVENT_PARAM_VAL1)) && 
-                (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL2) == event.param.at(EVENT_PARAM_VAL2))) done = true;
+          case input_type_e::JoyStick :
+            if ((Config->buttons->button.at(b).param.at(EVENT_PARAM_ID) == event.param.at(EVENT_PARAM_ID)) &&
+                (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL1) == event.param.at(EVENT_PARAM_VAL1)) &&
+                (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL2) == event.param.at(EVENT_PARAM_VAL2)))
+                {
+                  done = true;
+                }
             break;
-        }
+
+          case input_type_e::JoyButton :
+            if ((Config->buttons->button.at(b).param.at(EVENT_PARAM_ID) == event.param.at(EVENT_PARAM_ID)) &&
+                (Config->buttons->button.at(b).param.at(EVENT_PARAM_VAL1) == event.param.at(EVENT_PARAM_VAL1)))
+                {
+                  done = true;
+                }
+            break;
+
+          }
       }
       if (done) break;
     }

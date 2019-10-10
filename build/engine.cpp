@@ -45,7 +45,7 @@ void EngineClass::UpdateSelectCode
   const char c
 )
 {
-  if (Config->general->select_mode == select_mode_e::Joystick) return; // select code is persistent in joystick mode
+  if (Config->general->select_mode == select_mode_e::JoyStick) return; // select code is persistent in joystick mode
 
   if (c == '-') // blank select code (for both SelectCode and TouchSong modes)
   {
@@ -244,7 +244,7 @@ void EngineClass::CheckAndAddSelection(void)
   {
     if (Config->general->page_mode == page_mode_e::Singles)
     {
-      PlayQueue->Add(song, play_type_e::credit_play);
+      duplicate_choice = PlayQueue->Add(song, play_type_e::credit_play);
     }
     else // add all songs in the album, i.e. from this song to all others following it on the rest of the page...
     {
@@ -252,7 +252,7 @@ void EngineClass::CheckAndAddSelection(void)
       {
         song = SelectSong(selected_song_page - start_page, s);
         if (song == nullptr) break;
-        PlayQueue->Add(song, play_type_e::credit_play);
+        duplicate_choice = PlayQueue->Add(song, play_type_e::credit_play);
       }
     }
     auto_play_timer = 0; // cancel any pending auto play addition
@@ -296,7 +296,7 @@ void EngineClass::Run(void)
     }
     // save screenshot...
     string screenshot_filename { Config->filename.substr(0, Config->filename.find_last_of("/")) + "/" + Config->general->screenshot };
-    cout << "Saving screenshot '" << screenshot_filename << "'" << endl;
+    log_file << "Saving screenshot '" << screenshot_filename << "'" << endl;
     Display->DrawJukebox(false);
     al_save_bitmap(screenshot_filename.c_str(), Display->jukebox);
     return;
@@ -304,7 +304,7 @@ void EngineClass::Run(void)
 
   Audio->SetVolume(Config->sounds->song_volume);
 
-  cout << "Let's Rock!" << endl;
+  log_file << "Let's Rock!" << endl;
 
   if (Config->choose_cfg == false)
   {
@@ -356,7 +356,7 @@ void EngineClass::Run(void)
         {
           case BUTTON_LEFT :
             page_jump = 1;
-            if (Config->general->select_mode == select_mode_e::Joystick)
+            if (Config->general->select_mode == select_mode_e::JoyStick)
             {
               if (joy_x > 0)
               {
@@ -377,7 +377,7 @@ void EngineClass::Run(void)
 
           case BUTTON_RIGHT :
             page_jump = 1;
-            if (Config->general->select_mode == select_mode_e::Joystick)
+            if (Config->general->select_mode == select_mode_e::JoyStick)
             {
               if (joy_x < Config->general->num_pages - 1)
               {
@@ -452,7 +452,7 @@ void EngineClass::Run(void)
             break;
 
           case BUTTON_UP :
-            if (Config->general->select_mode == select_mode_e::Joystick)
+            if (Config->general->select_mode == select_mode_e::JoyStick)
             {
               if (joy_y > 0)
               {
@@ -463,7 +463,7 @@ void EngineClass::Run(void)
             break;
 
           case BUTTON_DOWN :
-            if (Config->general->select_mode == select_mode_e::Joystick)
+            if (Config->general->select_mode == select_mode_e::JoyStick)
             {
               if (Config->general->page_mode == page_mode_e::Singles) // y_pos stays at zero in albums mode
               {
@@ -654,8 +654,8 @@ void EngineClass::Run(void)
     if (sel_code_timer)
     { 
       if (--sel_code_timer == 0) {
-      UpdateSelectCode('-'); // timeout for partially selected code
-}
+        UpdateSelectCode('-'); // timeout for partially selected code
+      }
     }
 
     if (auto_play_timer)
@@ -782,7 +782,7 @@ void EngineClass::Run(void)
         song_video.handle = al_open_video(status.now_playing->filename.c_str());
         if (song_video.handle == nullptr)
         {
-          cout << WARNING << "Can't open Video file '" << status.now_playing->filename << "'" << endl;
+          log_file << WARNING << "Can't open Video file '" << status.now_playing->filename << "'" << endl;
           Audio->StopSong(false);
         }
         else
@@ -805,15 +805,15 @@ void EngineClass::Run(void)
           if (l)
           {
             uint32_t tr { l - et };
-            status.now_playing_time_remaining_scale = 1.0 - (static_cast<float>(tr) / static_cast<float>(l));
             status.now_playing_length_str = StrMS(l);
             status.now_playing_time_remaining_str = StrMS(tr);
+            status.now_playing_time_remaining_scale = 1.0 - (static_cast<float>(tr) / static_cast<float>(l));
           }
           else // undefined time (ogv or url)
           {
-            status.now_playing_time_remaining_scale = 0;
             status.now_playing_length_str = invalidTimeMS;
             status.now_playing_time_remaining_str = invalidTimeMS;
+            status.now_playing_time_remaining_scale = 0.0;
           }
         }
       }

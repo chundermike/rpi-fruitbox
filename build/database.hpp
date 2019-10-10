@@ -21,12 +21,16 @@ private:
   static ofstream dbFile;
   vector< vector<song_t*> > song_lookup { };
   void Create(const string filename);
+  static int CheckDate(const char *path, const struct stat *sptr, int type);
   static int Search(const char *path, const struct stat *sptr, int type);
   bool CheckNewSortSectionStart(song_t &song);
   static void OpenNew(void);
   void BuildPages(void);
   static bool file_created;
   static bool music_path_written;
+  static bool db_out_of_date;
+  static time_t db_mtime;
+
 
   static bool SortByAlbum(const song_t &song_a, const song_t &song_b)
   {

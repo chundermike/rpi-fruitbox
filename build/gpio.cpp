@@ -49,7 +49,7 @@ void GpioClass::OpenDevice(void)
   // gpio_regs.gpfen[1] = GPFEN[1];
   gpio_regs.saved = true;
 
-  cout << NOTE << "Opened GPIO" << endl;
+  log_file << NOTE << "Opened GPIO" << endl;
   #endif
 }
 
@@ -69,6 +69,7 @@ GpioClass::~GpioClass()
 
 void GpioClass::ConfigurePinAsInput(const uint32_t pin)
 {
+  log_file << NOTE << "Setting GPIO " << pin << " as input" << endl;
   #ifdef _RPI
     // Determine FPSEL register offset and bit shift
     OpenDevice();
@@ -95,14 +96,13 @@ void GpioClass::ConfigurePinAsInput(const uint32_t pin)
     // GPFEN[offset] = pin_mask;
 
     gpio_input_mask |= (1 << pin);
-  #else
-    cout << NOTE << "Setting GPIO " << pin << " as input" << endl;
   #endif
   Config->general->gpio.at(pin) = gpio_e::Input;
 }
 
 void GpioClass::ConfigurePinAsOutput(const uint32_t pin)
 {
+  log_file << NOTE << "Setting GPIO " << pin << " as output" << endl;
   #ifdef _RPI
     // Determine FPSEL register offset and bit shift
     OpenDevice();
@@ -115,8 +115,6 @@ void GpioClass::ConfigurePinAsOutput(const uint32_t pin)
 
     //Set the bits to the output function (1)
     GPFSEL[offset] |= (1 << shift);
-  #else
-    cout << NOTE << "Setting GPIO " << pin << " as output" << endl;
   #endif
   Config->general->gpio.at(pin) = gpio_e::Output;
 }
@@ -128,7 +126,7 @@ void GpioClass::SetPin(const uint32_t pin)
     uint32_t pin_mask { static_cast<uint32_t>(0x1 << (pin % 32)) };
     GPSET[offset] = pin_mask;
   #else
-    cout << NOTE << "Setting GPIO " << pin << " output high" << endl;
+    log_file << NOTE << "Setting GPIO " << pin << " output high" << endl;
   #endif
 }
 
@@ -139,7 +137,7 @@ void GpioClass::ClrPin(const uint32_t pin)
     uint32_t pin_mask { static_cast<uint32_t>(0x1 << (pin % 32)) };
     GPCLR[offset] = pin_mask;
   #else
-    cout << NOTE << "Setting GPIO " << pin << " output low" << endl;
+    log_file << NOTE << "Setting GPIO " << pin << " output low" << endl;
   #endif
 }
 
