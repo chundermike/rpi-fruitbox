@@ -70,8 +70,8 @@
 
   4.5: --user-guide               
 
-    Show this user guide (but I guess you already worked that one 
-    out...)
+    Create this user-guide to file "userguide.txt" (but I guess you 
+    already worked that one out...)
 
 
   4.6: --debug-song-nums          
@@ -454,16 +454,18 @@
   Building the database file may take some considerable time if 
   your music library is large, but it only needs to be done once, 
   and subsequent start-ups of fruitbox will be very fast.  If you 
-  add or remove music from your library, you will need to delete 
-  the database file in order for fruitbox to re-generate it correctly. 
-  Alternatively, the database file can be edited by hand in a 
-  standard text editor if you have small changes to make or are 
-  feeling brave!.  This can be useful if you wish to add or remove 
-  particular songs, or tweak the song details, without having to 
-  re-generate the database from scratch.  Note that the song order 
-  in the database file is irrelevant; after fruitbox has read the 
-  songs from the database file it will sort them according to the 
-  'SortSongsBy' configuration parameter.
+  add or remove music from your library, fruitbox will regenerate 
+  it automatically, providing the changes are in the same MusicPath 
+  directory.  If not, you will have to manually delete the database 
+  filefor frtuibox to re-generate it correctly.  Alternatively, 
+  the database file can be edited by hand in a standard text editor 
+  if you have small changes to make or are feeling brave!.  This 
+  can be useful if you wish to add or remove particular songs, 
+  or tweak the song details, without having to re-generate the 
+  database from scratch.  Note that the song order in the database 
+  file is irrelevant; after fruitbox has read the songs from the 
+  database file it will sort them according to the 'SortSongsBy' 
+  configuration parameter.
   
   If the database file already exists, then fruitbox will ignore 
   the MusicPath parameter(s) in the skin file.
