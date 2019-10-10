@@ -1,7 +1,4 @@
 
-fruitbox v1.14 (Jan 31 2019, 19:55:44) by Mike Kingsley
-A customisable MP3 Retro Jukebox for the Raspberry Pi
-
   1: Introduction
 
   Welcome to fruitbox, a customisable, Retro MP3 Jukebox for the 
@@ -82,7 +79,15 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     Show select code alongside song entries
 
 
-  4.7: --config-buttons           
+  4.7: --no-database-update       
+
+    Normally fruitbox will update the database if it has a modification 
+    time earler than the contents of any of the MusicPath directories.This 
+    option disables this check, so it is up to the user to delete 
+    the database file in order for it to be regenerated.
+
+
+  4.8: --config-buttons           
 
     This option allows the user to interactively change the input 
     control button mappings, and creates the button mapping file 
@@ -90,7 +95,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     if not specified)
 
 
-  4.8: --calibrate-touch          
+  4.9: --calibrate-touch          
 
     Used in conjunction with '--config-buttons' , this allows the 
     user to interactively specify the touch-min and touch-max values 
@@ -98,20 +103,20 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     these values to the button mapping file for future use.
 
 
-  4.9: --test-buttons             
+  4.10: --test-buttons             
 
     This option allows button codes to be checked without creating 
     a button mapping file.
 
 
-  4.10: --load-playlist <filename> 
+  4.11: --load-playlist <filename> 
 
     Loads a playlist file and populates the play queue with the songs 
     in it; fruitbox will begin playing the songs after it has playing 
     up.
 
 
-  4.11: --save-playlist <filename> 
+  4.12: --save-playlist <filename> 
 
     When fruitbox exits (by the user pressing the 'Quit' button), 
     this option saves the contents of the play queue (and currently 
@@ -122,7 +127,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     required.
 
 
-  4.12: --choose-cfg <filename>    
+  4.13: --choose-cfg <filename>    
 
     This option allows the user to choose a configuration file (skin) 
     from a menu when fruitbox starts up, rather than specifying it 
@@ -142,7 +147,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     can be generated with the '--screenshot' command line option.
 
 
-  4.13: --screenshot               
+  4.14: --screenshot               
 
     Save a screenshot of the skin, then quit without running.  The 
     screenshot will be written to 'screenshot.jpg' in the skin directory 
@@ -151,7 +156,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     with the '--cfg' or '--choose-cfg' command line options.
 
 
-  4.14: --no-scale                 
+  4.15: --no-scale                 
 
     Normally fruitbox will scale (resize) the skin to the display, 
     so no matter what it's size, it will always fit exactly.  This 
@@ -163,7 +168,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     the skin will not be visible.
 
 
-  4.15: --button-map <filename>    
+  4.16: --button-map <filename>    
 
     Name of button mapping file (defaults to 'fruitbox.btn' if not 
     specified)
@@ -192,10 +197,7 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   file, fruitbox will use a default value.
   
   Note that entries marked with a '*' means that these groups / 
-  parameters can be defined multiple times.  Also note that undefined 
-  parameters in a section can be inherited from a previously defined 
-  section of the same type.
-  
+  parameters can be defined multiple times.
   Note: filenames for 'Database' and 'MusicPath' parameters have 
   file paths relative to the directory fruitbox was run from, whereas 
   filenames for all other parameters (sound files, bitmap files, 
@@ -205,246 +207,57 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
   kept together, but easily share common MusicPath(s) and Database 
   files with other skins.
 
-      [general]
-      SkinSize                      Size of the skin (width and height in pixels).
-                                    The skin is scaled to match the full screen size of the display
-      SkinName                      Name of the skin
-      SkinDescription               Description of the skin
-      Screenshot                    Filename of screenshot capture
-      Database                      File name of Database file
-      MusicPath *                   File name of path to mp3 music files.  Can contain sub-directories.
-                                    Ignored if the 'Database' file already exists
-      SortSongsBy *                 'Title', 'Artist', 'Album', 'AlbumArtist', 'Year', 'Genre', 'TrackNumber', 'Publisher', 'ISRC', 'Custom', 'Random', 'Unsorted'
-      SelectButtons *               List of characters for the select code for the button presses
-      SelectButtonsSequence         'RowCol', 'ColRow'
-                                    Specifies if the first select buttons are cycled before the second
-                                    select code buttons (ColRow) or the after the second buttons (RowCol)
-      CustomMP3Tag                  Name of an MP3 ID3v2 tag the user wishes to extract to a song's 'Custom' field (i.e. "TCON" is content type)
-                                    Note: this is only used during database file *creation*
-      AutoSelect                    'No' = ButtonSelect needs to be pressed to select song (after the select code is entered)
-                                    'Yes' = song selected immediately select code is entered
-      PageJump                      The number of screens of pages moved in one go when 'ButtonLeftJump' or 'ButtonRightJump' is pressed
-      SelectTimeout                 Timeout for select code to return to '--' after not detecting all the selection digits
-      SelectHoldTimeout             Timeout for select code to return to '--' after song selected
-      AutoPageTurnTime              Time between pages automatically turning (0 = no automatic page turn)
-      MaxPlaylistLength             Maximum number of songs which can be stored in the coming up queue
-      LoopPlaylist                  'Yes' = a song is added to the back of the play queue when it has finished playing (credits permitting)
-      AutoPlay                      'Yes' = a random song is played if the play queue is empty and no songs are playing
-      AutoPlayGap                   The time between a random song being selected and played after the last song has finished playing
-      AutoGenre *                   Name of Genre.  Pressing ButtonAuto will cycle through all AutoGenre definitions (and 'Off'
-                                    and 'Any') and only select a random song from that Genre **
-      PlaysPerCoin1                 The number of song credits added when a coin is inserted (if all PlaysPerCoin = 0; freeplay mode)
-      PlaysPerCoin2                 The number of song credits added when a coin is inserted (if all PlaysPerCoin = 0; freeplay mode)
-      PlaysPerCoin3                 The number of song credits added when a coin is inserted (if all PlaysPerCoin = 0; freeplay mode)
-      PlaysPerCoin4                 The number of song credits added when a coin is inserted (if all PlaysPerCoin = 0; freeplay mode)
-      SongsPerPage                  The number of song entries on each song page
-      PageMode                      'Singles' or 'Albums'.
-      PageSize                      The size (width and height in pixels) of each song page
-      PairSongs                     'No' = each song in a page is listed with its artist line
-                                    'Yes' = two songs are displayed (above and below) the artist line only if they are by the same artist
-                                    'Dual' = two songs are displayed (above and below) the artist line regardless of artist
-      PageMoveStyle                 effect speed fading.  See section 'Pages'
-      SongDescription *             Defines (part of) the song description for the song entry (first in a pair) in the pages...
-                                    'SongTitle', 'Artist', 'AlbumTitle', 'AlbumArtist', 'Year', 'Genre', 'TrackNumber',
-                                    'Publisher', 'ISRC', 'Custom', 'PairedSongTitle', 'PairedArtist',
-                                    'PairedAlbumTitle', 'PairedAlbumArtist', 'PairedYear', 'PairedGenre',
-                                    'PairedTrackNumber', 'PairedPublisher', 'PairedISRC', 'PairedCustom'
-      PairedSongDescription *       Defines (part of) the song description for the second song in a pair
-                                    NOTE: In Albums mode (PageMode = Albums) this determines the Album Title line
-      ArtistDescription *           Defines (part of) the artist description in the pages (same values as 'SongDescription')
-      MatchedArtistDescription *    Used instead of 'ArtistDescription' if the artists of the songs in a pair are the same
-                                    (or the second song in a pair is absent)
-      ExtraDescription *            Defines (part of) the extra description in the pages (same values as 'SongDescription')
-      SongHistoryDepth              Determines the search range of number of previously played songs to ensure
-                                    no repeated songs are chosen in Auto play or Random selection.
-                                    If not specified or set to zero, fruitbox will only check for
-                                    repeated songs from within the play queue
-      SongLoadTime                  The time the song takes to load (from removing from the coming up queue to starting to play)
-      SongUnloadTime                The time the song takes to unload (from finishing playing to the next song in the queue loading)
-      SongText                      Text style for Song title in song page. See section 'Fonts and Text'
-      PairedSongText                Text style for the paired Song title in song page. See section 'Fonts and Text'
-      ArtistText                    Text style for Artist name in song page. See section 'Fonts and Text'
-      AlbumText                     Text style for Album name in song page. See section 'Fonts and Text'
-      ExtraText                     Text style for the extra text field in song page. See section 'Fonts and Text'
-      AlbumArtSize                  width height (in pixels)
-      AlbumArtOffset                Offset from top left hand corner of songs page (x y in pixels)
-      AlbumArtAngle                 Angle of Album artwork in degrees (0..359)
-      AlbumPageLineSpacing          Gap (in pixels) between song titles in the albums song pages
-      NowPlayingMissingArtwork      Filename of graphic image (bmp, png, tga, jpg, pcx) to be used if NowPlayingArtworkMode = 'Specified',
-                                    or no song artwork is found and NowPlayingArtworkMode = 'Auto'
-      AlbumPageMissingArtwork       Filename of graphic image (bmp, png, tga, jpg, pcx) to be used if AlbumPageArtworkMode = 'Specified',
-                                    or no song artwork is found and AlbumPageArtworkMode = 'Auto'
-      NowPlayingArtworkMode         'None' don't show artwork,
-                                    'Embedded' use image in MP3 file,
-                                    'Folder' use 'folder.jpg' in song directory,
-                                    'Specified' use MissingArtwork image,
-                                    'Logo' use fruitbox logo,
-                                    'Auto' use embedded/folder/missing/logo if available
-      AlbumPageArtworkMode          'None' don't show artwork,
-                                    'Folder' use 'folder.jpg' in song directory,
-                                    'Specified' use MissingArtwork image,
-                                    'Logo' use fruitbox logo,
-                                    'Auto' use folder/missing/logo if available
-
-      [touch areas]
-      ButtonQuit                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonCoin1                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonCoin2                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonCoin3                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonCoin4                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonVol+                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonVol-                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonRandom                  x y width height  (touch area of button, where x y = top left corner)
-      ButtonSelect                  x y width height  (touch area of button, where x y = top left corner)
-      ButtonSkip                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonPause                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonUp                      x y width height  (touch area of button, where x y = top left corner)
-      ButtonDown                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonLeft                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonRight                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonLeftJump                x y width height  (touch area of button, where x y = top left corner)
-      ButtonRightJump               x y width height  (touch area of button, where x y = top left corner)
-      ButtonLeftAlpha               x y width height  (touch area of button, where x y = top left corner)
-      ButtonRightAlpha              x y width height  (touch area of button, where x y = top left corner)
-      ButtonAuto                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonLoop                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonFree                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonClear                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonMute                    x y width height  (touch area of button, where x y = top left corner)
-      ButtonPowerOff                x y width height  (touch area of button, where x y = top left corner)
-      Button0                       x y width height  (touch area of button, where x y = top left corner)
-      Button1                       x y width height  (touch area of button, where x y = top left corner)
-      Button2                       x y width height  (touch area of button, where x y = top left corner)
-      Button3                       x y width height  (touch area of button, where x y = top left corner)
-      Button4                       x y width height  (touch area of button, where x y = top left corner)
-      Button5                       x y width height  (touch area of button, where x y = top left corner)
-      Button6                       x y width height  (touch area of button, where x y = top left corner)
-      Button7                       x y width height  (touch area of button, where x y = top left corner)
-      Button8                       x y width height  (touch area of button, where x y = top left corner)
-      Button9                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonA                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonB                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonC                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonD                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonE                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonF                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonG                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonH                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonI                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonJ                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonK                       x y width height  (touch area of button, where x y = top left corner)
-      ButtonFlag1                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonFlag2                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonFlag3                   x y width height  (touch area of button, where x y = top left corner)
-      ButtonFlag4                   x y width height  (touch area of button, where x y = top left corner)
-
-      [sounds]
-      InsertCoin                    Volume (0..100), Filename of sound effect when a coin is inserted (wav, flac, ogg)
-      LoadSong                      Volume (0..100), Filename of sound effect when a song is loading (wav, flac, ogg)
-      UnloadSong                    Volume (0..100), Filename of sound effect when a song is unloading (wav, flac, ogg)
-      PageMove                      Volume (0..100), Filename of sound effect when pages are moving (wav, flac, ogg)
-      InvalidSong                   Volume (0..100), Filename of sound effect when an invalid song choice is selected (wav, flac, ogg)
-      SongVolume                    Initial song volume (0..100)
-
-      [font] * 
-      File                          Filename of a font to add to the font pool (ttf, opentype, type1, CID, CFF, fon, fnt, x11, pcf)
-      Height                        The height of the font in pixels
-
-      [page] * 
-      Position                      x y (in pixels)
-      Angle                         Angle of object in degrees (0..359)
-      Background                    Filename of graphic image (bmp, png, tga, jpg, pcx) to be used as the page background
-      MoveDelay                     Delay (in video frame ticks) between left/right button press and page moving
-
-      [status] * 
-      Size                          width height (in pixels)
-      Position                      x y (in pixels)
-      Angle                         Angle of object in degrees (0..359)
-      Contents                      Filename of text file describing status box contents
-      Output                        Filename of output text file containing status
-      Text                          Status box text style.  See section 'Fonts and Text'
-      LineSpacing                   Gap (in pixels) between text lines in the status box
-      LoopVideo                     'Yes' - start video from beginning after it finishes
-      TimerTickPeriod               Time (in video frame ticks) of status box timer period
-      BitmapDirectory               Location of image files (bmp, jpg, png)
-      Bitmap *                      Filename of graphic image (bmp, png, tga, jpg, pcx)
-      Video *                       Filename of video clip (ogv)
-
-      [bitmap] * 
-      Size                          width height (in pixels)
-      Position                      x y (in pixels)
-      Angle                         Angle of object in degrees (0..359)
-      File                          Filename of graphic image (bmp, png, tga, jpg, pcx)
-      HorzScale                     Set the bitmap horizontal size according to 'Volume' or 'NowPlayingElapsedTime'
-      HorzScaleMode                 'Scaled' - bitmap is scaled to size, 'Clipped' - bitmap is clipped not scaled
-      VertScale                     Set the bitmap vertical size according to 'Volume' or 'NowPlayingElapsedTime'
-      VertScaleMode                 'Scaled' - bitmap is scaled to size, 'Clipped' - bitmap is clipped not scaled
-      ReverseClip                   'No' - bitmap is clipped bottom->top and/or right->left
-                                    'Yes' - bitmap is clipped top->bottom and/or left->right
-
-      [joystick] * 
-      Bitmap                        Filename of graphic image (bmp, png, tga, jpg, pcx)
-      Offset                        x, y (offset in pixels from top left corner of joystick highlight in song title region)
-      Size                          width height (in pixels).  If not specified the size will be set to cover the song title exactly
-      Angle                         Angle of object in degrees (0..359)
-
-      [touch song]
-      Bitmap                        Filename of graphic image (bmp, png, tga, jpg, pcx)
-      Offset                        x, y (offset in pixels from top left corner of song touch highlight in song title region)
-      Size                          width height (in pixels).  If not specified the size will be set to cover the song title exactly
-      Angle                         Angle of object in degrees (0..359)
-
 
   ** Recognised AutoGenre values are...
 
-  Blues                         Classic Rock                  Country                       Dance                         
-  Disco                         Funk                          Grunge                        Hip-Hop                       
-  Jazz                          Metal                         New Age                       Oldies                        
-  Other                         Pop                           R&B                           Rap                           
-  Reggae                        Rock                          Techno                        Industrial                    
-  Alternative                   Ska                           Death Metal                   Pranks                        
-  Soundtrack                    Euro-Techno                   Ambient                       Trip-Hop                      
-  Vocal                         Jazz+Funk                     Fusion                        Trance                        
-  Classical                     Instrumental                  Acid                          House                         
-  Game                          Sound Clip                    Gospel                        Noise                         
-  AlternRock                    Bass                          Soul                          Punk                          
-  Space                         Meditative                    Instrumental Pop              Instrumental Rock             
-  Ethnic                        Gothic                        Darkwave                      Techno-Industrial             
-  Electronic                    Pop-Folk                      Eurodance                     Dream                         
-  Southern Rock                 Comedy                        Cult                          Gangsta Rap                   
-  Top 40                        Christian Rap                 Pop / Funk                    Jungle                        
-  Native American               Cabaret                       New Wave                      Psychedelic                   
-  Rave                          Showtunes                     Trailer                       Lo-Fi                         
-  Tribal                        Acid Punk                     Acid Jazz                     Polka                         
-  Retro                         Musical                       Rock & Roll                   Hard Rock                     
-  Folk                          Folk-Rock                     National Folk                 Swing                         
-  Fast Fusion                   Bebob                         Latin                         Revival                       
-  Celtic                        Bluegrass                     Avantgarde                    Gothic Rock                   
-  Progressive Rock              Psychedelic Rock              Symphonic Rock                Slow Rock                     
-  Big Band                      Chorus                        Easy Listening                Acoustic                      
-  Humour                        Speech                        Chanson                       Opera                         
-  Chamber Music                 Sonata                        Symphony                      Booty Bass                    
-  Primus                        Porn Groove                   Satire                        Slow Jam                      
-  Club                          Tango                         Samba                         Folklore                      
-  Ballad                        Power Ballad                  Rhythmic Soul                 Freestyle                     
-  Duet                          Punk Rock                     Drum Solo                     A Cappella                    
-  Euro-House                    Dance Hall                    Goa                           Drum & Bass                   
-  Club-House                    Hardcore                      Terror                        Indie                         
-  BritPop                       Negerpunk                     Polsk Punk                    Beat                          
-  Christian Gangsta Rap         Heavy Metal                   Black Metal                   Crossover                     
-  Contemporary Christian        Christian Rock                Merengue                      Salsa                         
-  Thrash Metal                  Anime                         JPop                          Synthpop                      
-  Abstract                      Art Rock                      Baroque                       Bhangra                       
-  Big Beat                      Breakbeat                     Chillout                      Downtempo                     
-  Dub                           EBM                           Eclectic                      Electro                       
-  Electroclash                  Emo                           Experimental                  Garage                        
-  Global                        IDM                           Illbient                      Industro-Goth                 
-  Jam Band                      Krautrock                     Leftfield                     Lounge                        
-  Math Rock                     New Romantic                  Nu-Breakz                     Post-Punk                     
-  Post-Rock                     Psytrance                     Shoegaze                      Space Rock                    
-  Trop Rock                     World Music                   Neoclassical                  Audiobook                     
-  Audio Theatre                 Neue Deutsche Welle           Podcast                       Indie Rock                    
-  G-Funk                        Dubstep                       Garage Rock                   Psybient                      
+                           Blues                  Classic Rock                       Country                         Dance
+                           Disco                          Funk                        Grunge                       Hip-Hop
+                            Jazz                         Metal                       New Age                        Oldies
+                           Other                           Pop                           R&B                           Rap
+                          Reggae                          Rock                        Techno                    Industrial
+                     Alternative                           Ska                   Death Metal                        Pranks
+                      Soundtrack                   Euro-Techno                       Ambient                      Trip-Hop
+                           Vocal                     Jazz+Funk                        Fusion                        Trance
+                       Classical                  Instrumental                          Acid                         House
+                            Game                    Sound Clip                        Gospel                         Noise
+                      AlternRock                          Bass                          Soul                          Punk
+                           Space                    Meditative              Instrumental Pop             Instrumental Rock
+                          Ethnic                        Gothic                      Darkwave             Techno-Industrial
+                      Electronic                      Pop-Folk                     Eurodance                         Dream
+                   Southern Rock                        Comedy                          Cult                   Gangsta Rap
+                          Top 40                 Christian Rap                    Pop / Funk                        Jungle
+                 Native American                       Cabaret                      New Wave                   Psychedelic
+                            Rave                     Showtunes                       Trailer                         Lo-Fi
+                          Tribal                     Acid Punk                     Acid Jazz                         Polka
+                           Retro                       Musical                   Rock & Roll                     Hard Rock
+                            Folk                     Folk-Rock                 National Folk                         Swing
+                     Fast Fusion                         Bebob                         Latin                       Revival
+                          Celtic                     Bluegrass                    Avantgarde                   Gothic Rock
+                Progressive Rock              Psychedelic Rock                Symphonic Rock                     Slow Rock
+                        Big Band                        Chorus                Easy Listening                      Acoustic
+                          Humour                        Speech                       Chanson                         Opera
+                   Chamber Music                        Sonata                      Symphony                    Booty Bass
+                          Primus                   Porn Groove                        Satire                      Slow Jam
+                            Club                         Tango                         Samba                      Folklore
+                          Ballad                  Power Ballad                 Rhythmic Soul                     Freestyle
+                            Duet                     Punk Rock                     Drum Solo                    A Cappella
+                      Euro-House                    Dance Hall                           Goa                   Drum & Bass
+                      Club-House                      Hardcore                        Terror                         Indie
+                         BritPop                     Negerpunk                    Polsk Punk                          Beat
+           Christian Gangsta Rap                   Heavy Metal                   Black Metal                     Crossover
+          Contemporary Christian                Christian Rock                      Merengue                         Salsa
+                    Thrash Metal                         Anime                          JPop                      Synthpop
+                        Abstract                      Art Rock                       Baroque                       Bhangra
+                        Big Beat                     Breakbeat                      Chillout                     Downtempo
+                             Dub                           EBM                      Eclectic                       Electro
+                    Electroclash                           Emo                  Experimental                        Garage
+                          Global                           IDM                      Illbient                 Industro-Goth
+                        Jam Band                     Krautrock                     Leftfield                        Lounge
+                       Math Rock                  New Romantic                     Nu-Breakz                     Post-Punk
+                       Post-Rock                     Psytrance                      Shoegaze                    Space Rock
+                       Trop Rock                   World Music                  Neoclassical                     Audiobook
+                   Audio Theatre           Neue Deutsche Welle                       Podcast                    Indie Rock
+                          G-Funk                       Dubstep                   Garage Rock                      Psybient
   
   Note that you can also define your own Genres and fruitbox will recognise these if the 'AutoGenre' 
   field matches the name in the MP3 (ID3v2) genre tag.
@@ -1160,6 +973,15 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       $UNPAUSE_VIDEO
       Un-pause video playing
 
+      $STOP_TIMER
+      Stop the status TimerTick timer
+
+      $START_TIMER
+      Start the status TimerTick timer
+
+      $RESET_TIMER
+      Reset the status TimerTick timer
+
       $IF_FREE_PLAY
       Activates the text following it if Free Play mode is enabled
 
@@ -1285,6 +1107,14 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       Activates the text following it if the last song selection was 
       not invalid
 
+      $IF_DUPLICATE_CHOICE
+      Activates the text following it if the last song selection was 
+      a duplicate choice
+
+      $IF_NOT_DUPLICATE_CHOICE
+      Activates the text following it if the last song selection was 
+      not a duplicate choice
+
       $IF_FLAG_1_HI
       Activates the text following it if the specified status flag 
       is high
@@ -1316,6 +1146,12 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
       $IF_FLAG_4_LO
       Activates the text following it if the specified status flag 
       is low
+
+      $IF_ANY_BUTTON_PRESSED
+      Activates the text following it if any button is pressed
+
+      $IF_NOT_ANY_BUTTON_PRESSED
+      Activates the text following it if any button is not pressed
 
       $IF_BUTTON_QUIT_PRESSED
       Activates the text following it if the specified button is pressed
@@ -1831,58 +1667,6 @@ A customisable MP3 Retro Jukebox for the Raspberry Pi
     
     The following entries in the button file are recognised:
 
-      TouchMin                      x y (the touch co-ordinatesfor top left of touch display)
-      TouchMax                      x y (the touch co-ordinatesfor bottom right of touch display)
-      ButtonQuit                    Name of button (quit fruitbox)
-      ButtonCoin1                   Name of button (insert coin)
-      ButtonCoin2                   Name of button (insert coin)
-      ButtonCoin3                   Name of button (insert coin)
-      ButtonCoin4                   Name of button (insert coin)
-      ButtonVol+                    Name of button (change volume)
-      ButtonVol-                    Name of button (change volume)
-      ButtonRandom                  Name of button (select random song)
-      ButtonSelect                  Name of button (play selected song)
-      ButtonSkip                    Name of button (stop current song)
-      ButtonPause                   Name of button (pause/unpause currently playing song)
-      ButtonUp                      Name of button (joystick selector)
-      ButtonDown                    Name of button (joystick selector)
-      ButtonLeft                    Name of button (move pages/joystick selector)
-      ButtonRight                   Name of button (move pages/joystick selector)
-      ButtonLeftJump                Name of button (move pages by 'PageJump' amount)
-      ButtonRightJump               Name of button (move pages by 'PageJump' amount)
-      ButtonLeftAlpha               Name of button (move pages by last 'SortSongsBy' value)
-      ButtonRightAlpha              Name of button (move pages by last 'SortSongsBy' value)
-      ButtonAuto                    Name of button (toggle Auto (aka Attract) mode)
-      ButtonLoop                    Name of button (toggle Loop mode)
-      ButtonFree                    Name of button (toggle Freeplay mode)
-      ButtonClear                   Name of button (empty play queue)
-      ButtonMute                    Name of button (volume mute)
-      ButtonPowerOff                Name of button (power off)
-      Button0                       Name of button (song selection)
-      Button1                       Name of button (song selection)
-      Button2                       Name of button (song selection)
-      Button3                       Name of button (song selection)
-      Button4                       Name of button (song selection)
-      Button5                       Name of button (song selection)
-      Button6                       Name of button (song selection)
-      Button7                       Name of button (song selection)
-      Button8                       Name of button (song selection)
-      Button9                       Name of button (song selection)
-      ButtonA                       Name of button (song selection)
-      ButtonB                       Name of button (song selection)
-      ButtonC                       Name of button (song selection)
-      ButtonD                       Name of button (song selection)
-      ButtonE                       Name of button (song selection)
-      ButtonF                       Name of button (song selection)
-      ButtonG                       Name of button (song selection)
-      ButtonH                       Name of button (song selection)
-      ButtonI                       Name of button (song selection)
-      ButtonJ                       Name of button (song selection)
-      ButtonK                       Name of button (song selection)
-      ButtonFlag1                   Name of button (toggle status flag)
-      ButtonFlag2                   Name of button (toggle status flag)
-      ButtonFlag3                   Name of button (toggle status flag)
-      ButtonFlag4                   Name of button (toggle status flag)
 
     
     Each of the above Button* parameters can be assigned one of the 

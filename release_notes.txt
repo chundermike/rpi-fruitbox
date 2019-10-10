@@ -1,6 +1,42 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.15
+-----------------------------------
+
+Bug-fixes...
+  -> Fixed input button masking (32-bit to 64-bit to capture all buttons)
+  -> Fixed album mode Select key combination calculation
+  -> Identical USB Joystick controllers now treated separately
+     * requires re-run of button config as button codes have been extended *
+  -> Mouse buttons now correctly identified
+  -> Correctly initialised/reset Time remaining value for status HorzScale and VertScale
+     (which means time-elapsed stretched bitmaps correctly disappear when no song playing)
+
+Ease of use improvements...
+  -> Reduced reliance on console output:
+    -> Errors now displayed in graphical box
+    -> Console output now sent to "fruitbox.log"
+    -> --user-guide command line option now writes the guide to the file "userguide.txt" rather than the console
+  -> Added auto database update
+    -> Added new command line option '--no-database-update'
+
+Added new skin config parameters...
+  -> [general] NoDuplicates
+  -> [general] DuplicatesUseCredits
+  -> [status] TimerOneShot
+  -> [status] TimerEnable
+
+Added new status variables...
+  -> $IF_DUPLICATE_CHOICE
+  -> $IF_NOT_DUPLICATE_CHOICE
+  -> $IF_ANY_BUTTON_PRESSED
+  -> $IF_NOT_ANY_BUTTON_PRESSED
+  -> $STOP_TIMER
+  -> $START_TIMER
+  -> $RESET_TIMER
+
+-----------------------------------
 v1.14
 -----------------------------------
 
@@ -13,6 +49,7 @@ v1.14
   -> Automatic detection and support for all input devices. You no longer have to specify an input device or touch device;
      fruitbox will now register all input devices it finds.  As such, the command line options "--input-device" and
      "--touch-device" have now been removed as they are no longer required.
+
 
 -----------------------------------
 v1.12.1
