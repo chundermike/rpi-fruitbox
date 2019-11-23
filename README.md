@@ -14,11 +14,13 @@ Installation is as follows:
 7. Point fruitbox to your MP3 files (edit skins/WallJuke/fruitbox.cfg (or any other skin you fancy) and change the MusicPath parameter)
 8. Run fruitbox ( ./fruitbox --cfg skins/WallJuke/fruitbox.cfg)
 
+Run with --config-buttons command line argument to map buttons to touch screen, GPIO and/or USB controllers.
+
 For best results, run fruitbox directly from a command line boot, not from a command shell launched from the desktop.
 
 The user guide will give details on how to create your own skins, storing songs on USB memory sticks, and other helpful hints.
 
-fruitbox works on all Raspberry Pi devices, but runs better on the higher spec (quad core) machines (i.e. Models 2 and 3), especially if playing music videos.
+fruitbox works on all Raspberry Pi devices except model 4, but runs better on the higher spec (quad core) machines (i.e. Models 2 and 3), especially if playing music videos.
 
 Please feedback to me any bugs which need fixing, or any feature requests you would like to see in future releases.
 
