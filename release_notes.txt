@@ -1,6 +1,14 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.16
+-----------------------------------
+
+Bug-fixes...
+  -> Fixed out_of_range crash in albums mode
+  -> Fixed missing skin configuration paraemters in userguide
+
+-----------------------------------
 v1.15
 -----------------------------------
 
