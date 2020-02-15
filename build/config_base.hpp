@@ -489,11 +489,25 @@ public:
   {
     if (multi_param)
     {
-      log_file << indent << keyword << setw(maxCfgKeywordWidth - keyword.size()) << left << multiCfgParameter << description << endl;
+      if (userguidecfgShow)
+      {
+        userguide << indent << keyword << setw(maxCfgKeywordWidth - keyword.size()) << left << multiCfgParameter << description << endl;
+      }
+      else
+      {
+        log_file << indent << keyword << setw(maxCfgKeywordWidth - keyword.size()) << left << multiCfgParameter << description << endl;
+      }
     }
     else
     {
-      log_file << indent << setw(maxCfgKeywordWidth) << left << keyword << description << endl;
+      if (userguidecfgShow)
+      {
+        userguide << indent << setw(maxCfgKeywordWidth) << left << keyword << description << endl;
+      }
+      else
+      {
+        log_file << indent << setw(maxCfgKeywordWidth) << left << keyword << description << endl;
+      }
     }
   }
 

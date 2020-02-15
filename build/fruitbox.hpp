@@ -53,6 +53,7 @@ extern std::ofstream log_file;
 #include "gpio.hpp"
 #include "input.hpp"
 #include "status_events.hpp"
+#include "userguide.hpp"
 #include "config_base.hpp"
 #include "display_base.hpp"
 #include "playqueue.hpp"
@@ -65,7 +66,6 @@ extern std::ofstream log_file;
 #include "audio.hpp"
 #include "config.hpp"
 #include "database.hpp"
-#include "userguide.hpp"
 
 #ifdef _RPI
   #pragma GCC diagnostic push
@@ -79,7 +79,7 @@ extern std::ofstream log_file;
 
 // #define _CURL
 
-#define FRUITBOX_VERSION                      "v1.15"
+#define FRUITBOX_VERSION                      "v1.16"
 #define FRUITBOX_DESCRIPTION                  "fruitbox " FRUITBOX_VERSION " (" __DATE__ ", " __TIME__ ") by Mike Kingsley"
 #define FRUITBOX_SUMMARY                      "A customisable MP3 Retro Jukebox for the Raspberry Pi."
 #define FRUITBOX_DONATE                       "To encourage future development, please consider making a donation\nto the author at https://paypal.me/rpifruitbox"

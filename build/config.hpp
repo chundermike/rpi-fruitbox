@@ -24,34 +24,68 @@ public:
 
   void cfgShow(const char *indent)
   {
-    log_file << indent << cfgSection_general << endl;
-    general->cfgShow(indent);
+    if (userguidecfgShow) // messy hack
+    {
+      userguide << indent << cfgSection_general << endl;
+      general->cfgShow(indent);
 
-    log_file << endl << indent << cfgSection_touch_areas << endl;
-    touch_areas->cfgShow(indent);
+      userguide << endl << indent << cfgSection_touch_areas << endl;
+      touch_areas->cfgShow(indent);
 
-    log_file << endl << indent << cfgSection_sounds << endl;
-    sounds->cfgShow(indent);
+      userguide << endl << indent << cfgSection_sounds << endl;
+      sounds->cfgShow(indent);
 
-    log_file << endl << indent << cfgSection_font << multiCfgParameter << endl;
-    tmp_font->cfgShow(indent);
+      userguide << endl << indent << cfgSection_font << multiCfgParameter << endl;
+      tmp_font->cfgShow(indent);
 
-    log_file << endl << indent << cfgSection_page << multiCfgParameter << endl;
-    tmp_page->cfgShow(indent);
+      userguide << endl << indent << cfgSection_page << multiCfgParameter << endl;
+      tmp_page->cfgShow(indent);
 
-    log_file << endl << indent << cfgSection_status << multiCfgParameter << endl;
-    tmp_status->cfgShow(indent);
+      userguide << endl << indent << cfgSection_status << multiCfgParameter << endl;
+      tmp_status->cfgShow(indent);
 
-    log_file << endl << indent << cfgSection_bitmap << multiCfgParameter << endl;
-    tmp_bitmap->cfgShow(indent);
+      userguide << endl << indent << cfgSection_bitmap << multiCfgParameter << endl;
+      tmp_bitmap->cfgShow(indent);
 
-    log_file << endl << indent << cfgSection_joystick << multiCfgParameter << endl;
-    tmp_joystick->cfgShow(indent);
+      userguide << endl << indent << cfgSection_joystick << multiCfgParameter << endl;
+      tmp_joystick->cfgShow(indent);
 
-    log_file << endl << indent << cfgSection_touch_song << endl;
-    tmp_touch_song->cfgShow(indent);
+      userguide << endl << indent << cfgSection_touch_song << endl;
+      tmp_touch_song->cfgShow(indent);
 
-    log_file << endl;
+      userguide << endl;
+    }
+    else
+    {
+      log_file << indent << cfgSection_general << endl;
+      general->cfgShow(indent);
+
+      log_file << endl << indent << cfgSection_touch_areas << endl;
+      touch_areas->cfgShow(indent);
+
+      log_file << endl << indent << cfgSection_sounds << endl;
+      sounds->cfgShow(indent);
+
+      log_file << endl << indent << cfgSection_font << multiCfgParameter << endl;
+      tmp_font->cfgShow(indent);
+
+      log_file << endl << indent << cfgSection_page << multiCfgParameter << endl;
+      tmp_page->cfgShow(indent);
+
+      log_file << endl << indent << cfgSection_status << multiCfgParameter << endl;
+      tmp_status->cfgShow(indent);
+
+      log_file << endl << indent << cfgSection_bitmap << multiCfgParameter << endl;
+      tmp_bitmap->cfgShow(indent);
+
+      log_file << endl << indent << cfgSection_joystick << multiCfgParameter << endl;
+      tmp_joystick->cfgShow(indent);
+
+      log_file << endl << indent << cfgSection_touch_song << endl;
+      tmp_touch_song->cfgShow(indent);
+
+      log_file << endl;
+    }
   }
 
   void cfgRead(string line) {};

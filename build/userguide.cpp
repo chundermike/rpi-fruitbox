@@ -13,6 +13,8 @@
 
 using namespace std;
 
+bool userguidecfgShow { false };
+
 constexpr uint32_t rightMargin           { 80 };
 constexpr uint32_t maxWordSize           { 20 };
 constexpr char userguideFilename[]       { "userguide.txt" };
@@ -81,7 +83,9 @@ void UserGuideShowStatusVariables(const char *indent)
 
 void UserGuideShowConfigParameters(const char *indent)
 {
+  userguidecfgShow = true;
   Config->cfgShow(indent);
+  userguidecfgShow = false;
 }
 
 void UserGuideShowGenres(const char *indent)

@@ -533,3 +533,6 @@ const char hints_and_tips_str[] = { \
 };
 
 void UserGuide(void);
+
+extern bool userguidecfgShow;
+extern ofstream userguide;

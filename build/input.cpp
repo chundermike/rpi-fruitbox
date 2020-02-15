@@ -572,7 +572,7 @@ void InputClass::scanDevice(input_device_t &device, input_event_t &event)
 
             for (song_page=0; song_page < Config->touch_song->entry_position.size(); ++song_page)
             {
-              for (song_entry=0; song_entry < Config->touch_song->entry_position[song_page].size(); ++song_entry)
+              for (song_entry=0; song_entry < Config->touch_song->entry_position.at(song_page).size(); ++song_entry)
               {
                 int32_t sx {Config->touch_song->entry_position.at(song_page).at(song_entry).x};
                 int32_t sy {Config->touch_song->entry_position.at(song_page).at(song_entry).y};

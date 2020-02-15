@@ -35,7 +35,17 @@ void EngineClass::UpdateSelectCode
   const uint32_t entry
 )
 {
-  uint32_t sel_num { entry + (Config->general->songs_per_page * page) };
+  uint32_t sel_num { };
+  
+  if (Config->general->page_mode == page_mode_e::Singles)
+  {
+    sel_num = entry + (Config->general->songs_per_page * page);
+  }
+  else
+  {
+    sel_num = entry + page;
+  }
+
   status.select_code_str = IntToSel(sel_num);
   status_event |= StatusEvent_selCodeChange;
 }
@@ -343,7 +353,6 @@ void EngineClass::Run(void)
       }
       else if (event_code & TOUCH_SONG)
       {
-        // cout << "TOUCH_SONG" << endl;
         joy_x = (event_code >> SONG_PAGE_POS) & SONG_POS_MASK;
         joy_y = (event_code >> SONG_ENTRY_POS) & SONG_POS_MASK;
         UpdateSelectCode(joy_x, joy_y);

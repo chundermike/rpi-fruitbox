@@ -348,20 +348,20 @@ void ConfigClass::PostProcess(void)
   for (auto b = 0; b < general->select_buttons.size(); ++b)
   {
     uint32_t base {1};
-  if (general->select_buttons_sequence == select_buttons_sequence_e::RowCol)
-  {
-    for (auto x = b+1; x < general->select_buttons.size(); ++x)
+    if (general->select_buttons_sequence == select_buttons_sequence_e::RowCol)
     {
-       base *= general->select_buttons.at(x).size();
+      for (auto x = b+1; x < general->select_buttons.size(); ++x)
+      {
+         base *= general->select_buttons.at(x).size();
+      }
     }
-  }
-  else
-  {
-    for (auto x = 0; x < b; ++x)
+    else
     {
-       base *= general->select_buttons.at(x).size();
+      for (auto x = 0; x < b; ++x)
+      {
+         base *= general->select_buttons.at(x).size();
+      }
     }
-  }
     select_digit_base.push_back(base); // base of this digit is product of number of select codes all lower digits
   }
 
@@ -506,7 +506,7 @@ void ConfigClass::PostProcess(void)
 
   for (auto &j : display_object)
   {
-    if (dynamic_cast<JoystickDisplayClass*>(j) != nullptr) // object is a joystick object
+    if (dynamic_cast<JoystickDisplayClass*>(j) != nullptr) // object is a joystick object (or inherited touch object)
     {
       for (auto &i : display_object) // search again to find all pages...
       {
@@ -514,21 +514,29 @@ void ConfigClass::PostProcess(void)
         {
           vector<ints2_t> page_pos {};
           ints2_t pos {};
-          uint32_t sinc = i->size.y / general->songs_per_page;
-          uint32_t yinc = 4 * sinc / (4 - (general->pair_songs != pair_songs_e::No ? 1 : 0));
-          for (uint32_t s = 0; s < general->songs_per_page; ++s)
+          if (general->page_mode == page_mode_e::Singles)
           {
-            uint32_t y { s * sinc };
-            pos.x = i->position.x + static_cast<JoystickDisplayClass*>(j)->offset.x;
-            pos.y = i->position.y + y + static_cast<JoystickDisplayClass*>(j)->offset.y;
-
-            if (general->pair_songs != pair_songs_e::No)
+            uint32_t sinc = i->size.y / general->songs_per_page;
+            uint32_t yinc = 4 * sinc / (4 - (general->pair_songs != pair_songs_e::No ? 1 : 0));
+            for (uint32_t s = 0; s < general->songs_per_page; ++s)
             {
-              page_pos.push_back(pos);
-              pos.y = i->position.y + y + yinc;
-              s++;
-            }
+              uint32_t y { s * sinc };
+              pos.x = i->position.x + static_cast<JoystickDisplayClass*>(j)->offset.x;
+              pos.y = i->position.y + y + static_cast<JoystickDisplayClass*>(j)->offset.y;
 
+              if (general->pair_songs != pair_songs_e::No)
+              {
+                page_pos.push_back(pos);
+                pos.y = i->position.y + y + yinc;
+                s++;
+              }
+              page_pos.push_back(pos);
+            }
+          }
+          else
+          {
+            pos.x = i->position.x + static_cast<JoystickDisplayClass*>(j)->offset.x;
+            pos.y = i->position.y + static_cast<JoystickDisplayClass*>(j)->offset.y;
             page_pos.push_back(pos);
           }
           static_cast<JoystickDisplayClass*>(j)->entry_position.push_back(page_pos);
@@ -536,42 +544,12 @@ void ConfigClass::PostProcess(void)
           static_cast<JoystickDisplayClass*>(j)->entry_position.shrink_to_fit();
         }
       }
-    }
-
-    if (dynamic_cast<TouchSongDisplayClass*>(j) != nullptr) // object is a touch song object
-    {
-      for (auto &i : display_object) // search again to find all pages...
+      if (dynamic_cast<TouchSongDisplayClass*>(j) != nullptr) // object is a touch song object
       {
-        if (dynamic_cast<PageDisplayClass*>(i) != nullptr)
-        {
-          vector<ints2_t> page_pos {};
-          ints2_t pos {};
-          uint32_t sinc = i->size.y / general->songs_per_page;
-          uint32_t yinc = 4 * sinc / (4 - (general->pair_songs != pair_songs_e::No ? 1 : 0));
-          for (uint32_t s = 0; s < general->songs_per_page; ++s)
-          {
-            uint32_t y { s * sinc };
-            pos.x = i->position.x + static_cast<TouchSongDisplayClass*>(j)->offset.x;
-            pos.y = i->position.y + y + static_cast<TouchSongDisplayClass*>(j)->offset.y;
-
-            if (general->pair_songs != pair_songs_e::No)
-            {
-              page_pos.push_back(pos);
-              pos.y = i->position.y + y + yinc;
-              s++;
-            }
-
-            page_pos.push_back(pos);
-          }
-          static_cast<TouchSongDisplayClass*>(j)->entry_position.push_back(page_pos);
-          static_cast<TouchSongDisplayClass*>(j)->setPosition(0, 0);
-          static_cast<TouchSongDisplayClass*>(j)->entry_position.shrink_to_fit();
-          touch_song = static_cast<TouchSongDisplayClass*>(j); // THIS LINE SHOULD BE OUTSIDE NEXT TWO BRACES!!!
-          touch_song->no_draw = true;// THIS LINE SHOULD BE OUTSIDE NEXT TWO BRACES!!!
-        }
+        touch_song = static_cast<TouchSongDisplayClass*>(j);
+        touch_song->no_draw = true;
       }
     }
-
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////
