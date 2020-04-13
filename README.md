@@ -7,9 +7,9 @@ An SD image file is avaialable here:
 
 https://www.dropbox.com/s/eckka8ogi02dr09/rpi-fruitbox-v1.16.img.zip?dl=0
 
-It's based on a Buster release, and will auto-boot into the fruitbox skin chooser menu, and expects the mp3 files to be on a USB memory stick. Make sure the memory stick is inserted before you power up your Pi. Don't try it on a Pi4 though please.
+Just download the image, burn it onto a SD card.  Then put all your MP3 files onto a USB memory stick, plug into the Pi (any model except Pi4) and then power up!  If you want to use touchscreens, remap your buttons or create your own skins, then you'll need to read the userguide.txt to find out how.
 
-Alternatively, you can install the files on your existing set-up as follows:
+Rather than use the SD card image above, you can install the files on your existing set-up as follows:
 
 1. It is recommended to start from a fresh OS install (Raspbian Stretch Lite 2018-03-13 release)
 2. Increase GPU memory to (at least) 256 (sudo raspi-config -> Advanced Options -> Memory Split)
