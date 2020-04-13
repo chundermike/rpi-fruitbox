@@ -3,7 +3,13 @@ Raspberry Pi fruitbox
 
 fruitbox is a customisable MP3 player for the Raspberry Pi, allowing the user to create the look and feel of classic jukeboxes.
 
-Installation is as follows:
+An SD image file is avaialable here:
+
+https://www.dropbox.com/s/eckka8ogi02dr09/rpi-fruitbox-v1.16.img.zip?dl=0
+
+It's based on a Buster release, and will auto-boot into the fruitbox skin chooser menu, and expects the mp3 files to be on a USB memory stick. Make sure the memory stick is inserted before you power up your Pi. Don't try it on a Pi4 though please.
+
+Alternatively, you can install the files on your existing set-up as follows:
 
 1. It is recommended to start from a fresh OS install (Raspbian Stretch Lite 2018-03-13 release)
 2. Increase GPU memory to (at least) 256 (sudo raspi-config -> Advanced Options -> Memory Split)
