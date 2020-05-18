@@ -51,15 +51,16 @@ void AudioClass::RemoveSong
 
 void AudioClass::LoadAlbumArtwork(const song_t *song, bitmap_t *bitmap)
 {
-  bitmap->handle = nullptr;
 
   if (bitmap->destroy_needed) {
       // cout << "1 destroy bitmap" << endl;
     al_destroy_bitmap(bitmap->handle);
-    bitmap->handle = nullptr;
+    // bitmap->handle = nullptr;
     bitmap->destroy_needed = false;
   }
 
+  bitmap->handle = nullptr;
+  
   switch (Config->general->album_page_artwork_mode) {
 
     case artwork_mode_e::None :
