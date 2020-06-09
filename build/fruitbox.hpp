@@ -79,7 +79,7 @@ extern std::ofstream log_file;
 
 // #define _CURL
 
-#define FRUITBOX_VERSION                      "v1.16a"
+#define FRUITBOX_VERSION                      "v1.16b"
 #define FRUITBOX_DESCRIPTION                  "fruitbox " FRUITBOX_VERSION " (" __DATE__ ", " __TIME__ ") by Mike Kingsley"
 #define FRUITBOX_SUMMARY                      "A customisable MP3 Retro Jukebox for the Raspberry Pi."
 #define FRUITBOX_DONATE                       "To encourage future development, please consider making a donation\nto the author at https://paypal.me/rpifruitbox"

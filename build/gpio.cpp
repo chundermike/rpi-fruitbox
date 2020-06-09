@@ -16,9 +16,9 @@ void GpioClass::OpenDevice(void)
 
   // /dev/mem is a psuedo-driver for accessing memory in the Linux filesystem
 
-  if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0)
+  if ((mem_fd = open("/dev/gpiomem", O_RDWR|O_SYNC) ) < 0)
   {
-    error("can't open /dev/mem");
+    error("can't open /dev/gpiomem");
   }
   reg_map = mmap
   (
@@ -33,7 +33,7 @@ void GpioClass::OpenDevice(void)
   if (reg_map == MAP_FAILED)
   {
     close(mem_fd);
-    error("gpio mmap error.\nTry running fruitbox as sudo (i.e. sudo ./fruitbox --cfg ...)");
+    error("gpio mmap error");
   }
 
   gpio_base = (volatile uint32_t *)reg_map;
