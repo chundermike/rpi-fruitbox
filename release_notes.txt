@@ -1,6 +1,12 @@
 fruitbox Release Notes:
 
 -----------------------------------
+v1.16b
+-----------------------------------
+
+Uses /dev/gpiomem instead of /dev/mem so that fruitbox no longer requires to be run in sudo mode
+
+-----------------------------------
 v1.16a
 -----------------------------------
 
