@@ -1,0 +1,11 @@
+a partir del botón rojo
+
+Colorear	Tono
+
+Azul		240
+
+Verde		125
+
+Madera		25
+
+Old			60
