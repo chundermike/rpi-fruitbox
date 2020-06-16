@@ -1,0 +1,22 @@
+# fruitbox v1.16 button mapping file
+# Missing buttons will assume their default values (see user guide)
+
+TouchMin          = -40 20
+TouchMax          = 4152 4116
+
+ButtonVol-        = Touch
+ButtonMute        = Touch
+ButtonVol+        = Touch
+ButtonRandom      = Touch
+ButtonSkip        = Touch
+ButtonPause       = Touch
+ButtonLeft        = Touch
+ButtonRight       = Touch
+ButtonLeftJump    = Touch
+ButtonRightJump   = Touch
+ButtonLeftAlpha   = Touch
+ButtonRightAlpha  = Touch
+ButtonClear       = Touch
+ButtonAuto        = Touch
+ButtonPowerOff    = Touch
+ButtonQuit        = Touch
