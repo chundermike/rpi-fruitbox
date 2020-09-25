@@ -9,7 +9,7 @@ cd ~/rpi-fruitbox-master/build/ # fruitbox build directory where the mpg & alleg
 # install and build libmpg123 as static library...
 
 tar -xvf mpg123-1.24.0.tar
-cd ~/mpg123-1.24.0
+cd mpg123-1.24.0
 chmod +x configure
 ./configure --with-cpu=arm_fpu --disable-shared
 make && sudo make install
@@ -30,7 +30,7 @@ sudo apt-get install libvorbis-dev libtheora-dev
 sudo apt-get install libts-dev
 
 # install and build allegro as static library...
-# If using raspbian stretch distribution do the follwoing five lines...
+# If using raspbian stretch distribution do the following five lines...
 
 cd /opt/vc/lib
 sudo ln -s libbrcmEGL.so libEGL.so
