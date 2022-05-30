@@ -1,6 +1,6 @@
 # rpi-fruitbox
 
-Note : this versionb has now been superceded by version 2.  Please find version 2 here :
+Note : this version has now been superceded by version 2.  Please find version 2 here :
 
 https://github.com/chundermike/rpi-fruitbox-v2
 
