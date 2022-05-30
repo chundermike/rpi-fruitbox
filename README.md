@@ -1,4 +1,10 @@
 # rpi-fruitbox
+
+Note : this versionb has now been superceded by version 2.  Please find version 2 here :
+
+https://github.com/chundermike/rpi-fruitbox-v2
+
+
 Raspberry Pi fruitbox
 
 fruitbox is a customisable MP3 player for the Raspberry Pi, allowing the user to create the look and feel of classic jukeboxes.
